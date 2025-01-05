@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.BPPApplication\SkySoft.BPPApplication.csproj" />
+    <ProjectReference Include="..\BPP.Person.CON\BPP.Person.CON.csproj" />
+    <ProjectReference Include="..\BPP.Person.DTI\BPP.Person.DTI.csproj" />
+    <ProjectReference Include="..\BPP.Person.DTO\BPP.Person.DTO.csproj" />
+  </ItemGroup>
+
+</Project>

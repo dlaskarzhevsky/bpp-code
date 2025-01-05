@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.APIHost\SkySoft.APIHost.csproj" />
+    <ProjectReference Include="..\BPP.Person.BL\BPP.Person.BL.csproj" />
+    <ProjectReference Include="..\BPP.Person.DAL\BPP.Person.DAL.csproj" />
+    <ProjectReference Include="..\BPP.Person.DPL\BPP.Person.DPL.csproj" />
+  </ItemGroup>
+
+</Project>

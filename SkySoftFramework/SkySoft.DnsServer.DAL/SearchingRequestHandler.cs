@@ -58,10 +58,11 @@ namespace SkySoft.DnsServer.DAL
         void GetUrlOfApplicationLayer(IDataContainer dataContainer, List<DnsRecordDTO> listOfDnsRecords)
         {
             dataContainer.RemoveCurrentRequestMetadta();
-            string applicationLayerName = $"{dataContainer.DomainName}_{dataContainer.ApplicationLayerName}_{dataContainer.UseCaseName}";
+            string applicationLayerName = $"{dataContainer.DomainName}_{dataContainer.ApplicationLayerName}_{dataContainer.UseCaseName}".ToLowerInvariant();
             for (int i = 0; i < listOfDnsRecords.Count; i++)
             {
-                if (listOfDnsRecords[i].ApplicationLayerName == applicationLayerName)
+                string? registeredApplicationLayerName = listOfDnsRecords[i].ApplicationLayerName;
+                if (!string.IsNullOrEmpty(registeredApplicationLayerName) && registeredApplicationLayerName.ToLowerInvariant() == applicationLayerName)
                 {
                     DnsRecordDTO dnsRecordDTO = new DnsRecordDTO();
                     dnsRecordDTO.ApplicationLayerName = dataContainer.ApplicationLayerName;

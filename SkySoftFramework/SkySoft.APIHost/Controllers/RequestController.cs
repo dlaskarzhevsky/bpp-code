@@ -32,20 +32,24 @@ namespace SkySoft.APIHost
         #endregion
 
         #region Public Methods
+        [HttpGet]
+        [Route("online")]
+        /// <summary>
+        /// Verifies API online status
+        /// </summary>
+        /// <returns>Health check result</returns>
+        public string VerifyApiOnlineStatus()
+        {
+            return "OK";
+        }
+
         [HttpPost]
         [Route("processrequest")]
-        public async Task<IActionResult> Search()
-        {
-            return await ProcessRequest();
-        }
-        #endregion
-
-        #region Public Methods
         /// <summary>
         /// Processes request
         /// </summary>
         /// <returns>Result of processed request</returns>
-        protected async Task<IActionResult> ProcessRequest()
+        public async Task<IActionResult> ProcessRequest()
         {
             string? plainText = null;
             using (var reader = new StreamReader(Request.Body))

@@ -64,7 +64,7 @@
         /// </summary>
         /// <param name="applicationLayerName">Application layer name</param>
         /// <param name="domainName">Domain name</param>
-        /// <param name="useCaseName">Application layer name</param>
+        /// <param name="useCaseName">Use case name</param>
         /// <param name="stateName">State name</param>
         /// <param name="transitionName">Transition name</param>
         void AddRequestMetadata(string? applicationLayerName, string? domainName, string? useCaseName, string? stateName, string? transitionName);

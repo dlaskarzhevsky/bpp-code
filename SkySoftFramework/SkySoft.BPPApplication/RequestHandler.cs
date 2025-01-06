@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 
 using SkySoft.Communication;
 using SkySoft.Core;
@@ -73,6 +74,15 @@ namespace SkySoft.BPPApplication
         }
 
         /// <summary>
+        /// Gets or sets memory cache
+        /// IRequestHandler iterface implementation
+        /// </summary>
+        public IMemoryCache? MemoryCache
+        {
+            get; set;
+        }
+
+        /// <summary>
         /// Gets state name
         /// IRequestHandler iterface implementation
         /// </summary>
@@ -112,6 +122,35 @@ namespace SkySoft.BPPApplication
             if (RedirectRequestToAnotherHandlerEvent != null)
             {
                 dataContainer.AddRequestMetadata(applicationLayerName, null, null, null, null);
+                DataContainerEventArgs dataContainerEventArgs = new DataContainerEventArgs(dataContainer);
+                await RedirectRequestToAnotherHandlerEvent(this, dataContainerEventArgs);
+                if (dataContainerEventArgs.DataContainer != null)
+                {
+                    dataContainer = dataContainerEventArgs.DataContainer;
+                    dataContainerEventArgs.DataContainer = null;
+                }
+
+                dataContainer.RemoveCurrentRequestMetadta();
+            }
+
+            return dataContainer;
+        }
+
+        /// <summary>
+        /// Redirects request to next request handler
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <param name="applicationLayerName">Application layer name</param>
+        /// <param name="domainName">Domain name</param>
+        /// <param name="useCaseName">Use case name</param>
+        /// <param name="stateName">State name</param>
+        /// <param name="transitionName">Transition name</param>
+        /// <returns>Result of redirection</returns>
+        protected async Task<IDataContainer> RedirectRequestToNextRequestHandler(IDataContainer dataContainer, string? applicationLayerName, string? domainName, string? useCaseName, string? stateName, string? transitionName)
+        {
+            if (RedirectRequestToAnotherHandlerEvent != null)
+            {
+                dataContainer.AddRequestMetadata(applicationLayerName, domainName, useCaseName, stateName, transitionName);
                 DataContainerEventArgs dataContainerEventArgs = new DataContainerEventArgs(dataContainer);
                 await RedirectRequestToAnotherHandlerEvent(this, dataContainerEventArgs);
                 if (dataContainerEventArgs.DataContainer != null)

@@ -1,33 +1,58 @@
+using System.Reflection;
+
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 using SkySoft.Communication;
-using SkySoft.ICommunication;
-using SkySoft.IBPPApplication;
-using System.Reflection;
 using SkySoft.Configuration;
-using System.Numerics;
-using SkySoft.Net.Http;
-using SkySoft.DnsServer.DTO;
 using SkySoft.Contracts;
 using SkySoft.DnsServer.DTI;
-using static System.TimeZoneInfo;
+using SkySoft.DnsServer.DTO;
+using SkySoft.IBPPApplication;
+using SkySoft.ICommunication;
+using SkySoft.Net.Http;
 
 namespace SkySoft.APIHost
 {
     [ApiController]
-    public class RequestController : ControllerBase
+    public class RequestController : ControllerBase, IRequestController
     {
+/*
+        #region Static Methods
+        /// <summary>
+        /// Initializes application
+        /// </summary>
+        /// <param name="serviceProvider">Service provider</param>
+        public static void InitializeApplication(IServiceProvider serviceProvider)
+        {
+            serviceProvider.GetRequiredService<IRequestController>();
+        }
+        #endregion
+*/
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="requestHandlers">Request handlers</param>
         /// <param name="applicationConfiguration">Application configuration</param>
-        public RequestController(IEnumerable<IRequestHandler> requestHandlers, IConfiguration applicationConfiguration)
+        /// <param name="memoryCache">Application configuration</param>
+        public RequestController(IEnumerable<IRequestHandler> requestHandlers, IConfiguration applicationConfiguration, IMemoryCache memoryCache)
         {
             RequestHandlers = requestHandlers;
             ApplicationConfiguration = applicationConfiguration;
-            LoadApplicationConfiguration();
+            MemoryCache = memoryCache;
+            bool? applicationInitialized;
+            MemoryCache!.TryGetValue<bool?>("ApplicationInitialized", out applicationInitialized);
+            if (applicationInitialized == null || applicationInitialized == false)
+            {
+                IDataContainer requestDataContainer = DataContainer.CreateDataContainer();
+                requestDataContainer.DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
+                requestDataContainer.ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
+                requestDataContainer.UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
+                requestDataContainer.TransitionName = SkySoft.DnsServer.CON.TransitionTypes.LOADING_USE_CASE;
+                RedirectRequestToRequestHandler(requestDataContainer).Wait();
+                MemoryCache!.Set("ApplicationInitialized", true);
+            }
         }
         #endregion
 
@@ -100,6 +125,28 @@ namespace SkySoft.APIHost
         }
 
         /// <summary>
+        /// Initializes application
+        /// </summary>
+        protected void InitializeApplication()
+        {
+            IConfigurationSection configurationSection = ApplicationConfiguration.GetSection("DefaultUseCaseInitializationRequest");
+            RequestMetadataDTO? requestMetadataDTO = configurationSection.Get<RequestMetadataDTO>();
+            if (requestMetadataDTO == null)
+            {
+                return;
+            }
+
+            IDataContainer dataContainer = DataContainer.CreateDataContainer();
+            dataContainer.ApplicationLayerName = requestMetadataDTO.ApplicationLayerName;
+            dataContainer.DomainName = requestMetadataDTO.DomainName;
+            dataContainer.StateName = requestMetadataDTO.StateName;
+            dataContainer.TransitionName = requestMetadataDTO.TransitionName;
+            dataContainer.UseCaseName = requestMetadataDTO.UseCaseName;
+
+            dataContainer = RedirectRequestToRequestHandler(dataContainer).Result;
+        }
+
+        /// <summary>
         /// Loads application configuration
         /// </summary>
         protected void LoadApplicationConfiguration()
@@ -168,7 +215,8 @@ namespace SkySoft.APIHost
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        protected virtual async Task<IDataContainer> RedirectRequestToRequestHandler(IDataContainer dataContainer)
+        [NonAction]
+        public async Task<IDataContainer> RedirectRequestToRequestHandler(IDataContainer dataContainer)
         {
             string requestHandlerType = $"{dataContainer.DomainName}_{dataContainer.ApplicationLayerName}_{dataContainer.UseCaseName}_{dataContainer.StateName}_{dataContainer.TransitionName}";
             IRequestHandler? requestHandler = FindRequestHandler(requestHandlerType);
@@ -179,10 +227,12 @@ namespace SkySoft.APIHost
             else
             {
                 requestHandler.ApplicationConfiguration = ApplicationConfiguration;
+                requestHandler.MemoryCache = MemoryCache;
                 requestHandler.RedirectRequestToAnotherHandlerEvent += RequestHandler_RedirectRequestToAnotherHandlerEvent;
                 dataContainer = await requestHandler.ProcessRequest(dataContainer);
                 requestHandler.RedirectRequestToAnotherHandlerEvent -= RequestHandler_RedirectRequestToAnotherHandlerEvent;
                 requestHandler.ApplicationConfiguration = null;
+                requestHandler.MemoryCache = null;
             }
 
             return dataContainer;
@@ -194,6 +244,14 @@ namespace SkySoft.APIHost
         /// Gets or sets application configuration
         /// </summary>
         protected IConfiguration ApplicationConfiguration
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets memory cache
+        /// </summary>
+        protected IMemoryCache MemoryCache
         {
             get; set;
         }

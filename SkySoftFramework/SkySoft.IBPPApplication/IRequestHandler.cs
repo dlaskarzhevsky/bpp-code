@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 
 using SkySoft.Core;
 using SkySoft.ICommunication;
@@ -31,6 +32,14 @@ namespace SkySoft.IBPPApplication
         /// Gets or sets application configuration
         /// </summary>
         IConfiguration? ApplicationConfiguration
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets memory cache
+        /// </summary>
+        IMemoryCache? MemoryCache
         {
             get; set;
         }

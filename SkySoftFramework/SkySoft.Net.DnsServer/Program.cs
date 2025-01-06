@@ -1,10 +1,15 @@
+using SkySoft.APIHost;
 using SkySoft.IBPPApplication;
+using SkySoft.Net.DnsServerConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddTransient<IRequestHandler, SkySoft.DnsServer.DAL.SearchingRequestHandler>();
+ApplicationConfiguration.RegisterServices(builder);
+builder.Services.AddTransient<IRequestController, RequestController>();
+
 builder.Services.AddControllers();
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
@@ -16,4 +21,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+ApplicationConfiguration.InitializeApplication(app.Services);
 app.Run();

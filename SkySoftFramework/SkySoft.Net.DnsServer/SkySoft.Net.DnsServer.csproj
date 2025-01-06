@@ -7,8 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="DnsRecords.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="DnsRecords.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SkySoft.APIHost\SkySoft.APIHost.csproj" />
-    <ProjectReference Include="..\SkySoft.DnsServer.DAL\SkySoft.DnsServer.DAL.csproj" />
+    <ProjectReference Include="..\SkySoft.Net.DnsServerConfiguration\SkySoft.Net.DnsServerConfiguration.csproj" />
   </ItemGroup>
 
 </Project>

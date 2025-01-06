@@ -1,4 +1,10 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using System.IO;
+using System.Reflection;
+
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
+
+using Newtonsoft.Json;
 
 using SkySoft.Communication;
 using SkySoft.DnsServer.CON;
@@ -8,19 +14,18 @@ using SkySoft.ICommunication;
 
 namespace SkySoft.DnsServer.DAL
 {
-    public class SearchingRequestHandler : SkySoft.BPPApplication.RequestHandler
+    public class LoadingUseCaseRequestHandler : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public SearchingRequestHandler()
+        public LoadingUseCaseRequestHandler()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
             UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
-            StateName = SkySoft.DnsServer.CON.StateTypes.INITIAL;
-            TransitionName = SkySoft.DnsServer.CON.TransitionTypes.SEARCHING;
+            TransitionName = SkySoft.DnsServer.CON.TransitionTypes.LOADING_USE_CASE;
         }
         #endregion
 
@@ -33,15 +38,46 @@ namespace SkySoft.DnsServer.DAL
         public override async Task<IDataContainer> ProcessRequest(IDataContainer dataContainer)
         {
             await Task.Delay(0);
-            List<DnsRecordDTO>? listOfDnsRecords;
-            MemoryCache!.TryGetValue<List<DnsRecordDTO>>("dnsRecords", out listOfDnsRecords);
-            if (listOfDnsRecords == null)
+            if (ApplicationConfiguration == null)
             {
-                dataContainer = await RedirectRequestToNextRequestHandler(dataContainer, null, null, null, null, SkySoft.Contracts.TransitionTypes.LOADING_USE_CASE);
+                throw new ApplicationException("Configuration is not loaded");
             }
-            else
+
+            List<DnsRecordDTO>? dnsRecords;
+            MemoryCache!.TryGetValue<List<DnsRecordDTO>>("dnsRecords", out dnsRecords);
+            if (dnsRecords == null)
             {
-                GetUrlOfApplicationLayer(dataContainer, listOfDnsRecords);
+                string? pathToDnsRecordsFile = ApplicationConfiguration.GetValue<string>("PathToDnsRecordsFile");
+                if (!string.IsNullOrEmpty(pathToDnsRecordsFile))
+                {
+                    string? directoryName = Path.GetDirectoryName(pathToDnsRecordsFile);
+                    if (string.IsNullOrEmpty(directoryName))
+                    {
+                        Assembly? assembly = Assembly.GetEntryAssembly();
+                        if (assembly == null)
+                        {
+                            throw new ArgumentNullException("Entry assembly not found");
+                        }
+
+                        directoryName = Path.GetDirectoryName(assembly.Location);
+                    }
+
+                    pathToDnsRecordsFile = Path.Combine(directoryName!, pathToDnsRecordsFile);
+                }
+
+                if (File.Exists(pathToDnsRecordsFile))
+                {
+                    string json = File.ReadAllText(pathToDnsRecordsFile);
+                    dnsRecords = JsonConvert.DeserializeObject<List<DnsRecordDTO>>(json);
+                    MemoryCache!.Set("dnsRecords", dnsRecords);
+                }
+                else
+                {
+                    dnsRecords = new List<DnsRecordDTO>();
+                    MemoryCache!.Set("dnsRecords", dnsRecords);
+                    string json = JsonConvert.SerializeObject(dnsRecords);
+                    File.WriteAllText(pathToDnsRecordsFile!, json);
+                }
             }
 
             return dataContainer;

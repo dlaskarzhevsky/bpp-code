@@ -1,0 +1,6 @@
+[
+    {"ApplicationLayerName": "BPP_BL_Person", "Url": "https://localhost:7286"},
+    {"ApplicationLayerName": "BPP_DPL_Person", "Url": "https://localhost:7287"},
+    {"ApplicationLayerName": "BPP_DAL_Person", "Url": "https://localhost:7288"},
+    {"ApplicationLayerName": "SKYSOFT_DAL_DnsServer", "Url": "https://localhost:7201"}
+]

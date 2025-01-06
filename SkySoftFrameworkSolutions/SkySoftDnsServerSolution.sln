@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkySoft.Net.DnsServer", "..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkySoft.BPPApplication", "..\SkySoftFramework\SkySoft.BPPApplication\SkySoft.BPPApplication.csproj", "{916B2347-0003-4ACE-BEBF-CD91D149EFD4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkySoft.Net.DnsServerConfiguration", "..\SkySoftFramework\SkySoft.Net.DnsServerConfiguration\SkySoft.Net.DnsServerConfiguration.csproj", "{D0EFB7AE-6908-4F76-BCBE-E84F5F89CC1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,10 @@ Global
 		{916B2347-0003-4ACE-BEBF-CD91D149EFD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{916B2347-0003-4ACE-BEBF-CD91D149EFD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{916B2347-0003-4ACE-BEBF-CD91D149EFD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0EFB7AE-6908-4F76-BCBE-E84F5F89CC1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0EFB7AE-6908-4F76-BCBE-E84F5F89CC1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0EFB7AE-6908-4F76-BCBE-E84F5F89CC1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0EFB7AE-6908-4F76-BCBE-E84F5F89CC1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -122,5 +128,6 @@ Global
 		{DC1B5D7E-2A76-455B-BAD2-6975F750748F} = {1462E7A1-2320-41A9-9F91-C672A58B6015}
 		{6D3C35D9-B4D8-4F7F-B975-8347AA16D599} = {2AC5D1CA-B35F-4F7F-84FB-751CF4DD80AD}
 		{916B2347-0003-4ACE-BEBF-CD91D149EFD4} = {FA27127D-05B0-498E-9B97-D704E206CE8D}
+		{D0EFB7AE-6908-4F76-BCBE-E84F5F89CC1F} = {2AC5D1CA-B35F-4F7F-84FB-751CF4DD80AD}
 	EndGlobalSection
 EndGlobal

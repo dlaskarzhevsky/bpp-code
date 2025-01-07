@@ -25,6 +25,11 @@ namespace SkySoft.IBPPApplication
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
         Task<IDataContainer> ProcessRequest(IDataContainer dataContainer);
+
+        /// <summary>
+        /// Releases resources
+        /// </summary>
+        void ReleaseResources();
         #endregion
 
         #region Propterties

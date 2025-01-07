@@ -1,10 +1,7 @@
-using System.Reflection;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
 using SkySoft.Communication;
-using SkySoft.Configuration;
 using SkySoft.Contracts;
 using SkySoft.DnsServer.DTI;
 using SkySoft.DnsServer.DTO;
@@ -42,7 +39,7 @@ namespace SkySoft.APIHost
             ApplicationConfiguration = applicationConfiguration;
             MemoryCache = memoryCache;
             bool? applicationInitialized;
-            MemoryCache!.TryGetValue<bool?>("ApplicationInitialized", out applicationInitialized);
+            MemoryCache!.TryGetValue<bool?>(SkySoft.Contracts.StateTypes.INITIAL, out applicationInitialized);
             if (applicationInitialized == null || applicationInitialized == false)
             {
                 IDataContainer requestDataContainer = DataContainer.CreateDataContainer();
@@ -51,7 +48,7 @@ namespace SkySoft.APIHost
                 requestDataContainer.UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
                 requestDataContainer.TransitionName = SkySoft.DnsServer.CON.TransitionTypes.LOADING_USE_CASE;
                 RedirectRequestToRequestHandler(requestDataContainer).Wait();
-                MemoryCache!.Set("ApplicationInitialized", true);
+                MemoryCache!.Set(SkySoft.Contracts.StateTypes.INITIAL, true);
             }
         }
         #endregion
@@ -125,42 +122,6 @@ namespace SkySoft.APIHost
         }
 
         /// <summary>
-        /// Initializes application
-        /// </summary>
-        protected void InitializeApplication()
-        {
-            IConfigurationSection configurationSection = ApplicationConfiguration.GetSection("DefaultUseCaseInitializationRequest");
-            RequestMetadataDTO? requestMetadataDTO = configurationSection.Get<RequestMetadataDTO>();
-            if (requestMetadataDTO == null)
-            {
-                return;
-            }
-
-            IDataContainer dataContainer = DataContainer.CreateDataContainer();
-            dataContainer.ApplicationLayerName = requestMetadataDTO.ApplicationLayerName;
-            dataContainer.DomainName = requestMetadataDTO.DomainName;
-            dataContainer.StateName = requestMetadataDTO.StateName;
-            dataContainer.TransitionName = requestMetadataDTO.TransitionName;
-            dataContainer.UseCaseName = requestMetadataDTO.UseCaseName;
-
-            dataContainer = RedirectRequestToRequestHandler(dataContainer).Result;
-        }
-
-        /// <summary>
-        /// Loads application configuration
-        /// </summary>
-        protected void LoadApplicationConfiguration()
-        {
-            Assembly? assembly = Assembly.GetEntryAssembly();
-            if (assembly == null)
-            {
-                throw new ArgumentNullException("Entry assembly not found");
-            }
-
-            ConfigurationSystem.LoadApplicationConfiguration(assembly.Location.Replace(".dll", ".exe") + ".json");
-        }
-
-        /// <summary>
         /// Redirect request to remote request handler
         /// </summary>
         /// <param name="requestDataContainer">Request data container</param>
@@ -231,8 +192,7 @@ namespace SkySoft.APIHost
                 requestHandler.RedirectRequestToAnotherHandlerEvent += RequestHandler_RedirectRequestToAnotherHandlerEvent;
                 dataContainer = await requestHandler.ProcessRequest(dataContainer);
                 requestHandler.RedirectRequestToAnotherHandlerEvent -= RequestHandler_RedirectRequestToAnotherHandlerEvent;
-                requestHandler.ApplicationConfiguration = null;
-                requestHandler.MemoryCache = null;
+                requestHandler.ReleaseResources();
             }
 
             return dataContainer;

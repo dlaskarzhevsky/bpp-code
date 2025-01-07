@@ -29,8 +29,26 @@ namespace SkySoft.BPPApplication
         /// <returns>Data container</returns>
         public virtual async Task<IDataContainer> ProcessRequest(IDataContainer dataContainer)
         {
-            await Task.Delay(0);
+            DataContainer = dataContainer;
+            InitializeComponent();
+            ValidateComponent();
+            if (ComponentIsValid)
+            {
+                await HandleRequest();
+                FinalizeComponent();
+            }
+
             return dataContainer;
+        }
+
+        /// <summary>
+        /// Releases resources
+        /// </summary>
+        public virtual void ReleaseResources()
+        {
+            DataContainer = null;
+            ApplicationConfiguration = null;
+            MemoryCache = null;
         }
         #endregion
 
@@ -112,6 +130,13 @@ namespace SkySoft.BPPApplication
 
         #region Protected Methods
         /// <summary>
+        /// Initializes component
+        /// </summary>
+        protected virtual void InitializeComponent()
+        {
+        }
+
+        /// <summary>
         /// Redirects request to next application layer
         /// </summary>
         /// <param name="dataContainer">Data container</param>
@@ -163,6 +188,49 @@ namespace SkySoft.BPPApplication
             }
 
             return dataContainer;
+        }
+
+        /// <summary>
+        /// Finalizes component
+        /// </summary>
+        protected virtual void FinalizeComponent()
+        {
+        }
+
+        /// <summary>
+        /// Handles request
+        /// </summary>
+        protected virtual async Task HandleRequest()
+        {
+            await Task.Delay(0);
+        }
+
+        /// <summary>
+        /// Validates component
+        /// </summary>
+        protected virtual void ValidateComponent()
+        {
+        }
+        #endregion
+
+        #region Protected Properties
+        /// <summary>
+        /// Gets flag indicating whether component is valid
+        /// </summary>
+        protected virtual bool ComponentIsValid
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets data container
+        /// </summary>
+        protected IDataContainer? DataContainer
+        {
+            get; set;
         }
         #endregion
     }

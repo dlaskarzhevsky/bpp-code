@@ -1,16 +1,11 @@
-﻿using System.IO;
-using System.Reflection;
+﻿using System.Reflection;
 
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
 
 using Newtonsoft.Json;
 
-using SkySoft.Communication;
-using SkySoft.DnsServer.CON;
-
+using SkySoft.Core;
 using SkySoft.DnsServer.DTO;
-using SkySoft.ICommunication;
 
 namespace SkySoft.DnsServer.DAL
 {
@@ -29,88 +24,162 @@ namespace SkySoft.DnsServer.DAL
         }
         #endregion
 
-        #region Public Methods
+        #region Overridden Methods
+        /// <summary>
+        /// Initializes component
+        /// </summary>
+        protected override void ValidateComponent()
+        {
+            if (ApplicationConfiguration == null)
+            {
+                throw new ConfigurationException("Configuration is not loaded");
+            }
+        }
+
         /// <summary>
         /// Processes request
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        public override async Task<IDataContainer> ProcessRequest(IDataContainer dataContainer)
+        protected override async Task HandleRequest()
         {
             await Task.Delay(0);
-            if (ApplicationConfiguration == null)
+
+            GetListOfDnsRecordsFromCache();
+            if (CacheHasNoDnsRecords)
             {
-                throw new ApplicationException("Configuration is not loaded");
-            }
-
-            List<DnsRecordDTO>? dnsRecords;
-            MemoryCache!.TryGetValue<List<DnsRecordDTO>>("dnsRecords", out dnsRecords);
-            if (dnsRecords == null)
-            {
-                string? pathToDnsRecordsFile = ApplicationConfiguration.GetValue<string>("PathToDnsRecordsFile");
-                if (!string.IsNullOrEmpty(pathToDnsRecordsFile))
+                VerifyThatPathToDnsRecordsFileContainsDirectoryName();
+                if (DnsRecordsFileExists)
                 {
-                    string? directoryName = Path.GetDirectoryName(pathToDnsRecordsFile);
-                    if (string.IsNullOrEmpty(directoryName))
-                    {
-                        Assembly? assembly = Assembly.GetEntryAssembly();
-                        if (assembly == null)
-                        {
-                            throw new ArgumentNullException("Entry assembly not found");
-                        }
-
-                        directoryName = Path.GetDirectoryName(assembly.Location);
-                    }
-
-                    pathToDnsRecordsFile = Path.Combine(directoryName!, pathToDnsRecordsFile);
-                }
-
-                if (File.Exists(pathToDnsRecordsFile))
-                {
-                    string json = File.ReadAllText(pathToDnsRecordsFile);
-                    dnsRecords = JsonConvert.DeserializeObject<List<DnsRecordDTO>>(json);
-                    MemoryCache!.Set("dnsRecords", dnsRecords);
+                    LoadDnsRecordsFromFile();
                 }
                 else
                 {
-                    dnsRecords = new List<DnsRecordDTO>();
-                    MemoryCache!.Set("dnsRecords", dnsRecords);
-                    string json = JsonConvert.SerializeObject(dnsRecords);
-                    File.WriteAllText(pathToDnsRecordsFile!, json);
+                    CreateEmptyListOfDnsRecords();
+                    CreateDnsRecordsEmptyFile();
                 }
-            }
 
-            return dataContainer;
+                CacheListOfDnsRecords();
+            }
+        }
+
+        /// <summary>
+        /// Releases resources
+        /// </summary>
+        public override void ReleaseResources()
+        {
+            ListOfDnsRecords = null;
+            base.ReleaseResources();
         }
         #endregion
 
         #region Private Methods
         /// <summary>
-        /// Get URL of application layer
+        /// Caches list of DNS records
         /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <param name="listOfDnsRecords">List of DNS records</param>
-        void GetUrlOfApplicationLayer(IDataContainer dataContainer, List<DnsRecordDTO> listOfDnsRecords)
+        void CacheListOfDnsRecords()
         {
-            dataContainer.RemoveCurrentRequestMetadta();
-            string applicationLayerName = $"{dataContainer.DomainName}_{dataContainer.ApplicationLayerName}_{dataContainer.UseCaseName}".ToLowerInvariant();
-            for (int i = 0; i < listOfDnsRecords.Count; i++)
+            MemoryCache!.Set(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS, ListOfDnsRecords);
+        }
+
+        /// <summary>
+        /// Creates DNS records empty file
+        /// </summary>
+        void CreateDnsRecordsEmptyFile()
+        {
+            string json = JsonConvert.SerializeObject(ListOfDnsRecords);
+            File.WriteAllText(PathToDnsRecordsFile, json);
+        }
+
+        /// <summary>
+        /// Creates empty list of DNS records
+        /// </summary>
+        void CreateEmptyListOfDnsRecords()
+        {
+            ListOfDnsRecords = new List<DnsRecordDTO>();
+        }
+
+        /// <summary>
+        /// Gets list of DNS records from cache
+        /// </summary>
+        void GetListOfDnsRecordsFromCache()
+        {
+            List<DnsRecordDTO>? listOfDnsRecords;
+            MemoryCache!.TryGetValue<List<DnsRecordDTO>>(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS, out listOfDnsRecords);
+            if (listOfDnsRecords != null)
             {
-                string? registeredApplicationLayerName = listOfDnsRecords[i].ApplicationLayerName;
-                if (!string.IsNullOrEmpty(registeredApplicationLayerName) && registeredApplicationLayerName.ToLowerInvariant() == applicationLayerName)
-                {
-                    DnsRecordDTO dnsRecordDTO = new DnsRecordDTO();
-                    dnsRecordDTO.ApplicationLayerName = dataContainer.ApplicationLayerName;
-                    dnsRecordDTO.Url = listOfDnsRecords[i].Url;
-
-                    IDataCollection<DnsRecordDTO> dnsRecordDTODataCollection = new DataCollection<DnsRecordDTO>();
-                    dnsRecordDTODataCollection.Add(dnsRecordDTO);
-                    dataContainer.AddDataCollection(UseCaseContract.DNS_SERVER + SkySoft.DnsServer.CON.DataCollectionTypes.SEARCH_RESPONSE, dnsRecordDTODataCollection);
-
-                    break;
-                }
+                ListOfDnsRecords = listOfDnsRecords;
             }
         }
+
+        /// <summary>
+        /// Load DNS records from file
+        /// </summary>
+        void LoadDnsRecordsFromFile()
+        {
+            string json = File.ReadAllText(PathToDnsRecordsFile!);
+            ListOfDnsRecords = JsonConvert.DeserializeObject<List<DnsRecordDTO>>(json);
+        }
+
+        /// <summary>
+        /// Verifies that path to DNS records file contains directory name
+        /// </summary>
+        void VerifyThatPathToDnsRecordsFileContainsDirectoryName()
+        {
+            string? directoryName = Path.GetDirectoryName(PathToDnsRecordsFile);
+            if (string.IsNullOrEmpty(directoryName))
+            {
+                Assembly? assembly = Assembly.GetEntryAssembly();
+                if (assembly == null)
+                {
+                    throw new ApplicationException("Entry assembly not found");
+                }
+
+                directoryName = Path.GetDirectoryName(assembly.Location);
+            }
+
+            PathToDnsRecordsFile = Path.Combine(directoryName!, PathToDnsRecordsFile!);
+        }
+        #endregion
+
+        #region Private Properties
+        /// <summary>
+        /// Gets flag indicating whether cache has no DNS records
+        /// </summary>
+        bool CacheHasNoDnsRecords
+        {
+            get
+            {
+                return ListOfDnsRecords == null;
+            }
+        }
+
+        /// <summary>
+        /// Gets flag indicating whether DNS records file exists
+        /// </summary>
+        bool DnsRecordsFileExists
+        {
+            get
+            {
+                return File.Exists(PathToDnsRecordsFile);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets list of DNS records
+        /// </summary>
+        List<DnsRecordDTO>? ListOfDnsRecords
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Getsa or sets path to DNS records file
+        /// </summary>
+        string PathToDnsRecordsFile
+        {
+            get; set;
+        } = SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS + ".json";
         #endregion
     }
 }

@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SkySoft.Communication\SkySoft.Communication.csproj" />
-    <ProjectReference Include="..\SkySoft.Configuration\SkySoft.Configuration.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.CON\SkySoft.DnsServer.CON.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.DTI\SkySoft.DnsServer.DTI.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.DTO\SkySoft.DnsServer.DTO.csproj" />

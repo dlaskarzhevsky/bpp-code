@@ -38,7 +38,7 @@ namespace SkySoft.DnsServer.DAL
                 throw new ApplicationException("Configuration is not loaded");
             }
 /*
-            IConfigurationSection configurationSection = ApplicationConfiguration.GetSection("DnsRecords");
+            IConfigurationSection configurationSection = ApplicationConfiguration.GetSection(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS);
             List<DnsRecordDTO>? listOfDnsRecords = configurationSection.Get<List<DnsRecordDTO>>();
             if (listOfDnsRecords != null)
             {

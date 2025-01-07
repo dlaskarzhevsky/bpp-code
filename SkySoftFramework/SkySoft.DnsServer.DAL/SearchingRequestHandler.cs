@@ -2,7 +2,6 @@
 
 using SkySoft.Communication;
 using SkySoft.DnsServer.CON;
-
 using SkySoft.DnsServer.DTO;
 using SkySoft.ICommunication;
 
@@ -24,56 +23,77 @@ namespace SkySoft.DnsServer.DAL
         }
         #endregion
 
-        #region Public Methods
+        #region Overridden Methods
         /// <summary>
         /// Processes request
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        public override async Task<IDataContainer> ProcessRequest(IDataContainer dataContainer)
+        protected override async Task HandleRequest()
         {
             await Task.Delay(0);
-            List<DnsRecordDTO>? listOfDnsRecords;
-            MemoryCache!.TryGetValue<List<DnsRecordDTO>>("dnsRecords", out listOfDnsRecords);
-            if (listOfDnsRecords == null)
-            {
-                dataContainer = await RedirectRequestToNextRequestHandler(dataContainer, null, null, null, null, SkySoft.Contracts.TransitionTypes.LOADING_USE_CASE);
-            }
-            else
-            {
-                GetUrlOfApplicationLayer(dataContainer, listOfDnsRecords);
-            }
 
-            return dataContainer;
+            GetListOfDnsRecordsFromCache();
+            DataContainer!.RemoveCurrentRequestMetadta();
+            GetUrlOfRequestedApplicationLayer();
+        }
+
+        /// <summary>
+        /// Releases resources
+        /// </summary>
+        public override void ReleaseResources()
+        {
+            ListOfDnsRecords = null;
+            base.ReleaseResources();
         }
         #endregion
 
         #region Private Methods
         /// <summary>
-        /// Get URL of application layer
+        /// Gets list of DNS records from cache
         /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <param name="listOfDnsRecords">List of DNS records</param>
-        void GetUrlOfApplicationLayer(IDataContainer dataContainer, List<DnsRecordDTO> listOfDnsRecords)
+        void GetListOfDnsRecordsFromCache()
         {
-            dataContainer.RemoveCurrentRequestMetadta();
-            string applicationLayerName = $"{dataContainer.DomainName}_{dataContainer.ApplicationLayerName}_{dataContainer.UseCaseName}".ToLowerInvariant();
-            for (int i = 0; i < listOfDnsRecords.Count; i++)
+            List<DnsRecordDTO>? listOfDnsRecords;
+            MemoryCache!.TryGetValue<List<DnsRecordDTO>>(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS, out listOfDnsRecords);
+            if (listOfDnsRecords != null)
             {
-                string? registeredApplicationLayerName = listOfDnsRecords[i].ApplicationLayerName;
+                ListOfDnsRecords = listOfDnsRecords;
+            }
+        }
+
+        /// <summary>
+        /// Get URL of requested application layer
+        /// </summary>
+        void GetUrlOfRequestedApplicationLayer()
+        {
+            string applicationLayerName = $"{DataContainer!.DomainName}_{DataContainer.ApplicationLayerName}_{DataContainer.UseCaseName}".ToLowerInvariant();
+            for (int i = 0; i < ListOfDnsRecords!.Count; i++)
+            {
+                string? registeredApplicationLayerName = ListOfDnsRecords[i].ApplicationLayerName;
                 if (!string.IsNullOrEmpty(registeredApplicationLayerName) && registeredApplicationLayerName.ToLowerInvariant() == applicationLayerName)
                 {
                     DnsRecordDTO dnsRecordDTO = new DnsRecordDTO();
-                    dnsRecordDTO.ApplicationLayerName = dataContainer.ApplicationLayerName;
-                    dnsRecordDTO.Url = listOfDnsRecords[i].Url;
+                    dnsRecordDTO.ApplicationLayerName = DataContainer.ApplicationLayerName;
+                    dnsRecordDTO.Url = ListOfDnsRecords[i].Url;
 
                     IDataCollection<DnsRecordDTO> dnsRecordDTODataCollection = new DataCollection<DnsRecordDTO>();
                     dnsRecordDTODataCollection.Add(dnsRecordDTO);
-                    dataContainer.AddDataCollection(UseCaseContract.DNS_SERVER + SkySoft.DnsServer.CON.DataCollectionTypes.SEARCH_RESPONSE, dnsRecordDTODataCollection);
+                    DataContainer.AddDataCollection(UseCaseContract.DNS_SERVER + SkySoft.DnsServer.CON.DataCollectionTypes.SEARCH_RESPONSE, dnsRecordDTODataCollection);
 
                     break;
                 }
             }
+        }
+        #endregion
+
+        #region Private Properties
+        /// <summary>
+        /// Gets or sets list of DNS records
+        /// </summary>
+        List<DnsRecordDTO>? ListOfDnsRecords
+        {
+            get; set;
         }
         #endregion
     }

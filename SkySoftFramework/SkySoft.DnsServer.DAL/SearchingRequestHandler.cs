@@ -75,7 +75,8 @@ namespace SkySoft.DnsServer.DAL
                 {
                     DnsRecordDTO dnsRecordDTO = new DnsRecordDTO();
                     dnsRecordDTO.ApplicationLayerName = DataContainer.ApplicationLayerName;
-                    dnsRecordDTO.Url = ListOfDnsRecords[i].Url;
+                    dnsRecordDTO.HttpUrl = ListOfDnsRecords[i].HttpUrl;
+                    dnsRecordDTO.HttpsUrl = ListOfDnsRecords[i].HttpsUrl;
 
                     IDataCollection<DnsRecordDTO> dnsRecordDTODataCollection = new DataCollection<DnsRecordDTO>();
                     dnsRecordDTODataCollection.Add(dnsRecordDTO);

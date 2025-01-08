@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SkySoft.APIHost.INT\SkySoft.APIHost.INT.csproj" />
     <ProjectReference Include="..\SkySoft.Communication\SkySoft.Communication.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.CON\SkySoft.DnsServer.CON.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.DTI\SkySoft.DnsServer.DTI.csproj" />

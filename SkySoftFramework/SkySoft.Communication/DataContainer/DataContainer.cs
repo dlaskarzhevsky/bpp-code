@@ -1,4 +1,5 @@
-﻿using SkySoft.ICommunication;
+﻿using SkySoft.Core;
+using SkySoft.ICommunication;
 
 namespace SkySoft.Communication
 {
@@ -152,22 +153,48 @@ namespace SkySoft.Communication
                 throw new ArgumentNullException(nameof(key));
             }
 
+            IDataCollection<T>? dataCollection = null;
             if (!ContainsKey(key))
             {
-                return default!;
+                dataCollection = new DataCollection<T>();
+                AddDataCollection(key, dataCollection);
             }
-
-            IDataCollection<T>? dataCollection = null;
-            if (DataContainerDeserializer.ConvertJArrayIntoDataCollection<T>(this[key], out dataCollection))
+            else
             {
-                if (dataCollection != null)
+                if (DataContainerDeserializer.ConvertJArrayIntoDataCollection<T>(this[key], out dataCollection))
                 {
-                    Remove(key);
-                    AddDataCollection(key, dataCollection);
+                    if (dataCollection != null)
+                    {
+                        Remove(key);
+                        AddDataCollection(key, dataCollection);
+                    }
                 }
             }
 
             return dataCollection;
+        }
+
+        /// <summary>
+        /// Gets new data transfer object
+        /// IDataContainer interface implementation
+        /// </summary>
+        /// <typeparam name="T">Data transfer object type</typeparam>
+        /// <param name="dataCollection">Data collection to which new data transfer object belongs</param>
+        /// <returns>New data transfer object</returns>
+        public T GetNewDTO<T>(IDataCollection<T>? dataCollection)
+        {
+            T? newDTO = (T?)Activator.CreateInstance(typeof(T));
+            if (newDTO == null)
+            {
+                throw new TypeAccessException("Cannot create new data transfer object");
+            }
+
+            if (dataCollection != null)
+            {
+                dataCollection.Add(newDTO);
+            }
+
+            return newDTO;
         }
 
         /// <summary>

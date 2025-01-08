@@ -37,7 +37,7 @@ namespace SkySoft.DnsServer.DAL
         }
 
         /// <summary>
-        /// Processes request
+        /// Handles request
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>

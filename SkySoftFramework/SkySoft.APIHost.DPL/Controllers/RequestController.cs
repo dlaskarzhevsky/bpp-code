@@ -7,33 +7,24 @@ using SkySoft.DnsServer.DTI;
 using SkySoft.DnsServer.DTO;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
+using SkySoft.APIHost.INT;
 using SkySoft.Net.Http;
+using System;
 
-namespace SkySoft.APIHost
+namespace SkySoft.APIHost.DPL
 {
     [ApiController]
     public class RequestController : ControllerBase, IRequestController
     {
-/*
-        #region Static Methods
-        /// <summary>
-        /// Initializes application
-        /// </summary>
-        /// <param name="serviceProvider">Service provider</param>
-        public static void InitializeApplication(IServiceProvider serviceProvider)
-        {
-            serviceProvider.GetRequiredService<IRequestController>();
-        }
-        #endregion
-*/
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="requestHandlers">Request handlers</param>
         /// <param name="applicationConfiguration">Application configuration</param>
-        /// <param name="memoryCache">Application configuration</param>
-        public RequestController(IEnumerable<IRequestHandler> requestHandlers, IConfiguration applicationConfiguration, IMemoryCache memoryCache)
+        /// <param name="memoryCache">Memory cache</param>
+        /// <param name="applicationConfigurator">Application configurator</param>
+        public RequestController(IEnumerable<IRequestHandler> requestHandlers, IConfiguration applicationConfiguration, IMemoryCache memoryCache, IAPIHostInitializer applicationConfigurator)
         {
             RequestHandlers = requestHandlers;
             ApplicationConfiguration = applicationConfiguration;
@@ -43,11 +34,16 @@ namespace SkySoft.APIHost
             if (applicationInitialized == null || applicationInitialized == false)
             {
                 IDataContainer requestDataContainer = DataContainer.CreateDataContainer();
-                requestDataContainer.DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-                requestDataContainer.ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
-                requestDataContainer.UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
-                requestDataContainer.TransitionName = SkySoft.DnsServer.CON.TransitionTypes.LOADING_USE_CASE;
-                RedirectRequestToRequestHandler(requestDataContainer).Wait();
+                if (applicationConfigurator.ConfigureRequestToInitializeApiHost(requestDataContainer))
+                {
+                    RedirectRequestToRequestHandler(requestDataContainer).Wait();
+                }
+
+                if (applicationConfigurator.ConfigureRequestToLoadDefaultUseCase(requestDataContainer))
+                {
+                    RedirectRequestToRequestHandler(requestDataContainer).Wait();
+                }
+
                 MemoryCache!.Set(SkySoft.Contracts.StateTypes.INITIAL, true);
             }
         }
@@ -154,12 +150,12 @@ namespace SkySoft.APIHost
             }
 
             IDnsRecordDTO dnsRecordDTO = dnsRecordDTODataCollection[0];
-            if (string.IsNullOrEmpty(dnsRecordDTO.Url))
+            if (string.IsNullOrEmpty(dnsRecordDTO.HttpUrl) && string.IsNullOrEmpty(dnsRecordDTO.HttpsUrl))
             {
-                throw new ApplicationException("URL not found for application layer " + dnsRecordDTO.ApplicationLayerName);
+                throw new ApplicationException("HTTP URL not found for application layer " + dnsRecordDTO.ApplicationLayerName);
             }
 
-            string url = dnsRecordDTO.Url;
+            string url = dnsRecordDTO.HttpUrl!;
             responseDataContainer.RemoveDataCollection(SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER + DataCollectionTypes.SEARCH_RESPONSE);
             requestDataContainer = responseDataContainer;
             responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, url, "processrequest", 10000);
@@ -196,6 +192,29 @@ namespace SkySoft.APIHost
             }
 
             return dataContainer;
+        }
+
+        /// <summary>
+        /// Redirect request to DNS server
+        /// </summary>
+        /// <param name="requestDataContainer">Request data container</param>
+        /// <returns>Data container</returns>
+        protected virtual async Task<IDataContainer> SendRequestToDnsServer(IDataContainer requestDataContainer)
+        {
+            string? dnsServerUrl = ApplicationConfiguration.GetValue<string>("DnsServerUrl");
+            if (string.IsNullOrEmpty(dnsServerUrl))
+            {
+                throw new KeyNotFoundException("There is no DnsServerUrl setting in appsettings.json file");
+            }
+
+            Transceiver transceiver = new Transceiver();
+            IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, dnsServerUrl, "/processrequest", 10000);
+            if (responseDataContainer == null)
+            {
+                throw new ApplicationException("DNS eerver is not online");
+            }
+
+            return responseDataContainer;
         }
         #endregion
 

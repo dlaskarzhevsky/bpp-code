@@ -17,9 +17,17 @@ namespace SkySoft.DnsServer.DTI
         }
 
         /// <summary>
-        /// Gets or set uniform resource locator
+        /// Gets or set HTTP uniform resource locator
         /// </summary>
-        string? Url
+        string? HttpUrl
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or set HTTPS uniform resource locator
+        /// </summary>
+        string? HttpsUrl
         {
             get; set;
         }

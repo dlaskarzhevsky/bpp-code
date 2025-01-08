@@ -8,19 +8,19 @@ using SkySoft.ICommunication;
 
 namespace SkySoft.DnsServer.DAL
 {
-    public class CreatingRequestHandler : SkySoft.BPPApplication.RequestHandler
+    public class RegisteringHostRequestHandler : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public CreatingRequestHandler()
+        public RegisteringHostRequestHandler()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
             UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
             StateName = SkySoft.DnsServer.CON.StateTypes.INITIAL;
-            TransitionName = SkySoft.DnsServer.CON.TransitionTypes.CREATING;
+            TransitionName = SkySoft.DnsServer.CON.TransitionTypes.REGISTERING_HOST;
         }
         #endregion
 

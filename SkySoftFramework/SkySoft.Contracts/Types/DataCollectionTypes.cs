@@ -5,6 +5,19 @@
     /// </summary>
     public class DataCollectionTypes
     {
+        /// <summary>
+        /// Request suffix
+        /// </summary>
+        public const string REQUEST_SUFFIX = "_Request";
+
+        /// <summary>
+        /// Response suffix
+        /// </summary>
+        public const string RESPONSE_SUFFIX = "_Response";
+
+        /// <summary>
+        /// Request metadata
+        /// </summary>
         public const string REQUEST_METADATA = "RequestMetadata";
 
         /// <summary>

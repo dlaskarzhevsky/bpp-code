@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SkySoft.APIHost\SkySoft.APIHost.csproj" />
-    <ProjectReference Include="..\SkySoft.Net.DnsServerConfiguration\SkySoft.Net.DnsServerConfiguration.csproj" />
+    <ProjectReference Include="..\SkySoft.APIHost.DPL\SkySoft.APIHost.DPL.csproj" />
+    <ProjectReference Include="..\SkySoft.DnsServer.CFG\SkySoft.DnsServer.CFG.csproj" />
   </ItemGroup>
 
 </Project>

@@ -18,6 +18,11 @@ namespace SkySoft.BPPApplication
         /// Defines RedirectRequestToAnotherHandler event
         /// </summary>
         public event AsyncEventHandler<EventArgs>? RedirectRequestToAnotherHandlerEvent;
+
+        /// <summary>
+        /// Defines SendRequestToDnsServer event
+        /// </summary>
+        public event AsyncEventHandler<EventArgs>? SendRequestToDnsServerEvent;
         #endregion
 
         #region Public Methods
@@ -185,6 +190,27 @@ namespace SkySoft.BPPApplication
                 }
 
                 dataContainer.RemoveCurrentRequestMetadta();
+            }
+
+            return dataContainer;
+        }
+
+        /// <summary>
+        /// Sends request to DNS server
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <returns>Data container</returns>
+        protected async Task<IDataContainer> SendRequestToDnsServer(IDataContainer dataContainer)
+        {
+            if (SendRequestToDnsServerEvent != null)
+            {
+                DataContainerEventArgs dataContainerEventArgs = new DataContainerEventArgs(dataContainer);
+                await SendRequestToDnsServerEvent(this, dataContainerEventArgs);
+                if (dataContainerEventArgs.DataContainer != null)
+                {
+                    dataContainer = dataContainerEventArgs.DataContainer;
+                    dataContainerEventArgs.DataContainer = null;
+                }
             }
 
             return dataContainer;

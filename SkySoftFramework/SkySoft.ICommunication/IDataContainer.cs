@@ -77,6 +77,16 @@
         /// <returns>Data collection if found, otherwise NULL</returns>
         IDataCollection<T>? GetDataColletion<T>(string key);
 
+        #region Methods
+        /// <summary>
+        /// Gets new data transfer object
+        /// </summary>
+        /// <typeparam name="T">Data transfer object type</typeparam>
+        /// <param name="dataCollection">Data collection to which new data transfer object belongs</param>
+        /// <returns>New data transfer object</returns>
+        T GetNewDTO<T>(IDataCollection<T> dataCollection);
+        #endregion
+
         /// <summary>
         /// Removes data collection
         /// </summary>

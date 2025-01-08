@@ -36,12 +36,12 @@ namespace BPP.Person.DALAPI.Tests
             }
 
             IDnsRecordDTO dnsRecordDTO = dnsRecordDTODataCollection[0];
-            if (string.IsNullOrEmpty(dnsRecordDTO.Url))
+            if (string.IsNullOrEmpty(dnsRecordDTO.HttpsUrl))
             {
                 Assert.Fail("URL not found for application layer " + dnsRecordDTO.ApplicationLayerName);
             }
 
-            string? url = dnsRecordDTO.Url;
+            string? url = dnsRecordDTO.HttpsUrl;
             Assert.IsNotNull(url);
         }
         #endregion

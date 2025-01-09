@@ -6,6 +6,11 @@
     public class DataCollectionTypes
     {
         /// <summary>
+        /// Exceptions collection
+        /// </summary>
+        public const string EXCEPTIONS = "Exceptions";
+
+        /// <summary>
         /// Request suffix
         /// </summary>
         public const string REQUEST_SUFFIX = "_Request";

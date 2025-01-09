@@ -156,6 +156,17 @@ namespace SkySoft.BPPApplication
         /// Redirects request to request handler
         /// </summary>
         /// <param name="dataContainer">Data container</param>
+        /// <returns>Result of redirection</returns>
+        protected async Task<IDataContainer> RedirectRequestToRequestHandler(IDataContainer dataContainer)
+        {
+            dataContainer = await OperatingSystem.RedirectRequestToRequestHandler(dataContainer);
+            return dataContainer;
+        }
+
+        /// <summary>
+        /// Redirects request to request handler
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
         /// <param name="applicationLayerName">Application layer name</param>
         /// <param name="domainName">Domain name</param>
         /// <param name="useCaseName">Use case name</param>

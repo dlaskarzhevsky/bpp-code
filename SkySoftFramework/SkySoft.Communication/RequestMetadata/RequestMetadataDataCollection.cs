@@ -114,7 +114,7 @@ namespace SkySoft.Communication
                 requestMetadataDTO.UseCaseName = useCaseName;
             }
 
-            if (string.IsNullOrEmpty(stateName))
+            if (stateName == null)
             {
                 requestMetadataDTO.StateName = previousRequestMetadataDTO.StateName;
             }

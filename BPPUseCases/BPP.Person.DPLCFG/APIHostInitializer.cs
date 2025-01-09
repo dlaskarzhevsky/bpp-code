@@ -2,7 +2,6 @@
 using SkySoft.Communication;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
-using SkySoft.IOperatingSystem;
 
 namespace BPP.Person.CFG
 {
@@ -28,8 +27,9 @@ namespace BPP.Person.CFG
         public static void RegisterServices(WebApplicationBuilder webApplicationBuilder)
         {
             webApplicationBuilder.Services.AddTransient<IAPIHostInitializer, BPP.Person.CFG.APIHostInitializer>();
-            webApplicationBuilder.Services.AddTransient<IOS, SkySoft.OperatingSystem.OS>();
+            webApplicationBuilder.Services.AddTransient<IOS, SkySoft.BPPApplication.OS>();
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHost.DAL.LoadingUseCaseRequestHandler>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHost.DPL.SendingRequestToDnsServerRequestHandler>();
         }
         #endregion
 

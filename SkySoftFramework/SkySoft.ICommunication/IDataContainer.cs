@@ -23,6 +23,14 @@
         }
 
         /// <summary>
+        /// Gets or sets exception
+        /// </summary>
+        Exception? Exception
+        {
+            get; set;
+        }
+
+        /// <summary>
         /// Gets or sets state name
         /// </summary>
         string? StateName

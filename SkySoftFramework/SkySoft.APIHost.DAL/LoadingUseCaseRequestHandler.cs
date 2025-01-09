@@ -51,10 +51,12 @@ namespace SkySoft.APIHost.DAL
         /// <returns>Data container</returns>
         protected override async Task HandleRequest()
         {
-            await Task.Delay(0);
             GetHostData();
             AddHostDataToRequest();
             await RegisterHostDataWithDnsServer();
+            if (RegistrationWithDnsServerWasSuccessful)
+            {
+            }
         }
 
         /// <summary>
@@ -100,12 +102,12 @@ namespace SkySoft.APIHost.DAL
         async Task RegisterHostDataWithDnsServer()
         {
             DataContainer!.AddRequestMetadata(
-            SkySoft.Contracts.ApplicationLayerNames.DAL,
-            SkySoft.Contracts.DomainNames.SKYSOFT,
+                SkySoft.Contracts.ApplicationLayerNames.DAL,
+                SkySoft.Contracts.DomainNames.SKYSOFT,
                 SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER,
                 SkySoft.DnsServer.CON.StateTypes.INITIAL,
                 SkySoft.DnsServer.CON.TransitionTypes.REGISTERING_HOST);
-            DataContainer = await SendRequestToDnsServer(DataContainer);
+            DataContainer = await RedirectRequestToRequestHandler(DataContainer);
         }
         #endregion
 
@@ -132,6 +134,17 @@ namespace SkySoft.APIHost.DAL
         string? HttpsUrl
         {
             get; set;
+        }
+
+        /// <summary>
+        /// Gets flag indicating whether registration with DNS server was successful
+        /// </summary>
+        bool RegistrationWithDnsServerWasSuccessful
+        {
+            get
+            {
+                return DataContainer.Exception == null;
+            }
         }
         #endregion
     }

@@ -45,14 +45,23 @@ namespace SkySoft.Net.Http
         /// <returns>Response data container if request was successful, otherwise NULL</returns>
         public async Task<IDataContainer?> TransceiveDataContainer(HttpClient httpClient, IDataContainer requestDataContainer, string baseAddress, string subAddress)
         {
-            string requestSerializedDataContainer = DataContainer.Serialize(requestDataContainer);
-            StringContent stringContent = new StringContent(requestSerializedDataContainer, System.Text.Encoding.ASCII, "text/plain");
+            IDataContainer? responseDataContainer = null;
+            try
+            {
+                string requestSerializedDataContainer = DataContainer.Serialize(requestDataContainer);
+                StringContent stringContent = new StringContent(requestSerializedDataContainer, System.Text.Encoding.ASCII, "text/plain");
 
-            httpClient.BaseAddress = new Uri(baseAddress);
-            var response = await httpClient.PostAsync(subAddress, stringContent);
+                httpClient.BaseAddress = new Uri(baseAddress);
+                var response = await httpClient.PostAsync(subAddress, stringContent);
 
-            var responseSerializedDataContainer = await response.Content.ReadAsStringAsync();
-            IDataContainer? responseDataContainer = DataContainer.Deserialize(responseSerializedDataContainer);
+                var responseSerializedDataContainer = await response.Content.ReadAsStringAsync();
+                responseDataContainer = DataContainer.Deserialize(responseSerializedDataContainer);
+            }
+            catch (HttpRequestException httpRequestException)
+            {
+                responseDataContainer = requestDataContainer;
+                responseDataContainer.Exception = httpRequestException;
+            }
 
             return responseDataContainer;
         }

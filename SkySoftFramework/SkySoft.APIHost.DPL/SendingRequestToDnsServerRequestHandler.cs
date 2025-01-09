@@ -1,4 +1,5 @@
-﻿using SkySoft.ICommunication;
+﻿using SkySoft.Communication;
+using SkySoft.ICommunication;
 using SkySoft.Net.Http;
 
 namespace SkySoft.APIHost.DPL
@@ -31,6 +32,8 @@ namespace SkySoft.APIHost.DPL
             {
                 throw new KeyNotFoundException("There is no DnsServerUrl setting in appsettings.json file");
             }
+
+            DataContainer.RemoveCurrentRequestMetadta();
 
             Transceiver transceiver = new Transceiver();
             IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(DataContainer, dnsServerUrl, "/processrequest", 10000);

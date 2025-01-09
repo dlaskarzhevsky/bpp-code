@@ -42,6 +42,22 @@ namespace SkySoft.Communication
         }
 
         /// <summary>
+        /// Gets or sets exception
+        /// IDataContainer interface implementation
+        /// </summary>
+        public Exception? Exception
+        {
+            get
+            {
+                return ExceptionDataCollection.GetException(this);
+            }
+            set
+            {
+                ExceptionDataCollection.AddException(this, value);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets state name
         /// IDataContainer interface implementation
         /// </summary>
@@ -247,6 +263,7 @@ namespace SkySoft.Communication
             {
                 // The following line of code deserializes request metadata by restoring it from JArray object
                 dataContainer.GetDataColletion<RequestMetadataDTO>(SkySoft.Contracts.DataCollectionTypes.REQUEST_METADATA);
+                dataContainer.GetDataColletion<ExceptionDTO>(SkySoft.Contracts.DataCollectionTypes.EXCEPTIONS);
             }
 
             return dataContainer;

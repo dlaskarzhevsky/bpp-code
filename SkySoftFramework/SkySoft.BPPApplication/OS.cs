@@ -88,7 +88,7 @@ namespace SkySoft.BPPApplication
                     SkySoft.Contracts.ApplicationLayerNames.DPL,
                     SkySoft.Contracts.DomainNames.SKYSOFT,
                     SkySoft.Contracts.UseCaseTypes.CONTROLLER,
-                    null,
+                    "",
                     SkySoft.Contracts.TransitionTypes.SENDING_REQUEST_TO_DNS_SERVER);
                 dataContainer = await RedirectRequestToRequestHandler(dataContainer);
             }

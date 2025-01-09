@@ -8,16 +8,21 @@
         /// <summary>
         /// Creating transition
         /// </summary>
-        public static string CREATING = "Creating";
+        public const string CREATING = "Creating";
 
         /// <summary>
         /// Loading use case transition
         /// </summary>
-        public static string LOADING_USE_CASE = "LoadingUseCase";
+        public const string LOADING_USE_CASE = "LoadingUseCase";
 
         /// <summary>
         /// Searching transition
         /// </summary>
-        public static string SEARCHING = "Searching";
+        public const string SEARCHING = "Searching";
+
+        /// <summary>
+        /// Sending request to DNS server transition
+        /// </summary>
+        public const string SENDING_REQUEST_TO_DNS_SERVER = "SendingRequestToDnsServer";
     }
 }

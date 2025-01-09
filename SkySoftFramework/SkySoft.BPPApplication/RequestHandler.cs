@@ -13,18 +13,6 @@ namespace SkySoft.BPPApplication
     /// </summary>
     public class RequestHandler : IRequestHandler
     {
-        #region Events
-        /// <summary>
-        /// Defines RedirectRequestToAnotherHandler event
-        /// </summary>
-        public event AsyncEventHandler<EventArgs>? RedirectRequestToAnotherHandlerEvent;
-
-        /// <summary>
-        /// Defines SendRequestToDnsServer event
-        /// </summary>
-        public event AsyncEventHandler<EventArgs>? SendRequestToDnsServerEvent;
-        #endregion
-
         #region Public Methods
         /// <summary>
         /// Processes request
@@ -51,9 +39,10 @@ namespace SkySoft.BPPApplication
         /// </summary>
         public virtual void ReleaseResources()
         {
-            DataContainer = null;
-            ApplicationConfiguration = null;
-            MemoryCache = null;
+            DataContainer = default!;
+            ApplicationConfiguration = default!;
+            MemoryCache = default!;
+            OperatingSystem = default!;
         }
         #endregion
 
@@ -61,10 +50,10 @@ namespace SkySoft.BPPApplication
         /// <summary>
         /// Gets or sets application configuration
         /// </summary>
-        public IConfiguration? ApplicationConfiguration
+        public IConfiguration ApplicationConfiguration
         {
             get; set;
-        }
+        } = default!;
 
         /// <summary>
         /// Gets application layer name
@@ -100,10 +89,19 @@ namespace SkySoft.BPPApplication
         /// Gets or sets memory cache
         /// IRequestHandler iterface implementation
         /// </summary>
-        public IMemoryCache? MemoryCache
+        public IMemoryCache MemoryCache
         {
             get; set;
-        }
+        } = default!;
+
+        /// <summary>
+        /// Gets or sets operating system
+        /// IRequestHandler iterface implementation
+        /// </summary>
+        public IOS OperatingSystem
+        {
+            get; set;
+        } = default!;
 
         /// <summary>
         /// Gets state name
@@ -149,25 +147,13 @@ namespace SkySoft.BPPApplication
         /// <returns>Result of redirection</returns>
         protected async Task<IDataContainer> RedirectRequestToNextApplicationLayer(IDataContainer dataContainer, string applicationLayerName)
         {
-            if (RedirectRequestToAnotherHandlerEvent != null)
-            {
-                dataContainer.AddRequestMetadata(applicationLayerName, null, null, null, null);
-                DataContainerEventArgs dataContainerEventArgs = new DataContainerEventArgs(dataContainer);
-                await RedirectRequestToAnotherHandlerEvent(this, dataContainerEventArgs);
-                if (dataContainerEventArgs.DataContainer != null)
-                {
-                    dataContainer = dataContainerEventArgs.DataContainer;
-                    dataContainerEventArgs.DataContainer = null;
-                }
-
-                dataContainer.RemoveCurrentRequestMetadta();
-            }
-
+            dataContainer.AddRequestMetadata(applicationLayerName, null, null, null, null);
+            dataContainer = await OperatingSystem.RedirectRequestToRequestHandler(dataContainer);
             return dataContainer;
         }
 
         /// <summary>
-        /// Redirects request to next request handler
+        /// Redirects request to request handler
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <param name="applicationLayerName">Application layer name</param>
@@ -176,43 +162,10 @@ namespace SkySoft.BPPApplication
         /// <param name="stateName">State name</param>
         /// <param name="transitionName">Transition name</param>
         /// <returns>Result of redirection</returns>
-        protected async Task<IDataContainer> RedirectRequestToNextRequestHandler(IDataContainer dataContainer, string? applicationLayerName, string? domainName, string? useCaseName, string? stateName, string? transitionName)
+        protected async Task<IDataContainer> RedirectRequestToRequestHandler(IDataContainer dataContainer, string? applicationLayerName, string? domainName, string? useCaseName, string? stateName, string? transitionName)
         {
-            if (RedirectRequestToAnotherHandlerEvent != null)
-            {
-                dataContainer.AddRequestMetadata(applicationLayerName, domainName, useCaseName, stateName, transitionName);
-                DataContainerEventArgs dataContainerEventArgs = new DataContainerEventArgs(dataContainer);
-                await RedirectRequestToAnotherHandlerEvent(this, dataContainerEventArgs);
-                if (dataContainerEventArgs.DataContainer != null)
-                {
-                    dataContainer = dataContainerEventArgs.DataContainer;
-                    dataContainerEventArgs.DataContainer = null;
-                }
-
-                dataContainer.RemoveCurrentRequestMetadta();
-            }
-
-            return dataContainer;
-        }
-
-        /// <summary>
-        /// Sends request to DNS server
-        /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <returns>Data container</returns>
-        protected async Task<IDataContainer> SendRequestToDnsServer(IDataContainer dataContainer)
-        {
-            if (SendRequestToDnsServerEvent != null)
-            {
-                DataContainerEventArgs dataContainerEventArgs = new DataContainerEventArgs(dataContainer);
-                await SendRequestToDnsServerEvent(this, dataContainerEventArgs);
-                if (dataContainerEventArgs.DataContainer != null)
-                {
-                    dataContainer = dataContainerEventArgs.DataContainer;
-                    dataContainerEventArgs.DataContainer = null;
-                }
-            }
-
+            dataContainer.AddRequestMetadata(applicationLayerName, domainName, useCaseName, stateName, transitionName);
+            dataContainer = await OperatingSystem.RedirectRequestToRequestHandler(dataContainer);
             return dataContainer;
         }
 
@@ -254,10 +207,10 @@ namespace SkySoft.BPPApplication
         /// <summary>
         /// Gets or sets data container
         /// </summary>
-        protected IDataContainer? DataContainer
+        protected IDataContainer DataContainer
         {
             get; set;
-        }
+        } = default!;
         #endregion
     }
 }

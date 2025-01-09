@@ -1,6 +1,6 @@
 ﻿using SkySoft.IBPPApplication;
 
-namespace SkySoft.OperatingSystem
+namespace SkySoft.BPPApplication
 {
     /// <summary>
     /// Provides request handler locator functionality

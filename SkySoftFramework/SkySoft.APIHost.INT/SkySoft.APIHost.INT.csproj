@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SkySoft.IBPPApplication\SkySoft.IBPPApplication.csproj" />
     <ProjectReference Include="..\SkySoft.ICommunication\SkySoft.ICommunication.csproj" />
-    <ProjectReference Include="..\SkySoft.IOperatingSystem\SkySoft.IOperatingSystem.csproj" />
   </ItemGroup>
 
 </Project>

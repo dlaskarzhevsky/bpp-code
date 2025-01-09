@@ -73,6 +73,11 @@ namespace SkySoft.APIHost.DAL
         void AddHostDataToRequest()
         {
             IDataCollection<DnsRecordDTO>? dnsRecordDTODataCollection = DataContainer!.GetDataColletion<DnsRecordDTO>(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.DnsServer.CON.DataCollectionTypes.REQUEST_SUFFIX);
+            if (dnsRecordDTODataCollection == null)
+            {
+                throw new KeyNotFoundException("Data container contains no data collection with key " + SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.DnsServer.CON.DataCollectionTypes.REQUEST_SUFFIX);
+            }
+
             DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(dnsRecordDTODataCollection);
             dnsRecordDTO.HttpsUrl = HttpsUrl;
             dnsRecordDTO.HttpUrl = HttpUrl;
@@ -100,7 +105,7 @@ namespace SkySoft.APIHost.DAL
                 SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER,
                 SkySoft.DnsServer.CON.StateTypes.INITIAL,
                 SkySoft.DnsServer.CON.TransitionTypes.REGISTERING_HOST);
-
+            DataContainer = await SendRequestToDnsServer(DataContainer);
         }
         #endregion
 

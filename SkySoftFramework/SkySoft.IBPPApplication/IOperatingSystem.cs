@@ -1,12 +1,16 @@
 ﻿using SkySoft.ICommunication;
 
-namespace SkySoft.IOperatingSystem
+namespace SkySoft.IBPPApplication
 {
     /// <summary>
     /// Defines operating system functionality
     /// </summary>
     public interface IOS
     {
+        #region Events
+
+        #endregion
+
         #region Methods
         /// <summary>
         /// Caches value

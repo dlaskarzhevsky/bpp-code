@@ -154,12 +154,7 @@ namespace SkySoft.Communication
             }
 
             IDataCollection<T>? dataCollection = null;
-            if (!ContainsKey(key))
-            {
-                dataCollection = new DataCollection<T>();
-                AddDataCollection(key, dataCollection);
-            }
-            else
+            if (ContainsKey(key))
             {
                 if (DataContainerDeserializer.ConvertJArrayIntoDataCollection<T>(this[key], out dataCollection))
                 {
@@ -169,6 +164,11 @@ namespace SkySoft.Communication
                         AddDataCollection(key, dataCollection);
                     }
                 }
+            }
+            else
+            {
+                dataCollection = new DataCollection<T>();
+                AddDataCollection(key, dataCollection);
             }
 
             return dataCollection;

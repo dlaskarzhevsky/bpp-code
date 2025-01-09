@@ -2,7 +2,6 @@
 using SkySoft.Communication;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
-using SkySoft.IOperatingSystem;
 
 namespace SkySoft.DnsServer.CFG
 {
@@ -18,7 +17,7 @@ namespace SkySoft.DnsServer.CFG
         /// <param name="serviceProvider">Service provider</param>
         public static void InitializeApplication(IServiceProvider serviceProvider)
         {
-            serviceProvider.GetRequiredService<IRequestController>();
+            serviceProvider.GetRequiredService<IReceiverController>();
         }
 
         /// <summary>
@@ -28,10 +27,10 @@ namespace SkySoft.DnsServer.CFG
         public static void RegisterServices(WebApplicationBuilder webApplicationBuilder)
         {
             webApplicationBuilder.Services.AddTransient<IAPIHostInitializer, SkySoft.DnsServer.CFG.APIHostInitializer>();
-            webApplicationBuilder.Services.AddTransient<IOS, SkySoft.OperatingSystem.OS>();
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, DAL.LoadingUseCaseRequestHandler>();
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, DAL.RegisteringHostRequestHandler>();
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, DAL.SearchingRequestHandler>();
+            webApplicationBuilder.Services.AddTransient<IOS, SkySoft.BPPApplication.OS>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServer.DAL.LoadingUseCaseRequestHandler>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServer.DAL.RegisteringHostRequestHandler>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServer.DAL.SearchingRequestHandler>();
         }
         #endregion
 

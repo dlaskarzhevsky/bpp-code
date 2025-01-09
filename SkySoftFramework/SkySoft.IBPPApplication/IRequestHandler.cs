@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 
-using SkySoft.Core;
 using SkySoft.ICommunication;
 
 namespace SkySoft.IBPPApplication
@@ -11,13 +10,6 @@ namespace SkySoft.IBPPApplication
     /// </summary>
     public interface IRequestHandler
     {
-        #region Events
-        /// <summary>
-        /// Defines RedirectRequestToAnotherHandler event
-        /// </summary>
-        event AsyncEventHandler<EventArgs>? RedirectRequestToAnotherHandlerEvent;
-        #endregion
-
         #region Methods
         /// <summary>
         /// Processes request
@@ -36,7 +28,7 @@ namespace SkySoft.IBPPApplication
         /// <summary>
         /// Gets or sets application configuration
         /// </summary>
-        IConfiguration? ApplicationConfiguration
+        IConfiguration ApplicationConfiguration
         {
             get; set;
         }
@@ -44,7 +36,7 @@ namespace SkySoft.IBPPApplication
         /// <summary>
         /// Gets or sets memory cache
         /// </summary>
-        IMemoryCache? MemoryCache
+        IMemoryCache MemoryCache
         {
             get; set;
         }
@@ -71,6 +63,14 @@ namespace SkySoft.IBPPApplication
         string Key
         {
             get;
+        }
+
+        /// <summary>
+        /// Gets or sets operating system
+        /// </summary>
+        IOS OperatingSystem
+        {
+            get; set;
         }
 
         /// <summary>

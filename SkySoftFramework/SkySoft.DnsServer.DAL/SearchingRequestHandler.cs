@@ -34,7 +34,7 @@ namespace SkySoft.DnsServer.DAL
             await Task.Delay(0);
 
             GetListOfDnsRecordsFromCache();
-            DataContainer!.RemoveCurrentRequestMetadta();
+            DataContainer.RemoveCurrentRequestMetadta();
             GetUrlOfRequestedApplicationLayer();
         }
 
@@ -55,7 +55,7 @@ namespace SkySoft.DnsServer.DAL
         void GetListOfDnsRecordsFromCache()
         {
             List<DnsRecordDTO>? listOfDnsRecords;
-            MemoryCache!.TryGetValue<List<DnsRecordDTO>>(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS, out listOfDnsRecords);
+            MemoryCache.TryGetValue<List<DnsRecordDTO>>(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS, out listOfDnsRecords);
             if (listOfDnsRecords != null)
             {
                 ListOfDnsRecords = listOfDnsRecords;
@@ -67,7 +67,7 @@ namespace SkySoft.DnsServer.DAL
         /// </summary>
         void GetUrlOfRequestedApplicationLayer()
         {
-            string applicationLayerName = $"{DataContainer!.DomainName}_{DataContainer.ApplicationLayerName}_{DataContainer.UseCaseName}".ToLowerInvariant();
+            string applicationLayerName = $"{DataContainer.DomainName}_{DataContainer.ApplicationLayerName}_{DataContainer.UseCaseName}".ToLowerInvariant();
             for (int i = 0; i < ListOfDnsRecords!.Count; i++)
             {
                 string? registeredApplicationLayerName = ListOfDnsRecords[i].ApplicationLayerName;

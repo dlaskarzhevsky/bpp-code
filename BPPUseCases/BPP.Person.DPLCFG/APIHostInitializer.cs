@@ -1,6 +1,8 @@
 ﻿using SkySoft.APIHost.INT;
+using SkySoft.Communication;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
+using SkySoft.IOperatingSystem;
 
 namespace BPP.Person.CFG
 {
@@ -16,7 +18,7 @@ namespace BPP.Person.CFG
         /// <param name="serviceProvider">Service provider</param>
         public static void InitializeApplication(IServiceProvider serviceProvider)
         {
-            serviceProvider.GetRequiredService<IRequestController>();
+            serviceProvider.GetRequiredService<IReceiverController>();
         }
 
         /// <summary>
@@ -26,11 +28,37 @@ namespace BPP.Person.CFG
         public static void RegisterServices(WebApplicationBuilder webApplicationBuilder)
         {
             webApplicationBuilder.Services.AddTransient<IAPIHostInitializer, BPP.Person.CFG.APIHostInitializer>();
+            webApplicationBuilder.Services.AddTransient<IOS, SkySoft.OperatingSystem.OS>();
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHost.DAL.LoadingUseCaseRequestHandler>();
         }
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// Configures API host
+        /// IAPIHostInitializer interface implementation
+        /// </summary>
+        /// <param name="operatingSystem">Operating system</param>
+        public void ConfigureApiHost(IOS operatingSystem)
+        {
+            bool? applicationInitialized = operatingSystem.GetValueFomCache<bool?>(SkySoft.Contracts.StateTypes.INITIAL);
+            if (applicationInitialized == null || applicationInitialized == false)
+            {
+                IDataContainer requestDataContainer = DataContainer.CreateDataContainer();
+                if (ConfigureRequestToInitializeApiHost(requestDataContainer))
+                {
+                    operatingSystem.RedirectRequestToRequestHandler(requestDataContainer).Wait();
+                }
+
+                if (ConfigureRequestToLoadDefaultUseCase(requestDataContainer))
+                {
+                    operatingSystem.RedirectRequestToRequestHandler(requestDataContainer).Wait();
+                }
+
+                operatingSystem.CacheValue<bool>(SkySoft.Contracts.StateTypes.INITIAL, true);
+            }
+        }
+
         /// <summary>
         /// Configures request to initialize API host
         /// IAPIHostInitializer interface implementation

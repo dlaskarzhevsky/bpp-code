@@ -5,12 +5,11 @@ using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
 using SkySoft.APIHost.INT;
 using SkySoft.Net.Http;
-using SkySoft.IOperatingSystem;
 
 namespace SkySoft.APIHost.DPL
 {
     [ApiController]
-    public class RequestController : ControllerBase, IRequestController
+    public class ReceiverController : ControllerBase, IReceiverController
     {
         #region Constructors
         /// <summary>
@@ -18,7 +17,7 @@ namespace SkySoft.APIHost.DPL
         /// </summary>
         /// <param name="applicationConfigurator">Application configurator</param>
         /// <param name="operatingSystem">Operating system</param>
-        public RequestController(IAPIHostInitializer applicationConfigurator, IOS operatingSystem)
+        public ReceiverController(IAPIHostInitializer applicationConfigurator, IOS operatingSystem)
         {
             OperatingSystem = operatingSystem;
             applicationConfigurator.ConfigureApiHost(operatingSystem);
@@ -67,13 +66,14 @@ namespace SkySoft.APIHost.DPL
         }
 
         /// <summary>
-        /// Sends request to DNS server
+        /// Sends request to remote server
         /// IRequestController interface implementation
         /// </summary>
         /// <param name="requestDataContainer">Request data container</param>
+        /// <param name="remoteServerUlr">Remote server URL</param>
         /// <returns>Response data container</returns>
         [NonAction]
-        public async Task<IDataContainer> SendRequestToDnsServer(IDataContainer requestDataContainer)
+        public async Task<IDataContainer> SendRequestToRemoteServer(IDataContainer requestDataContainer, string remoteServerUlr)
         {
             string? dnsServerUrl = OperatingSystem.GetValueFromApplicationConfiguration<string>("DnsServerUrl");
             if (string.IsNullOrEmpty(dnsServerUrl))
@@ -82,7 +82,7 @@ namespace SkySoft.APIHost.DPL
             }
 
             Transceiver transceiver = new Transceiver();
-            IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, dnsServerUrl, "/processrequest", 10000);
+            IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, remoteServerUlr, "/processrequest", 10000);
             if (responseDataContainer == null)
             {
                 throw new ApplicationException("DNS eerver is not online");

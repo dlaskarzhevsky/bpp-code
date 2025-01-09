@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "BPP.Person.CFG": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:61731;http://localhost:61732"
+    }
+  }
+}

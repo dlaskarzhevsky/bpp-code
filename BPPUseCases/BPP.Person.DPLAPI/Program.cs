@@ -1,12 +1,11 @@
 using SkySoft.APIHost.DPL;
 using SkySoft.IBPPApplication;
-using BPP.Person.CFG;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddTransient<IRequestController, RequestController>();
-APIHostInitializer.RegisterServices(builder);
+builder.Services.AddTransient<IReceiverController, ReceiverController>();
+BPP.Person.CFG.APIHostInitializer.RegisterServices(builder);
 builder.Services.AddControllers();
 builder.Services.AddMemoryCache();
 
@@ -20,5 +19,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-APIHostInitializer.InitializeApplication(app.Services);
+BPP.Person.CFG.APIHostInitializer.InitializeApplication(app.Services);
 app.Run();

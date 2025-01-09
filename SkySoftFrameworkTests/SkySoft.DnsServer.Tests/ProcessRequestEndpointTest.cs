@@ -4,7 +4,7 @@ using SkySoft.DnsServer.DTO;
 using SkySoft.ICommunication;
 using SkySoft.Net.Http;
 
-namespace BPP.Person.DALAPI.Tests
+namespace SkySoft.DnsServer.Tests
 {
     /// <summary>
     /// Tests "processequest" endpoint

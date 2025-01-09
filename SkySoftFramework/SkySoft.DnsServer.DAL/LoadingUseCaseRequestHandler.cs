@@ -79,7 +79,7 @@ namespace SkySoft.DnsServer.DAL
         /// </summary>
         void CacheListOfDnsRecords()
         {
-            MemoryCache!.Set(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS, ListOfDnsRecords);
+            MemoryCache.Set(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS, ListOfDnsRecords);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace SkySoft.DnsServer.DAL
         void GetListOfDnsRecordsFromCache()
         {
             List<DnsRecordDTO>? listOfDnsRecords;
-            MemoryCache!.TryGetValue<List<DnsRecordDTO>>(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS, out listOfDnsRecords);
+            MemoryCache.TryGetValue<List<DnsRecordDTO>>(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS, out listOfDnsRecords);
             if (listOfDnsRecords != null)
             {
                 ListOfDnsRecords = listOfDnsRecords;

@@ -1,12 +1,16 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using System.Security.Cryptography.X509Certificates;
+
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 
 using SkySoft.Communication;
+using SkySoft.Contracts;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
-using SkySoft.IOperatingSystem;
 
-namespace SkySoft.OperatingSystem
+using static System.TimeZoneInfo;
+
+namespace SkySoft.BPPApplication
 {
     /// <summary>
     /// Provides operating system functionality
@@ -80,15 +84,20 @@ namespace SkySoft.OperatingSystem
             IRequestHandler? requestHandler = RequestHandlerLocator.FindRequestHandler(RequestHandlers, requestHandlerType);
             if (requestHandler == null)
             {
-                dataContainer = await RedirectRequestToRemoteRequestHandler(dataContainer);
+                dataContainer.AddRequestMetadata(
+                    SkySoft.Contracts.ApplicationLayerNames.DPL,
+                    SkySoft.Contracts.DomainNames.SKYSOFT,
+                    SkySoft.Contracts.UseCaseTypes.CONTROLLER,
+                    null,
+                    SkySoft.Contracts.TransitionTypes.SENDING_REQUEST_TO_DNS_SERVER);
+                dataContainer = await RedirectRequestToRequestHandler(dataContainer);
             }
             else
             {
                 requestHandler.ApplicationConfiguration = ApplicationConfiguration;
                 requestHandler.MemoryCache = MemoryCache;
-                requestHandler.RedirectRequestToAnotherHandlerEvent += RequestHandler_RedirectRequestToAnotherHandlerEvent;
+                requestHandler.OperatingSystem = this;
                 dataContainer = await requestHandler.ProcessRequest(dataContainer);
-                requestHandler.RedirectRequestToAnotherHandlerEvent -= RequestHandler_RedirectRequestToAnotherHandlerEvent;
                 requestHandler.ReleaseResources();
             }
 
@@ -175,24 +184,6 @@ namespace SkySoft.OperatingSystem
         IEnumerable<IRequestHandler> RequestHandlers
         {
             get; set;
-        }
-        #endregion
-
-        #region Event Handlers
-        /// <summary>
-        /// Handles RedirectRequestToAnotherHandler event
-        /// </summary>
-        /// <param name="sender">Event source</param>
-        /// <param name="e">event arguments</param>
-        /// <returns>Handling result</returns>
-        async Task RequestHandler_RedirectRequestToAnotherHandlerEvent(object? sender, EventArgs e)
-        {
-            DataContainerEventArgs? dataContainerEventArgs = e as DataContainerEventArgs;
-            if (dataContainerEventArgs != null && dataContainerEventArgs.DataContainer != null)
-            {
-                IDataContainer dataContainer = await RedirectRequestToRequestHandler(dataContainerEventArgs.DataContainer);
-                dataContainerEventArgs.DataContainer = dataContainer;
-            }
         }
         #endregion
     }

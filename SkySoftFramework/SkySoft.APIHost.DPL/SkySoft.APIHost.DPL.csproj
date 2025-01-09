@@ -8,17 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SkySoft.APIHost.INT\SkySoft.APIHost.INT.csproj" />
     <ProjectReference Include="..\SkySoft.Communication\SkySoft.Communication.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.CON\SkySoft.DnsServer.CON.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.DTI\SkySoft.DnsServer.DTI.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.DTO\SkySoft.DnsServer.DTO.csproj" />
     <ProjectReference Include="..\SkySoft.IBPPApplication\SkySoft.IBPPApplication.csproj" />
+    <ProjectReference Include="..\SkySoft.IOperatingSystem\SkySoft.IOperatingSystem.csproj" />
     <ProjectReference Include="..\SkySoft.Net.Http\SkySoft.Net.Http.csproj" />
   </ItemGroup>
 

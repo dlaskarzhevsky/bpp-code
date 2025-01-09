@@ -8,10 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="APIHostInitializer.cs~RF9c9199a.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SkySoft.APIHost.CON\SkySoft.APIHost.CON.csproj" />
     <ProjectReference Include="..\SkySoft.APIHost.INT\SkySoft.APIHost.INT.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.DAL\SkySoft.DnsServer.DAL.csproj" />
     <ProjectReference Include="..\SkySoft.IBPPApplication\SkySoft.IBPPApplication.csproj" />
+    <ProjectReference Include="..\SkySoft.IOperatingSystem\SkySoft.IOperatingSystem.csproj" />
+    <ProjectReference Include="..\SkySoft.OperatingSystem\SkySoft.OperatingSystem.csproj" />
   </ItemGroup>
 
 </Project>

@@ -7,11 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="FSM\Tasks\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SkySoft.IBPPApplication\SkySoft.IBPPApplication.csproj" />
+    <ProjectReference Include="..\SkySoft.ICommunication\SkySoft.ICommunication.csproj" />
   </ItemGroup>
 
 </Project>

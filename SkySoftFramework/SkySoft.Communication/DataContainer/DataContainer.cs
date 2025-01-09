@@ -245,7 +245,8 @@ namespace SkySoft.Communication
             IDataContainer? dataContainer = DataContainerDeserializer.Deserialize(serializedDataContainer);
             if (dataContainer != null)
             {
-                IDataCollection<RequestMetadataDTO>? requestMetadataDataCollection = dataContainer.GetDataColletion<RequestMetadataDTO>(SkySoft.Contracts.DataCollectionTypes.REQUEST_METADATA);
+                // The following line of code deserializes request metadata by restoring it from JArray object
+                dataContainer.GetDataColletion<RequestMetadataDTO>(SkySoft.Contracts.DataCollectionTypes.REQUEST_METADATA);
             }
 
             return dataContainer;

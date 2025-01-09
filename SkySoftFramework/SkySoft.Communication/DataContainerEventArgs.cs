@@ -3,7 +3,7 @@
 namespace SkySoft.Communication
 {
     /// <summary>
-    /// Carries ADONetDataContainer through events
+    /// Carries data container through events
     /// </summary>
     public class DataContainerEventArgs : EventArgs
     {

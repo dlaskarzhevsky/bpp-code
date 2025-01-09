@@ -9,11 +9,11 @@ namespace SkySoft.IBPPApplication
     {
         #region Methods
         /// <summary>
-        /// Redirect request to request handler
+        /// Sends request to DNS server
         /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <returns>Data container</returns>
-        Task<IDataContainer> RedirectRequestToRequestHandler(IDataContainer dataContainer);
+        /// <param name="requestDataContainer">Request data container</param>
+        /// <returns>Response data container</returns>
+        Task<IDataContainer> SendRequestToDnsServer(IDataContainer requestDataContainer);
         #endregion
     }
 }

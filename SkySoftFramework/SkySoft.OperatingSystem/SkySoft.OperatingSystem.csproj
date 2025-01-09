@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="IAPIHostInitializer.cs~RF7b33073.TMP" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SkySoft.ICommunication\SkySoft.ICommunication.csproj" />
+    <ProjectReference Include="..\SkySoft.Communication\SkySoft.Communication.csproj" />
     <ProjectReference Include="..\SkySoft.IOperatingSystem\SkySoft.IOperatingSystem.csproj" />
   </ItemGroup>
 

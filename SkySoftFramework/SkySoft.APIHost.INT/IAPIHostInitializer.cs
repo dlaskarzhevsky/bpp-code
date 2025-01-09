@@ -1,4 +1,5 @@
 ﻿using SkySoft.ICommunication;
+using SkySoft.IOperatingSystem;
 
 namespace SkySoft.APIHost.INT
 {
@@ -8,6 +9,12 @@ namespace SkySoft.APIHost.INT
     public interface IAPIHostInitializer
     {
         #region Methods
+        /// <summary>
+        /// Configures API host
+        /// </summary>
+        /// <param name="operatingSystem">Operating system</param>
+        void ConfigureApiHost(IOS operatingSystem);
+
         /// <summary>
         /// Configures request to initialize API host
         /// </summary>

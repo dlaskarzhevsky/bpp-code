@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddTransient<IReceiverController, ReceiverController>();
-BPP.Person.CFG.APIHostInitializer.RegisterServices(builder);
+BPP.Person.DPLCFG.APIHostInitializer.RegisterServices(builder);
 builder.Services.AddControllers();
 builder.Services.AddMemoryCache();
 
@@ -19,5 +19,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-BPP.Person.CFG.APIHostInitializer.InitializeApplication(app.Services);
+BPP.Person.DPLCFG.APIHostInitializer.InitializeApplication(app.Services);
 app.Run();

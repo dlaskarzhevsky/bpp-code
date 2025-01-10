@@ -1,19 +1,9 @@
-﻿using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-using Newtonsoft.Json;
-
-using SkySoft.Communication;
-using SkySoft.Contracts;
 using SkySoft.Core;
 using SkySoft.DnsServer.DTO;
 using SkySoft.ICommunication;
-
-using static System.TimeZoneInfo;
 
 namespace SkySoft.APIHost.DAL
 {

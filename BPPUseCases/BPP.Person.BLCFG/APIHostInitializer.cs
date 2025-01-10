@@ -3,7 +3,7 @@ using SkySoft.Communication;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
 
-namespace BPP.Person.DPLCFG
+namespace BPP.Person.BLCFG
 {
     /// <summary>
     /// Provides API host initializer functionality
@@ -26,7 +26,7 @@ namespace BPP.Person.DPLCFG
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void RegisterServices(WebApplicationBuilder webApplicationBuilder)
         {
-            webApplicationBuilder.Services.AddTransient<IAPIHostInitializer, BPP.Person.DPLCFG.APIHostInitializer>();
+            webApplicationBuilder.Services.AddTransient<IAPIHostInitializer, BPP.Person.BLCFG.APIHostInitializer>();
             webApplicationBuilder.Services.AddTransient<IOS, SkySoft.BPPApplication.OS>();
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHost.DAL.LoadingUseCaseRequestHandler>();
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHost.DPL.SendingRequestToDnsServerRequestHandler>();

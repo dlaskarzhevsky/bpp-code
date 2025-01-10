@@ -14,6 +14,14 @@
             get;
             set;
         }
+
+        /// <summary>
+        /// Gets or sets message
+        /// </summary>
+        string? Message
+        {
+            get; set;
+        }
         #endregion
     }
 }

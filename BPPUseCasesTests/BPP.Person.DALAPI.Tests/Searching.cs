@@ -27,22 +27,27 @@ namespace BPP.Person.DALAPI.Tests
             IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, "https://localhost:7201", "/processrequest", 10000);
             if (responseDataContainer == null)
             {
-                Assert.Fail("Response is null");
+                Assert.Fail("DNS server response is null");
             }
 
             IDataCollection<DnsRecordDTO>? dnsRecordDTODataCollection = responseDataContainer.GetDataColletion<DnsRecordDTO>(SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER + DataCollectionTypes.SEARCH_RESPONSE);
-            if (dnsRecordDTODataCollection == null)
+            if (dnsRecordDTODataCollection == null || dnsRecordDTODataCollection.Count == 0)
             {
-                Assert.Fail("Response is null");
+                Assert.Fail("DNS server response is null");
             }
 
             IDnsRecordDTO dnsRecordDTO = dnsRecordDTODataCollection[0];
-            if (string.IsNullOrEmpty(dnsRecordDTO.Url))
+            if (string.IsNullOrEmpty(dnsRecordDTO.HttpsUrl))
             {
-                Assert.Fail("URL not found for application layer " + dnsRecordDTO.ApplicationLayerName);
+                Assert.Fail("HTTPS URL not found for application layer " + dnsRecordDTO.ApplicationLayerName);
             }
 
-            string url = dnsRecordDTO.Url;
+            if (string.IsNullOrEmpty(dnsRecordDTO.HttpUrl))
+            {
+                Assert.Fail("HTTP URL not found for application layer " + dnsRecordDTO.ApplicationLayerName);
+            }
+
+            string url = dnsRecordDTO.HttpsUrl;
             responseDataContainer.RemoveDataCollection(SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER + DataCollectionTypes.SEARCH_RESPONSE);
             requestDataContainer = responseDataContainer;
             AddPersonSearchCriteriaToRequestDataContainer(requestDataContainer);

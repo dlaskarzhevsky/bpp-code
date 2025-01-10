@@ -7,10 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.APIHost\SkySoft.APIHost.csproj" />
-    <ProjectReference Include="..\BPP.Person.BL\BPP.Person.BL.csproj" />
-    <ProjectReference Include="..\BPP.Person.DAL\BPP.Person.DAL.csproj" />
-    <ProjectReference Include="..\BPP.Person.DPL\BPP.Person.DPL.csproj" />
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.APIHost.DPL\SkySoft.APIHost.DPL.csproj" />
+    <ProjectReference Include="..\BPP.Person.BLCFG\BPP.Person.BLCFG.csproj" />
   </ItemGroup>
 
 </Project>

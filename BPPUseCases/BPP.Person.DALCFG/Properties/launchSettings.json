@@ -1,12 +1,12 @@
 {
   "profiles": {
-    "BPP.Person.CFG": {
+    "BPP.Person.DALCFG": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:61731;http://localhost:61732"
+      "applicationUrl": "https://localhost:50802;http://localhost:50803"
     }
   }
 }

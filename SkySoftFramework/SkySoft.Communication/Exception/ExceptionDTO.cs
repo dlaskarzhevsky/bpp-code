@@ -10,12 +10,21 @@ namespace SkySoft.Communication
         #region Public Properties
         /// <summary>
         /// Gets or sets exception
-        /// IRequestMetadataDTO interface implementation
+        /// IExceptionDTO interface implementation
         /// </summary>
         public Exception? Exception
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// Gets or sets message
+        /// IExceptionDTO interface implementation
+        /// </summary>
+        public string? Message
+        {
+            get; set;
         }
         #endregion
     }

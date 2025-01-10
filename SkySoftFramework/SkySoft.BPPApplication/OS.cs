@@ -102,13 +102,34 @@ namespace SkySoft.BPPApplication
             IRequestHandler? requestHandler = RequestHandlerLocator.FindRequestHandler(RequestHandlers, requestHandlerType);
             if (requestHandler == null)
             {
-                dataContainer.AddRequestMetadata(
-                    SkySoft.Contracts.ApplicationLayerNames.DPL,
-                    SkySoft.Contracts.DomainNames.SKYSOFT,
-                    SkySoft.Contracts.UseCaseTypes.CONTROLLER,
-                    "",
-                    SkySoft.Contracts.TransitionTypes.SENDING_REQUEST_TO_DNS_SERVER);
-                dataContainer = await RedirectRequestToRequestHandler(dataContainer);
+                if (dataContainer.DomainName == SkySoft.Contracts.DomainNames.SKYSOFT)
+                {
+                    dataContainer.AddRequestMetadata(
+                        SkySoft.Contracts.ApplicationLayerNames.DPL,
+                        SkySoft.Contracts.DomainNames.SKYSOFT,
+                        SkySoft.Contracts.UseCaseTypes.CONTROLLER,
+                        "",
+                        SkySoft.Contracts.TransitionTypes.SENDING_REQUEST_TO_DNS_SERVER);
+                    dataContainer = await RedirectRequestToRequestHandler(dataContainer);
+                }
+                else
+                {
+                    string requestApplicationLayerName = $"{dataContainer.DomainName}_{dataContainer.ApplicationLayerName}_{dataContainer.UseCaseName}";
+                    string? hostApplicationLayerName = ApplicationConfiguration.GetValue<string>("ApplicationLayerName");
+                    if (string.IsNullOrEmpty(hostApplicationLayerName))
+                    {
+                        throw new KeyNotFoundException("appsettings.json file does not have ApplicationLayerName setting");
+                    }
+
+                    if (requestApplicationLayerName.ToLowerInvariant() == hostApplicationLayerName.ToLowerInvariant())
+                    {
+                        LogMessage($"The {requestHandlerType} request handler is not registered inside APIHostInitializer file", LogLevel.Error);
+                    }
+                    else
+                    {
+                        dataContainer = await RedirectRequestToRemoteRequestHandler(dataContainer);
+                    }
+                }
             }
             else
             {

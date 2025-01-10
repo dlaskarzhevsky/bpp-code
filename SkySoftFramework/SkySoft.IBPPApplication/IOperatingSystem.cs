@@ -1,4 +1,6 @@
-﻿using SkySoft.ICommunication;
+﻿using Microsoft.Extensions.Logging;
+
+using SkySoft.ICommunication;
 
 namespace SkySoft.IBPPApplication
 {
@@ -7,10 +9,6 @@ namespace SkySoft.IBPPApplication
     /// </summary>
     public interface IOS
     {
-        #region Events
-
-        #endregion
-
         #region Methods
         /// <summary>
         /// Caches value
@@ -35,6 +33,19 @@ namespace SkySoft.IBPPApplication
         /// <param name="key">Value key</param>
         /// <returns>Value fom cache</returns>
         T? GetValueFomCache<T>(string key);
+
+        /// <summary>
+        /// Logs exception
+        /// </summary>
+        /// <param name="exception">Exception for logging</param>
+        void LogException(Exception exception);
+
+        /// <summary>
+        /// Logs message
+        /// </summary>
+        /// <param name="message">Message for logging</param>
+        /// <param name="logLevel">Log level</param>
+        void LogMessage(string message, LogLevel logLevel);
 
         /// <summary>
         /// Redirects request to request handler

@@ -3,6 +3,7 @@ using System.Security.Cryptography.X509Certificates;
 
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 using Newtonsoft.Json;
 
@@ -56,6 +57,14 @@ namespace SkySoft.APIHost.DAL
             await RegisterHostDataWithDnsServer();
             if (RegistrationWithDnsServerWasSuccessful)
             {
+                OperatingSystem.LogMessage("Host was registered with DNS server successfully", LogLevel.Information);
+            }
+            else
+            {
+                if (DataContainer.Exception != null)
+                {
+                    OperatingSystem.LogMessage("DNS server is offline", LogLevel.Critical);
+                }
             }
         }
 

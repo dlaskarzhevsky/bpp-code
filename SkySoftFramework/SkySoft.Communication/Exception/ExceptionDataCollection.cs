@@ -28,7 +28,7 @@ namespace SkySoft.Communication
         public static Exception? GetException(IDataContainer dataContainer)
         {
             IDataCollection<ExceptionDTO>? exceptionDataCollection = dataContainer.GetDataColletion<ExceptionDTO>(SkySoft.Contracts.DataCollectionTypes.EXCEPTIONS);
-            if (exceptionDataCollection == null)
+            if (exceptionDataCollection == null || exceptionDataCollection.Count == 0)
             {
                 return default!;
             }

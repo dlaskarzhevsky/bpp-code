@@ -1,14 +1,9 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
-using SkySoft.Communication;
-using SkySoft.Contracts;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
-
-using static System.TimeZoneInfo;
 
 namespace SkySoft.BPPApplication
 {
@@ -24,11 +19,13 @@ namespace SkySoft.BPPApplication
         /// <param name="applicationConfiguration">Application configuration</param>
         /// <param name="emoryCache">Memory cache</param>
         /// <param name="requestHandlers">Request handlers</param>
+        /// <param name="logger">Logger instance</param>
         /// <param name="drivers">Set of drivers</param>
-        public OS(IConfiguration applicationConfiguration, IMemoryCache memoryCache, IEnumerable<IRequestHandler> requestHandlers)
+        public OS(IConfiguration applicationConfiguration, IMemoryCache memoryCache, ILogger<OS> logger, IEnumerable<IRequestHandler> requestHandlers)
         {
             ApplicationConfiguration = applicationConfiguration;
             MemoryCache = memoryCache;
+            Logger = logger;
             RequestHandlers = requestHandlers;
         }
         #endregion
@@ -70,6 +67,27 @@ namespace SkySoft.BPPApplication
         {
             MemoryCache.TryGetValue<T?>(key, out T? value);
             return value;
+        }
+
+        /// <summary>
+        /// Logs exception
+        /// IOS interface implementation
+        /// </summary>
+        /// <param name="exception">Exception for logging</param>
+        public void LogException(Exception exception)
+        {
+            Logger.LogCritical(exception, null);
+        }
+
+        /// <summary>
+        /// Logs message
+        /// IOS interface implementation
+        /// </summary>
+        /// <param name="message">Message for logging</param>
+        /// <param name="logLevel">Log level</param>
+        public void LogMessage(string message, LogLevel logLevel)
+        {
+            Logger.Log(logLevel, $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()} {message}");
         }
 
         /// <summary>
@@ -166,6 +184,14 @@ namespace SkySoft.BPPApplication
         /// Gets or sets application configuration
         /// </summary>
         IConfiguration ApplicationConfiguration
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets logger
+        /// </summary>
+        ILogger<OS> Logger
         {
             get; set;
         }

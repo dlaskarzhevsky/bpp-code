@@ -1,5 +1,4 @@
-﻿using SkySoft.Communication;
-using SkySoft.ICommunication;
+﻿using SkySoft.ICommunication;
 using SkySoft.Net.Http;
 
 namespace SkySoft.APIHost.DPL
@@ -39,7 +38,7 @@ namespace SkySoft.APIHost.DPL
             IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(DataContainer, dnsServerUrl, "/processrequest", 10000);
             if (responseDataContainer == null)
             {
-                throw new ApplicationException("DNS eerver is not online");
+                throw new ApplicationException("DNS server is not online");
             }
         }
         #endregion

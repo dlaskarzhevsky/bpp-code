@@ -1,24 +1,20 @@
-using SkySoft.APIHost.DPL;
-using SkySoft.IBPPApplication;
+WebApplicationBuilder webApplicationBuilder = WebApplication.CreateBuilder(args);
 
-var builder = WebApplication.CreateBuilder(args);
+SkySoft.BPPApplication.CFG.BPPApplicationComponentsRegistrar.Register(webApplicationBuilder);
+SkySoft.APIHost.CFG.RequestHandlersRegistrar.Register(webApplicationBuilder);
+SkySoft.APIHost.CFG.ReceiverControllerRegistrar.Register(webApplicationBuilder);
+SkySoft.DnsClient.CFG.RequestHandlersRegistrar.Register(webApplicationBuilder);
+SkySoft.DnsClient.CFG.ApplicationInitializerRegistrar.Register(webApplicationBuilder);
+BPP.Person.DALCFG.RequestHandlersRegistrar.Register(webApplicationBuilder);
 
-// Add services to the container.
-SkySoft.BPPApplication.CFG.Configurator.RegisterServices(builder);
-SkySoft.APIHost.CFG.Configurator.RegisterServices(builder);
-SkySoft.DnsClient.CFG.Configurator.RegisterServices(builder);
-BPP.Person.DALCFG.Configurator.RegisterServices(builder);
+webApplicationBuilder.Services.AddControllers();
+webApplicationBuilder.Services.AddMemoryCache();
 
-builder.Services.AddTransient<IReceiverController, ReceiverController>();
-builder.Services.AddControllers();
-builder.Services.AddMemoryCache();
+WebApplication webApplication = webApplicationBuilder.Build();
+webApplication.UseHttpsRedirection();
+webApplication.UseAuthorization();
+webApplication.MapControllers();
 
-var app = builder.Build();
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
+SkySoft.APIHost.CFG.ReceiverControllerStarter.Start(webApplication);
 
-// Start receiver controller
-app.Services.GetRequiredService<IReceiverController>();
-
-app.Run();
+webApplication.Run();

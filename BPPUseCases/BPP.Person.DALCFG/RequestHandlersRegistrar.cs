@@ -3,18 +3,18 @@
 namespace BPP.Person.DALCFG
 {
     /// <summary>
-    /// Provides configurator functionality
+    /// Provides request handlers registrar functionality
     /// </summary>
-    public class Configurator
+    public class RequestHandlersRegistrar
     {
         #region Static Methods
         /// <summary>
-        /// Registers services
+        /// Register request handlers
         /// </summary>
         /// <param name="webApplicationBuilder">Web application builder</param>
-        public static void RegisterServices(WebApplicationBuilder webApplicationBuilder)
+        public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
-            // Data access logic request handlers
+            // Data access logic
             webApplicationBuilder.Services.AddTransient<IRequestHandler, BPP.Person.DAL.SearchingRequestHandler>();
         }
         #endregion

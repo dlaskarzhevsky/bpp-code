@@ -3,18 +3,18 @@
 namespace SkySoft.DnsClient.CFG
 {
     /// <summary>
-    /// Provides configurator functionality
+    /// Provides request handlers registrar functionality
     /// </summary>
-    public class Configurator
+    public class RequestHandlersRegistrar
     {
         #region Static Methods
         /// <summary>
-        /// Registers services
+        /// Register request handlers
         /// </summary>
         /// <param name="webApplicationBuilder">Web application builder</param>
-        public static void RegisterServices(WebApplicationBuilder webApplicationBuilder)
+        public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
-            // Data processing logic request handlers
+            // Data processing logic
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DPL.LoadingUseCaseRequestHandler>();
         }
         #endregion

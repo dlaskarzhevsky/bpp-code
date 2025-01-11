@@ -17,9 +17,6 @@ namespace SkySoft.APIHost.CFG
             // Data processing logic request handlers
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHost.DPL.LoadingUseCaseRequestHandler>();
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHost.DPL.SendingRequestToDnsServerRequestHandler>();
-
-            // Data access logic request handlers
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHost.DAL.LoadingUseCaseRequestHandler>();
         }
         #endregion
     }

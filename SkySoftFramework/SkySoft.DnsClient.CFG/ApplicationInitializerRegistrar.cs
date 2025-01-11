@@ -1,6 +1,6 @@
 ﻿using SkySoft.IBPPApplication;
 
-namespace SkySoft.DnsServer.CFG
+namespace SkySoft.DnsClient.CFG
 {
     /// <summary>
     /// Provides application initializer registrar functionality
@@ -14,7 +14,8 @@ namespace SkySoft.DnsServer.CFG
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
-            webApplicationBuilder.Services.AddTransient<IApplicationInitializer, SkySoft.DnsServer.INI.ApplicationInitializer>();
+            // Data processing logic
+            webApplicationBuilder.Services.AddTransient<IApplicationInitializer, SkySoft.DnsClient.INI.ApplicationInitializer>();
         }
         #endregion
     }

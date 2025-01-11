@@ -14,9 +14,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\SkySoftFramework\SkySoft.Communication\SkySoft.Communication.csproj" />
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsRecord.DTI\SkySoft.DnsRecord.DTI.csproj" />
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsRecord.DTO\SkySoft.DnsRecord.DTO.csproj" />
     <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsServer.CON\SkySoft.DnsServer.CON.csproj" />
-    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsServer.DTI\SkySoft.DnsServer.DTI.csproj" />
-    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsServer.DTO\SkySoft.DnsServer.DTO.csproj" />
     <ProjectReference Include="..\..\SkySoftFramework\SkySoft.ICommunication\SkySoft.ICommunication.csproj" />
     <ProjectReference Include="..\..\SkySoftFramework\SkySoft.Net.Http\SkySoft.Net.Http.csproj" />
   </ItemGroup>

@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SkySoft.DnsServer.CON\SkySoft.DnsServer.CON.csproj" />
+    <ProjectReference Include="..\SkySoft.IBPPApplication\SkySoft.IBPPApplication.csproj" />
+    <ProjectReference Include="..\SkySoft.ICommunication\SkySoft.ICommunication.csproj" />
+  </ItemGroup>
+
+</Project>

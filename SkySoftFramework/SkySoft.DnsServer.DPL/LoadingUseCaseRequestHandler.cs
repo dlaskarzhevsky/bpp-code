@@ -5,9 +5,10 @@ using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 
 using SkySoft.Core;
-using SkySoft.DnsServer.DTO;
+using SkySoft.DnsRecord.DTO;
 
-namespace SkySoft.DnsServer.DAL
+
+namespace SkySoft.DnsServer.DPL
 {
     public class LoadingUseCaseRequestHandler : SkySoft.BPPApplication.RequestHandler
     {
@@ -18,7 +19,7 @@ namespace SkySoft.DnsServer.DAL
         public LoadingUseCaseRequestHandler()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
             TransitionName = SkySoft.DnsServer.CON.TransitionTypes.LOADING_USE_CASE;
         }

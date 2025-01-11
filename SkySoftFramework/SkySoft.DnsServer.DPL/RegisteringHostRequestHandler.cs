@@ -4,10 +4,10 @@ using Microsoft.Extensions.Caching.Memory;
 
 using Newtonsoft.Json;
 
-using SkySoft.DnsServer.DTO;
+using SkySoft.DnsRecord.DTO;
 using SkySoft.ICommunication;
 
-namespace SkySoft.DnsServer.DAL
+namespace SkySoft.DnsServer.DPL
 {
     public class RegisteringHostRequestHandler : SkySoft.BPPApplication.RequestHandler
     {
@@ -18,7 +18,7 @@ namespace SkySoft.DnsServer.DAL
         public RegisteringHostRequestHandler()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
             StateName = SkySoft.DnsServer.CON.StateTypes.INITIAL;
             TransitionName = SkySoft.DnsServer.CON.TransitionTypes.REGISTERING_HOST;

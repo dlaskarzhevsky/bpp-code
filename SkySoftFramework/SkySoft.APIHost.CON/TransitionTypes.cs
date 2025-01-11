@@ -6,8 +6,8 @@
     public class TransitionTypes : SkySoft.Contracts.TransitionTypes
     {
         /// <summary>
-        /// Sending request to DNS server
+        /// Initialize DNS client
         /// </summary>
-        public const string SENDING_REQUEST_TO_DNS_SERVER = "SendingRequestToDnsServer";
+        public const string INITIALIZE_DNS_CLIENT = "InitializeDnsClient";
     }
 }

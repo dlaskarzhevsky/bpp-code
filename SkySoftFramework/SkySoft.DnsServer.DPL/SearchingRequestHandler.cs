@@ -2,10 +2,10 @@
 
 using SkySoft.Communication;
 using SkySoft.DnsServer.CON;
-using SkySoft.DnsServer.DTO;
+using SkySoft.DnsRecord.DTO;
 using SkySoft.ICommunication;
 
-namespace SkySoft.DnsServer.DAL
+namespace SkySoft.DnsServer.DPL
 {
     public class SearchingRequestHandler : SkySoft.BPPApplication.RequestHandler
     {
@@ -16,7 +16,7 @@ namespace SkySoft.DnsServer.DAL
         public SearchingRequestHandler()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
             StateName = SkySoft.DnsServer.CON.StateTypes.INITIAL;
             TransitionName = SkySoft.DnsServer.CON.TransitionTypes.SEARCHING;
@@ -67,20 +67,17 @@ namespace SkySoft.DnsServer.DAL
         /// </summary>
         void GetUrlOfRequestedApplicationLayer()
         {
+            IDataCollection<DnsRecordDTO>? dnsRecordDTODataCollection = DataContainer.GetDataColletion<DnsRecordDTO>(UseCaseContract.DNS_SERVER + SkySoft.DnsServer.CON.DataCollectionTypes.SEARCH_RESPONSE);
             string applicationLayerName = $"{DataContainer.DomainName}_{DataContainer.ApplicationLayerName}_{DataContainer.UseCaseName}".ToLowerInvariant();
             for (int i = 0; i < ListOfDnsRecords!.Count; i++)
             {
                 string? registeredApplicationLayerName = ListOfDnsRecords[i].ApplicationLayerName;
                 if (!string.IsNullOrEmpty(registeredApplicationLayerName) && registeredApplicationLayerName.ToLowerInvariant() == applicationLayerName)
                 {
-                    DnsRecordDTO dnsRecordDTO = new DnsRecordDTO();
+                    DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(dnsRecordDTODataCollection!);
                     dnsRecordDTO.ApplicationLayerName = DataContainer.ApplicationLayerName;
                     dnsRecordDTO.HttpUrl = ListOfDnsRecords[i].HttpUrl;
                     dnsRecordDTO.HttpsUrl = ListOfDnsRecords[i].HttpsUrl;
-
-                    IDataCollection<DnsRecordDTO> dnsRecordDTODataCollection = new DataCollection<DnsRecordDTO>();
-                    dnsRecordDTODataCollection.Add(dnsRecordDTO);
-                    DataContainer.AddDataCollection(UseCaseContract.DNS_SERVER + SkySoft.DnsServer.CON.DataCollectionTypes.SEARCH_RESPONSE, dnsRecordDTODataCollection);
 
                     break;
                 }

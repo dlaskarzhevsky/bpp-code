@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using SkySoft.Communication;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
-using SkySoft.APIHost.INT;
 
 namespace SkySoft.APIHost.DPL
 {
@@ -14,12 +13,12 @@ namespace SkySoft.APIHost.DPL
         /// <summary>
         /// Default constructor
         /// </summary>
-        /// <param name="applicationConfigurator">Application configurator</param>
+        /// <param name="applicationInitializer">Application initializer</param>
         /// <param name="operatingSystem">Operating system</param>
-        public ReceiverController(IAPIHostInitializer applicationConfigurator, IOS operatingSystem)
+        public ReceiverController(IApplicationInitializer applicationInitializer, IOS operatingSystem)
         {
             OperatingSystem = operatingSystem;
-            applicationConfigurator.ConfigureApiHost(operatingSystem);
+            applicationInitializer.InitializeApplication(operatingSystem);
         }
         #endregion
 

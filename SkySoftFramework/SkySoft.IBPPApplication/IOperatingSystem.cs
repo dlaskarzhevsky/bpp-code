@@ -19,6 +19,12 @@ namespace SkySoft.IBPPApplication
         void CacheValue<T>(string key, T value);
 
         /// <summary>
+        /// Gets new data container
+        /// </summary>
+        /// <returns>New data container</returns>
+        IDataContainer GetNewDataContainer();
+
+        /// <summary>
         /// Gets value from application configuration
         /// </summary>
         /// <typeparam name="T">Value type</typeparam>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
+using SkySoft.Communication;
 using SkySoft.Core;
 using SkySoft.DnsServer.DTO;
 using SkySoft.ICommunication;
@@ -44,6 +45,8 @@ namespace SkySoft.APIHost.DAL
         {
             GetHostData();
             AddHostDataToRequest();
+            ConfigureRequestForRegisteringHostDataWithDnsServer();
+            ConfigureRequestForSubmissionToDnsServer();
             await RegisterHostDataWithDnsServer();
             if (RegistrationWithDnsServerWasSuccessful)
             {
@@ -86,6 +89,32 @@ namespace SkySoft.APIHost.DAL
         }
 
         /// <summary>
+        /// Configures request for registering host data with DNS server
+        /// </summary>
+        void ConfigureRequestForRegisteringHostDataWithDnsServer()
+        {
+            DataContainer!.AddRequestMetadata(
+                SkySoft.Contracts.ApplicationLayerNames.DAL,
+                SkySoft.Contracts.DomainNames.SKYSOFT,
+                SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER,
+                SkySoft.DnsServer.CON.StateTypes.INITIAL,
+                SkySoft.DnsServer.CON.TransitionTypes.REGISTERING_HOST);
+        }
+
+        /// <summary>
+        /// Configure request for submission to DNS server
+        /// </summary>
+        void ConfigureRequestForSubmissionToDnsServer()
+        {
+            DataContainer.AddRequestMetadata(
+                SkySoft.Contracts.ApplicationLayerNames.DPL,
+                SkySoft.Contracts.DomainNames.SKYSOFT,
+                SkySoft.Contracts.UseCaseTypes.CONTROLLER,
+                "",
+                SkySoft.Contracts.TransitionTypes.SENDING_REQUEST_TO_DNS_SERVER);
+        }
+
+        /// <summary>
         /// Gets host data
         /// </summary>
         void GetHostData()
@@ -100,12 +129,6 @@ namespace SkySoft.APIHost.DAL
         /// </summary>
         async Task RegisterHostDataWithDnsServer()
         {
-            DataContainer!.AddRequestMetadata(
-                SkySoft.Contracts.ApplicationLayerNames.DAL,
-                SkySoft.Contracts.DomainNames.SKYSOFT,
-                SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER,
-                SkySoft.DnsServer.CON.StateTypes.INITIAL,
-                SkySoft.DnsServer.CON.TransitionTypes.REGISTERING_HOST);
             DataContainer = await RedirectRequestToRequestHandler(DataContainer);
         }
         #endregion

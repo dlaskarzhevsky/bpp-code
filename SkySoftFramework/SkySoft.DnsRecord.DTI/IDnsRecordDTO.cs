@@ -1,6 +1,6 @@
 ﻿using SkySoft.ICommunication;
 
-namespace SkySoft.DnsServer.DTI
+namespace SkySoft.DnsRecord.DTI
 {
     /// <summary>
     /// Defines DNS record data transfer object functionality

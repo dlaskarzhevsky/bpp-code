@@ -1,7 +1,7 @@
 ﻿using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
 
-namespace SkySoft.APIHost.INT
+namespace SkySoft.IHttp
 {
     /// <summary>
     /// Defines API host initializer functionality

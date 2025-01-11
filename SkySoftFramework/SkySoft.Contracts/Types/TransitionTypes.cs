@@ -21,8 +21,8 @@
         public const string SEARCHING = "Searching";
 
         /// <summary>
-        /// Sending request to DNS server transition
+        /// Sending request
         /// </summary>
-        public const string SENDING_REQUEST_TO_DNS_SERVER = "SendingRequestToDnsServer";
+        public const string SENDING_REQUEST = "SendingRequest";
     }
 }

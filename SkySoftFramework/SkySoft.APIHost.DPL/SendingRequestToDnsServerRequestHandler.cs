@@ -14,7 +14,7 @@ namespace SkySoft.APIHost.DPL
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             UseCaseName = SkySoft.Contracts.UseCaseTypes.CONTROLLER;
-            TransitionName = SkySoft.Contracts.TransitionTypes.SENDING_REQUEST_TO_DNS_SERVER;
+            TransitionName = SkySoft.Contracts.TransitionTypes.SENDING_REQUEST;
         }
         #endregion
 

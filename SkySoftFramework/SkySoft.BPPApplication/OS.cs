@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
+using SkySoft.Communication;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
 
@@ -41,6 +42,16 @@ namespace SkySoft.BPPApplication
         public void CacheValue<T>(string key, T value)
         {
             MemoryCache.Set(key, value);
+        }
+
+        /// <summary>
+        /// Gets new data container
+        /// IOS interface implementation
+        /// </summary>
+        /// <returns>New data container</returns>
+        public IDataContainer GetNewDataContainer()
+        {
+            return DataContainer.CreateDataContainer();
         }
 
         /// <summary>
@@ -102,26 +113,15 @@ namespace SkySoft.BPPApplication
             IRequestHandler? requestHandler = RequestHandlerLocator.FindRequestHandler(RequestHandlers, requestHandlerType);
             if (requestHandler == null)
             {
-                if (dataContainer.DomainName == SkySoft.Contracts.DomainNames.SKYSOFT)
+                string applicationLayerNameOfRequest = $"{dataContainer.DomainName}_{dataContainer.ApplicationLayerName}_{dataContainer.UseCaseName}";
+                string? applicationLayerNameOfHost = ApplicationConfiguration.GetValue<string>("ApplicationLayerName");
+                if (string.IsNullOrEmpty(applicationLayerNameOfHost))
                 {
-                    dataContainer.AddRequestMetadata(
-                        SkySoft.Contracts.ApplicationLayerNames.DPL,
-                        SkySoft.Contracts.DomainNames.SKYSOFT,
-                        SkySoft.Contracts.UseCaseTypes.CONTROLLER,
-                        "",
-                        SkySoft.Contracts.TransitionTypes.SENDING_REQUEST_TO_DNS_SERVER);
-                    dataContainer = await RedirectRequestToRequestHandler(dataContainer);
+                    LogMessage("appsettings.json file does not have ApplicationLayerName setting", LogLevel.Error);
                 }
                 else
                 {
-                    string requestApplicationLayerName = $"{dataContainer.DomainName}_{dataContainer.ApplicationLayerName}_{dataContainer.UseCaseName}";
-                    string? hostApplicationLayerName = ApplicationConfiguration.GetValue<string>("ApplicationLayerName");
-                    if (string.IsNullOrEmpty(hostApplicationLayerName))
-                    {
-                        throw new KeyNotFoundException("appsettings.json file does not have ApplicationLayerName setting");
-                    }
-
-                    if (requestApplicationLayerName.ToLowerInvariant() == hostApplicationLayerName.ToLowerInvariant())
+                    if (applicationLayerNameOfRequest.ToLowerInvariant() == applicationLayerNameOfHost.ToLowerInvariant())
                     {
                         LogMessage($"The {requestHandlerType} request handler is not registered inside APIHostInitializer file", LogLevel.Error);
                     }

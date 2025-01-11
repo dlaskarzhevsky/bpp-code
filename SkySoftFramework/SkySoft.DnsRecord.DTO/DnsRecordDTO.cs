@@ -1,7 +1,7 @@
 ﻿using SkySoft.Communication;
-using SkySoft.DnsServer.DTI;
+using SkySoft.DnsRecord.DTI;
 
-namespace SkySoft.DnsServer.DTO
+namespace SkySoft.DnsRecord.DTO
 {
     /// <summary>
     /// Provides DNS record data transfer object functionality

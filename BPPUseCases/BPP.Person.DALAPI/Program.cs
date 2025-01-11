@@ -4,20 +4,21 @@ using SkySoft.IBPPApplication;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+SkySoft.BPPApplication.CFG.Configurator.RegisterServices(builder);
+SkySoft.APIHost.CFG.Configurator.RegisterServices(builder);
+SkySoft.DnsClient.CFG.Configurator.RegisterServices(builder);
+BPP.Person.DALCFG.Configurator.RegisterServices(builder);
+
 builder.Services.AddTransient<IReceiverController, ReceiverController>();
-BPP.Person.DALCFG.APIHostInitializer.RegisterServices(builder);
 builder.Services.AddControllers();
 builder.Services.AddMemoryCache();
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
-BPP.Person.DALCFG.APIHostInitializer.InitializeApplication(app.Services);
+// Start receiver controller
+app.Services.GetRequiredService<IReceiverController>();
+
 app.Run();

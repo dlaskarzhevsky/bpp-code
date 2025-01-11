@@ -9,7 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="..\SkySoft.APIHost.CON\SkySoft.APIHost.CON.csproj" />
     <ProjectReference Include="..\SkySoft.BPPApplication\SkySoft.BPPApplication.csproj" />
-    <ProjectReference Include="..\SkySoft.DnsServer.CON\SkySoft.DnsServer.CON.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.DTI\SkySoft.DnsServer.DTI.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.DTO\SkySoft.DnsServer.DTO.csproj" />
   </ItemGroup>

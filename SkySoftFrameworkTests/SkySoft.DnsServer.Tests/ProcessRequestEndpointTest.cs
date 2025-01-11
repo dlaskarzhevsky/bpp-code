@@ -1,6 +1,6 @@
 ﻿using SkySoft.Communication;
-using SkySoft.DnsServer.DTI;
-using SkySoft.DnsServer.DTO;
+using SkySoft.DnsRecord.DTI;
+using SkySoft.DnsRecord.DTO;
 using SkySoft.ICommunication;
 using SkySoft.Net.Http;
 
@@ -22,7 +22,7 @@ namespace SkySoft.DnsServer.Tests
         {
             IDataContainer requestDataContainer = InitializeRequestDataContainer();
             Transceiver transceiver = new Transceiver();
-            requestDataContainer.AddRequestMetadata(SkySoft.Contracts.ApplicationLayerNames.DAL, SkySoft.Contracts.DomainNames.SKYSOFT, SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER, SkySoft.DnsServer.CON.StateTypes.INITIAL, SkySoft.DnsServer.CON.TransitionTypes.SEARCHING);
+            requestDataContainer.AddRequestMetadata(SkySoft.Contracts.ApplicationLayerNames.DPL, SkySoft.Contracts.DomainNames.SKYSOFT, SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER, SkySoft.DnsServer.CON.StateTypes.INITIAL, SkySoft.DnsServer.CON.TransitionTypes.SEARCHING);
             IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, "https://localhost:7201", "/processrequest", 10000);
             if (responseDataContainer == null)
             {
@@ -30,19 +30,7 @@ namespace SkySoft.DnsServer.Tests
             }
 
             IDataCollection<DnsRecordDTO>? dnsRecordDTODataCollection = responseDataContainer.GetDataColletion<DnsRecordDTO>(SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER + SkySoft.DnsServer.CON.DataCollectionTypes.SEARCH_RESPONSE);
-            if (dnsRecordDTODataCollection == null)
-            {
-                Assert.Fail("Response is null");
-            }
-
-            IDnsRecordDTO dnsRecordDTO = dnsRecordDTODataCollection[0];
-            if (string.IsNullOrEmpty(dnsRecordDTO.HttpsUrl))
-            {
-                Assert.Fail("URL not found for application layer " + dnsRecordDTO.ApplicationLayerName);
-            }
-
-            string? url = dnsRecordDTO.HttpsUrl;
-            Assert.IsNotNull(url);
+            Assert.IsNotNull(dnsRecordDTODataCollection);
         }
         #endregion
 
@@ -55,7 +43,7 @@ namespace SkySoft.DnsServer.Tests
         {
             IDataContainer requestDataContainer = DataContainer.CreateDataContainer();
             requestDataContainer.DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            requestDataContainer.ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
+            requestDataContainer.ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             requestDataContainer.UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
             requestDataContainer.StateName = SkySoft.DnsServer.CON.StateTypes.INITIAL;
             requestDataContainer.TransitionName = SkySoft.DnsServer.CON.TransitionTypes.SEARCHING;

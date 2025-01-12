@@ -1,43 +1,21 @@
-﻿using SkySoft.IBPPApplication;
-using SkySoft.ICommunication;
-
-namespace SkySoft.APIHost.INI
+﻿namespace SkySoft.APIHost.INI
 {
     /// <summary>
     /// Provides application initializer functionality
     /// </summary>
-    public class ApplicationInitializer : IApplicationInitializer
+    public class ApplicationInitializer : SkySoft.BPPApplication.ApplicationInitializer
     {
-        #region Public Methods
+        #region Constructors
         /// <summary>
-        /// Initializes application
-        /// IApplicationInitializer interface implementation
+        /// Default constructor
         /// </summary>
-        /// <param name="operatingSystem">Operating system</param>
-        public void InitializeApplication(IOS operatingSystem)
+        public ApplicationInitializer()
         {
-            bool? applicationInitialized = operatingSystem.GetValueFomCache<bool?>(SkySoft.Contracts.StateTypes.INITIAL);
-            if (applicationInitialized == null || applicationInitialized == false)
-            {
-                IDataContainer requestDataContainer = operatingSystem.GetNewDataContainer();
-                ConfigureRequestToLoadDefaultUseCase(requestDataContainer);
-                operatingSystem.RedirectRequestToRequestHandler(requestDataContainer).Wait();
-                operatingSystem.CacheValue<bool>(SkySoft.Contracts.StateTypes.INITIAL, true);
-            }
-        }
-        #endregion
-
-        #region Private Methods
-        /// <summary>
-        /// Configures request to load default use case
-        /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        void ConfigureRequestToLoadDefaultUseCase(IDataContainer dataContainer)
-        {
-            dataContainer.DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            dataContainer.ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
-            dataContainer.UseCaseName = SkySoft.APIHost.CON.UseCaseContract.API_HOST;
-            dataContainer.TransitionName = SkySoft.APIHost.CON.TransitionTypes.LOADING_USE_CASE;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
+            DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
+            UseCaseName = SkySoft.APIHost.CON.UseCaseContract.API_HOST;
+            StateName = SkySoft.APIHost.CON.StateTypes.INITIAL;
+            TransitionName = SkySoft.APIHost.CON.TransitionTypes.LOADING_USE_CASE;
         }
         #endregion
     }

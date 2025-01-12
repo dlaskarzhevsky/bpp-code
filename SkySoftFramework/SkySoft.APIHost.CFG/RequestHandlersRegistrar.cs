@@ -14,9 +14,8 @@ namespace SkySoft.APIHost.CFG
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
-            // Data processing logic request handlers
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHost.DPL.LoadingUseCaseRequestHandler>();
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHost.DPL.SendingRequestToDnsServerRequestHandler>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHost.DPL.LoadingUseCase>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHost.DPL.SendingRequest>();
         }
         #endregion
     }

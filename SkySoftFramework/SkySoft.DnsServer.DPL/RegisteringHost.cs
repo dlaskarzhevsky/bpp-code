@@ -9,13 +9,16 @@ using SkySoft.ICommunication;
 
 namespace SkySoft.DnsServer.DPL
 {
-    public class RegisteringHostRequestHandler : SkySoft.BPPApplication.RequestHandler
+    /// <summary>
+    /// RegisteringHost transition request handler
+    /// </summary>
+    public class RegisteringHost : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public RegisteringHostRequestHandler()
+        public RegisteringHost()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
@@ -27,11 +30,11 @@ namespace SkySoft.DnsServer.DPL
 
         #region Public Methods
         /// <summary>
-        /// Handles request
+        /// Handles request aynchronously
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        protected override async Task HandleRequest()
+        protected override async Task HandleRequestAsync()
         {
             await Task.Delay(0);
 

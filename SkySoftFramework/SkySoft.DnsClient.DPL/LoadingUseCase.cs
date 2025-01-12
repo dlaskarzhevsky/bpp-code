@@ -7,13 +7,16 @@ using SkySoft.ICommunication;
 
 namespace SkySoft.DnsClient.DPL
 {
-    public class LoadingUseCaseRequestHandler : SkySoft.BPPApplication.RequestHandler
+    /// <summary>
+    /// LoadingUseCase transition request handler
+    /// </summary>
+    public class LoadingUseCase : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public LoadingUseCaseRequestHandler()
+        public LoadingUseCase()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
@@ -35,17 +38,18 @@ namespace SkySoft.DnsClient.DPL
         }
 
         /// <summary>
-        /// Handles request
+        /// Handles request aynchronously
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        protected override async Task HandleRequest()
+        protected override async Task HandleRequestAsync()
         {
-            GetHostData();
-            AddHostDataToRequest();
-            ConfigureRequestForRegisteringHostDataWithDnsServer();
-            ConfigureRequestForSubmissionToDnsServer();
-            await RegisterHostDataWithDnsServer();
+//            GetHostData();
+//            AddHostDataToRequest();
+            GetDnsData();
+            AddDnsDataToRequest();
+            ConfigureRequestForDnsClientRegistrationWithDnsServer();
+            await RequestDnsClientRegistrationWithDnsServer();
             if (RegistrationWithDnsServerWasSuccessful)
             {
                 OperatingSystem.LogMessage("Host was registered with DNS server successfully", LogLevel.Information);
@@ -70,64 +74,58 @@ namespace SkySoft.DnsClient.DPL
 
         #region Private Methods
         /// <summary>
+        /// Adds DNS data to request
+        /// </summary>
+        void AddDnsDataToRequest()
+        {
+            DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.DnsClient.CON.DataCollectionTypes.REQUEST_SUFFIX);
+            dnsRecordDTO.ApplicationLayerName = HostApplicationLayerName;
+            dnsRecordDTO.HttpsUrl = HttpsUrl;
+            dnsRecordDTO.HttpUrl = HttpUrl;
+            dnsRecordDTO.UseHttps = UseHttps;
+        }
+
+        /// <summary>
         /// Adds host data to request
         /// </summary>
         void AddHostDataToRequest()
         {
-            IDataCollection<DnsRecordDTO>? dnsRecordDTODataCollection = DataContainer!.GetDataColletion<DnsRecordDTO>(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.DnsClient.CON.DataCollectionTypes.REQUEST_SUFFIX);
-            if (dnsRecordDTODataCollection == null)
-            {
-                throw new KeyNotFoundException("Data container contains no data collection with key " + SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.DnsClient.CON.DataCollectionTypes.REQUEST_SUFFIX);
-            }
-
-            DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(dnsRecordDTODataCollection);
+            DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.DnsClient.CON.DataCollectionTypes.REQUEST_SUFFIX);
+            dnsRecordDTO.ApplicationLayerName = HostApplicationLayerName;
             dnsRecordDTO.HttpsUrl = HttpsUrl;
             dnsRecordDTO.HttpUrl = HttpUrl;
-            dnsRecordDTO.ApplicationLayerName = HostApplicationLayerName;
+            dnsRecordDTO.UseHttps = UseHttps;
         }
 
         /// <summary>
-        /// Configures request for registering host data with DNS server
+        /// Configures request for DNS client registration with DNS server
         /// </summary>
-        void ConfigureRequestForRegisteringHostDataWithDnsServer()
+        void ConfigureRequestForDnsClientRegistrationWithDnsServer()
         {
             DataContainer!.AddRequestMetadata(
-                SkySoft.Contracts.ApplicationLayerNames.DAL,
+                SkySoft.Contracts.ApplicationLayerNames.DPL,
                 SkySoft.Contracts.DomainNames.SKYSOFT,
                 SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT,
                 "",
-                SkySoft.DnsClient.CON.TransitionTypes.REGISTERING_DNS_CLIENT_WITH_DNS_SERVER);
+                SkySoft.DnsClient.CON.EventTypes.REGISTERING_DNS_CLIENT_WITH_DNS_SERVER_EVENT);
         }
 
         /// <summary>
-        /// Configure request for submission to DNS server
+        /// Gets DNS Data
         /// </summary>
-        void ConfigureRequestForSubmissionToDnsServer()
+        void GetDnsData()
         {
-            DataContainer.AddRequestMetadata(
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
-                SkySoft.Contracts.DomainNames.SKYSOFT,
-                SkySoft.Contracts.UseCaseTypes.CONTROLLER,
-                "",
-                SkySoft.DnsClient.CON.TransitionTypes.SENDING_REQUEST_TO_DNS_SERVER);
+            HttpUrl = ApplicationConfiguration!.GetValue<string>("DnsServer:Endpoints:Http:Url");
+            HttpsUrl = ApplicationConfiguration!.GetValue<string>("DnsServer:Endpoints:Https:Url");
+            UseHttps = ApplicationConfiguration.GetValue<bool>("UseHttps");
         }
 
         /// <summary>
-        /// Gets host data
+        /// Requests DNS client registration with DNS server
         /// </summary>
-        void GetHostData()
+        async Task RequestDnsClientRegistrationWithDnsServer()
         {
-            HttpUrl = ApplicationConfiguration!.GetValue<string>("Kestrel:Endpoints:Http:Url");
-            HttpsUrl = ApplicationConfiguration!.GetValue<string>("Kestrel:Endpoints:Https:Url");
-            HostApplicationLayerName = ApplicationConfiguration!.GetValue<string>("ApplicationLayerName");
-        }
-
-        /// <summary>
-        /// Registers host data with DNS server
-        /// </summary>
-        async Task RegisterHostDataWithDnsServer()
-        {
-            DataContainer = await RedirectRequestToRequestHandler(DataContainer);
+            DataContainer = await RaiseEvent(DataContainer);
         }
         #endregion
 
@@ -165,6 +163,14 @@ namespace SkySoft.DnsClient.DPL
             {
                 return DataContainer.Exception == null;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets flag indicating whether HTTPS needs to be used
+        /// </summary>
+        bool UseHttps
+        {
+            get; set;
         }
         #endregion
     }

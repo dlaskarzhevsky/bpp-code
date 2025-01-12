@@ -4,8 +4,9 @@ SkySoft.BPPApplication.CFG.BPPApplicationComponentsRegistrar.Register(webApplica
 SkySoft.APIHost.CFG.RequestHandlersRegistrar.Register(webApplicationBuilder);
 SkySoft.APIHost.CFG.ReceiverControllerRegistrar.Register(webApplicationBuilder);
 SkySoft.DnsClient.CFG.RequestHandlersRegistrar.Register(webApplicationBuilder);
-SkySoft.DnsClient.CFG.ApplicationInitializerRegistrar.Register(webApplicationBuilder);
+SkySoft.APIHostApp.CFG.EventHandlersRegistrar.Register(webApplicationBuilder);
 BPP.Person.DALCFG.RequestHandlersRegistrar.Register(webApplicationBuilder);
+SkySoft.APIHost.CFG.ApplicationInitializerRegistrar.Register(webApplicationBuilder);
 
 webApplicationBuilder.Services.AddControllers();
 webApplicationBuilder.Services.AddMemoryCache();
@@ -15,6 +16,4 @@ webApplication.UseHttpsRedirection();
 webApplication.UseAuthorization();
 webApplication.MapControllers();
 
-SkySoft.APIHost.CFG.ReceiverControllerStarter.Start(webApplication);
-
-webApplication.Run();
+SkySoft.BPPApplication.Runtime.ApplicationStarter.Start(webApplication);

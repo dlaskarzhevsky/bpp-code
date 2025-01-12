@@ -16,7 +16,14 @@ namespace SkySoft.IBPPApplication
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        Task<IDataContainer> ProcessRequest(IDataContainer dataContainer);
+        IDataContainer ProcessRequest(IDataContainer dataContainer);
+
+        /// <summary>
+        /// Processes request asynchronously
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <returns>Data container</returns>
+        Task<IDataContainer> ProcessRequestAsync(IDataContainer dataContainer);
 
         /// <summary>
         /// Releases resources

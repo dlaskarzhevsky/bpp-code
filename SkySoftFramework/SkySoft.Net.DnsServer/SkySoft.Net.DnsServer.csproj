@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SkySoft.APIHost.CFG\SkySoft.APIHost.CFG.csproj" />
     <ProjectReference Include="..\SkySoft.BPPApplication.CFG\SkySoft.BPPApplication.CFG.csproj" />
+    <ProjectReference Include="..\SkySoft.BPPApplication.Runtime\SkySoft.BPPApplication.Runtime.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.CFG\SkySoft.DnsServer.CFG.csproj" />
   </ItemGroup>
 

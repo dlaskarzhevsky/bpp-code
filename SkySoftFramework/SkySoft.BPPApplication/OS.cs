@@ -55,6 +55,17 @@ namespace SkySoft.BPPApplication
         }
 
         /// <summary>
+        /// Gets new data transfer object
+        /// IOS interface implementation
+        /// </summary>
+        /// <typeparam name="T">Data transfer object type</typeparam>
+        /// <returns>New data transfer object</returns>
+        public T GetNewDataTransferObject<T>()
+        {
+            return DataContainer.GetNewDataTransferObject<T>();
+        }
+
+        /// <summary>
         /// Gets value from application configuration
         /// IOS interface implementation
         /// </summary>
@@ -102,6 +113,17 @@ namespace SkySoft.BPPApplication
         }
 
         /// <summary>
+        /// Raises event
+        /// IOS interface implementation
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <returns>Data container</returns>
+        public async Task<IDataContainer> RaiseEvent(IDataContainer dataContainer)
+        {
+            return await RequestRedirector.RedirectRequestToRequestHandler(dataContainer, this);
+        }
+
+        /// <summary>
         /// Redirect request to request handler
         /// IOS interface implementation
         /// </summary>
@@ -109,102 +131,15 @@ namespace SkySoft.BPPApplication
         /// <returns>Data container</returns>
         public async Task<IDataContainer> RedirectRequestToRequestHandler(IDataContainer dataContainer)
         {
-            string requestHandlerType = $"{dataContainer.DomainName}_{dataContainer.ApplicationLayerName}_{dataContainer.UseCaseName}_{dataContainer.StateName}_{dataContainer.TransitionName}";
-            IRequestHandler? requestHandler = RequestHandlerLocator.FindRequestHandler(RequestHandlers, requestHandlerType);
-            if (requestHandler == null)
-            {
-                string applicationLayerNameOfRequest = $"{dataContainer.DomainName}_{dataContainer.ApplicationLayerName}_{dataContainer.UseCaseName}";
-                string? applicationLayerNameOfHost = ApplicationConfiguration.GetValue<string>("ApplicationLayerName");
-                if (string.IsNullOrEmpty(applicationLayerNameOfHost))
-                {
-                    LogMessage("appsettings.json file does not have ApplicationLayerName setting", LogLevel.Error);
-                }
-                else
-                {
-                    if (applicationLayerNameOfRequest.ToLowerInvariant() == applicationLayerNameOfHost.ToLowerInvariant())
-                    {
-                        LogMessage($"The {requestHandlerType} request handler is not registered inside APIHostInitializer file", LogLevel.Error);
-                    }
-                    else
-                    {
-                        dataContainer = await RedirectRequestToRemoteRequestHandler(dataContainer);
-                    }
-                }
-            }
-            else
-            {
-                requestHandler.ApplicationConfiguration = ApplicationConfiguration;
-                requestHandler.MemoryCache = MemoryCache;
-                requestHandler.OperatingSystem = this;
-                dataContainer = await requestHandler.ProcessRequest(dataContainer);
-                requestHandler.ReleaseResources();
-            }
-
-            return dataContainer;
+            return await RequestRedirector.RedirectRequestToRequestHandler(dataContainer, this);
         }
         #endregion
 
-        #region Private Methods
-        /// <summary>
-        /// Redirect request to remote request handler
-        /// </summary>
-        /// <param name="requestDataContainer">Request data container</param>
-        /// <returns>Data container</returns>
-        protected virtual async Task<IDataContainer> RedirectRequestToRemoteRequestHandler(IDataContainer requestDataContainer)
-        {
-            await Task.Delay(0);
-            return default!;
-/*
-            if (string.IsNullOrEmpty(requestDataContainer.TransitionName))
-            {
-                throw new ArgumentNullException("Data container metadata does not contain transition name");
-            }
-
-            string? dnsServerUrl = ApplicationConfiguration.GetValue<string>("DnsServerUrl");
-            if (string.IsNullOrEmpty(dnsServerUrl))
-            {
-                throw new KeyNotFoundException("There is no DnsServerUrl setting in appsettings.json file");
-            }
-
-            Transceiver transceiver = new Transceiver();
-            requestDataContainer.AddRequestMetadata(SkySoft.Contracts.ApplicationLayerNames.DAL, SkySoft.Contracts.DomainNames.SKYSOFT, SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER, SkySoft.DnsServer.CON.StateTypes.INITIAL, SkySoft.DnsServer.CON.TransitionTypes.SEARCHING);
-            IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, dnsServerUrl, "/processrequest", 10000);
-            if (responseDataContainer == null)
-            {
-                throw new ApplicationException("SkySoft DNS Server is not online");
-            }
-
-            IDataCollection<DnsRecordDTO>? dnsRecordDTODataCollection = responseDataContainer.GetDataColletion<DnsRecordDTO>(SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER + DataCollectionTypes.SEARCH_RESPONSE);
-            if (dnsRecordDTODataCollection == null)
-            {
-                throw new ApplicationException("SkySoft DNS Server is not configured");
-            }
-
-            IDnsRecordDTO dnsRecordDTO = dnsRecordDTODataCollection[0];
-            if (string.IsNullOrEmpty(dnsRecordDTO.HttpUrl) && string.IsNullOrEmpty(dnsRecordDTO.HttpsUrl))
-            {
-                throw new ApplicationException("HTTP URL not found for application layer " + dnsRecordDTO.ApplicationLayerName);
-            }
-
-            string url = dnsRecordDTO.HttpUrl!;
-            responseDataContainer.RemoveDataCollection(SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER + DataCollectionTypes.SEARCH_RESPONSE);
-            requestDataContainer = responseDataContainer;
-            responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, url, "processrequest", 10000);
-            if (responseDataContainer == null)
-            {
-                throw new ApplicationException("Server is not online " + url);
-            }
-
-            return responseDataContainer;
-*/
-        }
-        #endregion
-
-        #region Private Properties
+        #region Public Properties
         /// <summary>
         /// Gets or sets application configuration
         /// </summary>
-        IConfiguration ApplicationConfiguration
+        public IConfiguration ApplicationConfiguration
         {
             get; set;
         }
@@ -212,7 +147,7 @@ namespace SkySoft.BPPApplication
         /// <summary>
         /// Gets or sets logger
         /// </summary>
-        ILogger<OS> Logger
+        public ILogger<OS> Logger
         {
             get; set;
         }
@@ -220,7 +155,7 @@ namespace SkySoft.BPPApplication
         /// <summary>
         /// Gets or sets memory cache
         /// </summary>
-        IMemoryCache MemoryCache
+        public IMemoryCache MemoryCache
         {
             get; set;
         }
@@ -228,7 +163,7 @@ namespace SkySoft.BPPApplication
         /// <summary>
         /// Gets or sets request handlers
         /// </summary>
-        IEnumerable<IRequestHandler> RequestHandlers
+        public IEnumerable<IRequestHandler> RequestHandlers
         {
             get; set;
         }

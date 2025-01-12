@@ -5,11 +5,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <OutputType>Library</OutputType>
+    <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SkySoft.APIHost.CON\SkySoft.APIHost.CON.csproj" />
     <ProjectReference Include="..\SkySoft.APIHost.DPL\SkySoft.APIHost.DPL.csproj" />
+    <ProjectReference Include="..\SkySoft.APIHost.INI\SkySoft.APIHost.INI.csproj" />
   </ItemGroup>
 
 </Project>

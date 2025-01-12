@@ -1,19 +1,21 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 
-using SkySoft.Communication;
 using SkySoft.DnsServer.CON;
 using SkySoft.DnsRecord.DTO;
 using SkySoft.ICommunication;
 
 namespace SkySoft.DnsServer.DPL
 {
-    public class SearchingRequestHandler : SkySoft.BPPApplication.RequestHandler
+    /// <summary>
+    /// Searching transition request handler
+    /// </summary>
+    public class Searching : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public SearchingRequestHandler()
+        public Searching()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
@@ -25,11 +27,11 @@ namespace SkySoft.DnsServer.DPL
 
         #region Overridden Methods
         /// <summary>
-        /// Processes request
+        /// Handles request aynchronously
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        protected override async Task HandleRequest()
+        protected override async Task HandleRequestAsync()
         {
             await Task.Delay(0);
 

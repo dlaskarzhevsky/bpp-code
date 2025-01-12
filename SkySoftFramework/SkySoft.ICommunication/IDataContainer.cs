@@ -23,6 +23,14 @@
         }
 
         /// <summary>
+        /// Gets or sets error message
+        /// </summary>
+        string ErrorMessage
+        {
+            get; set;
+        }
+
+        /// <summary>
         /// Gets or sets exception
         /// </summary>
         Exception? Exception
@@ -85,7 +93,29 @@
         /// <returns>Data collection if found, otherwise NULL</returns>
         IDataCollection<T>? GetDataColletion<T>(string key);
 
-        #region Methods
+        /// <summary>
+        /// Gets last data transfer object in data collection
+        /// </summary>
+        /// <typeparam name="T">Data transfer object type</typeparam>
+        /// <param name="key">Data collection key (required)</param>
+        /// <returns>Last data transfer object in data collection</returns>
+        T GetLastDTOInDataCollection<T>(string key);
+
+        /// <summary>
+        /// Gets new data transfer object
+        /// </summary>
+        /// <typeparam name="T">Data transfer object type</typeparam>
+        /// <returns>New data transfer object</returns>
+        T GetNewDTO<T>();
+
+        /// <summary>
+        /// Gets new data transfer object from data collection
+        /// </summary>
+        /// <typeparam name="T">Data transfer object type</typeparam>
+        /// <param name="key">Data collection key (required)</param>
+        /// <returns>New data transfer object</returns>
+        T GetNewDTO<T>(string key);
+
         /// <summary>
         /// Gets new data transfer object
         /// </summary>
@@ -93,7 +123,6 @@
         /// <param name="dataCollection">Data collection to which new data transfer object belongs</param>
         /// <returns>New data transfer object</returns>
         T GetNewDTO<T>(IDataCollection<T> dataCollection);
-        #endregion
 
         /// <summary>
         /// Removes data collection

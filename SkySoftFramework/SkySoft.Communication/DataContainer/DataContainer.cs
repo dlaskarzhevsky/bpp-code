@@ -42,6 +42,22 @@ namespace SkySoft.Communication
         }
 
         /// <summary>
+        /// Gets or sets error message
+        /// IDataContainer interface implementation
+        /// </summary>
+        public string ErrorMessage
+        {
+            get
+            {
+                return ExceptionDataCollection.GetErrorMessage(this);
+            }
+            set
+            {
+                ExceptionDataCollection.AddErrorMessage(this, value);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets exception
         /// IDataContainer interface implementation
         /// </summary>
@@ -191,6 +207,54 @@ namespace SkySoft.Communication
         }
 
         /// <summary>
+        /// Gets last data transfer object in data collection
+        /// IDataContainer interface implementation
+        /// </summary>
+        /// <typeparam name="T">Data transfer object type</typeparam>
+        /// <param name="key">Data collection key (required)</param>
+        /// <returns>Last data transfer object in data collection</returns>
+        public T GetLastDTOInDataCollection<T>(string key)
+        {
+            IDataCollection<T>? dataCollection = GetDataColletion<T>(key);
+            if (dataCollection == null)
+            {
+                return default!;
+            }
+
+            return dataCollection[dataCollection.Count - 1];
+        }
+
+        /// <summary>
+        /// Gets new data transfer object
+        /// IDataContainer interface implementation
+        /// </summary>
+        /// <typeparam name="T">Data transfer object type</typeparam>
+        /// <returns>New data transfer object</returns>
+        public T GetNewDTO<T>()
+        {
+            return DataContainer.GetNewDataTransferObject<T>();
+        }
+
+        /// <summary>
+        /// Gets new data transfer object from data collection
+        /// IDataContainer interface implementation
+        /// </summary>
+        /// <typeparam name="T">Data transfer object type</typeparam>
+        /// <param name="key">Data collection key (required)</param>
+        /// <returns>New data transfer object</returns>
+        public T GetNewDTO<T>(string key)
+        {
+            IDataCollection<T>? dataCollection = GetDataColletion<T>(key);
+            if (dataCollection == null)
+            {
+                return default!;
+            }
+
+            T newDTO = GetNewDTO<T>(dataCollection);
+            return newDTO;
+        }
+
+        /// <summary>
         /// Gets new data transfer object
         /// IDataContainer interface implementation
         /// </summary>
@@ -199,12 +263,7 @@ namespace SkySoft.Communication
         /// <returns>New data transfer object</returns>
         public T GetNewDTO<T>(IDataCollection<T>? dataCollection)
         {
-            T? newDTO = (T?)Activator.CreateInstance(typeof(T));
-            if (newDTO == null)
-            {
-                throw new TypeAccessException("Cannot create new data transfer object");
-            }
-
+            T? newDTO = DataContainer.GetNewDataTransferObject<T>();
             if (dataCollection != null)
             {
                 dataCollection.Add(newDTO);
@@ -267,6 +326,39 @@ namespace SkySoft.Communication
             }
 
             return dataContainer;
+        }
+
+        /// <summary>
+        /// Gets new data transfer object
+        /// </summary>
+        /// <typeparam name="T">Data transfer object type</typeparam>
+        /// <returns>New data transfer object</returns>
+        public static T GetNewDataTransferObject<T>()
+        {
+            T? newDTO = default!;
+            Type type = typeof(T);
+            if (type.IsInterface)
+            {
+                string typeName = type.Name.Substring(1);
+                Type? classType = Type.GetType(typeName);
+                if (classType == null)
+                {
+                    throw new TypeAccessException("Cannot create new data transfer object type of " + typeName);
+                }
+
+                newDTO = (T?)Activator.CreateInstance(classType);
+            }
+            else
+            {
+                newDTO = Activator.CreateInstance<T>();
+            }
+
+            if (newDTO == null)
+            {
+                throw new TypeAccessException("Cannot create new data transfer object");
+            }
+
+            return newDTO;
         }
 
         /// <summary>

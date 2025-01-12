@@ -33,7 +33,7 @@ namespace BPP.Person.DAL
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        public override async Task<IDataContainer> ProcessRequest(IDataContainer dataContainer)
+        public override async Task<IDataContainer> ProcessRequestAsync(IDataContainer dataContainer)
         {
             await Task.Delay(0);
 

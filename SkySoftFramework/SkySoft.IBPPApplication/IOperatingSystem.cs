@@ -25,6 +25,13 @@ namespace SkySoft.IBPPApplication
         IDataContainer GetNewDataContainer();
 
         /// <summary>
+        /// Gets new data transfer object
+        /// </summary>
+        /// <typeparam name="T">Data transfer object type</typeparam>
+        /// <returns>New data transfer object</returns>
+        T GetNewDataTransferObject<T>();
+
+        /// <summary>
         /// Gets value from application configuration
         /// </summary>
         /// <typeparam name="T">Value type</typeparam>
@@ -52,6 +59,13 @@ namespace SkySoft.IBPPApplication
         /// <param name="message">Message for logging</param>
         /// <param name="logLevel">Log level</param>
         void LogMessage(string message, LogLevel logLevel);
+
+        /// <summary>
+        /// Raises event
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <returns>Data container</returns>
+        Task<IDataContainer> RaiseEvent(IDataContainer dataContainer);
 
         /// <summary>
         /// Redirects request to request handler

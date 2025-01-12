@@ -15,7 +15,7 @@ namespace SkySoft.DnsClient.CFG
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
             // Data processing logic
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DPL.LoadingUseCaseRequestHandler>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DPL.LoadingUseCase>();
         }
         #endregion
     }

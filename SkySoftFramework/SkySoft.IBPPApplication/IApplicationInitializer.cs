@@ -10,7 +10,8 @@
         /// Initializes application
         /// </summary>
         /// <param name="operatingSystem">Operating system</param>
-        void InitializeApplication(IOS operatingSystem);
+        /// <returns>True if application was initialized, otherwise false</returns>
+        bool InitializeApplication(IOS operatingSystem);
         #endregion
     }
 }

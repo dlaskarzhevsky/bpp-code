@@ -7,16 +7,18 @@ using Newtonsoft.Json;
 using SkySoft.Core;
 using SkySoft.DnsRecord.DTO;
 
-
 namespace SkySoft.DnsServer.DPL
 {
-    public class LoadingUseCaseRequestHandler : SkySoft.BPPApplication.RequestHandler
+    /// <summary>
+    /// LoadingUseCase transition request handler
+    /// </summary>
+    public class LoadingUseCase : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public LoadingUseCaseRequestHandler()
+        public LoadingUseCase()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
@@ -38,11 +40,11 @@ namespace SkySoft.DnsServer.DPL
         }
 
         /// <summary>
-        /// Handles request
+        /// Handles request aynchronously
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        protected override async Task HandleRequest()
+        protected override async Task HandleRequestAsync()
         {
             await Task.Delay(0);
 

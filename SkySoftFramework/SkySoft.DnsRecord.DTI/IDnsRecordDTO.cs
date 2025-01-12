@@ -31,6 +31,14 @@ namespace SkySoft.DnsRecord.DTI
         {
             get; set;
         }
+
+        /// <summary>
+        /// Gets or sets flag indicating whether HTTPS needs to be used
+        /// </summary>
+        bool UseHttps
+        {
+            get; set;
+        }
         #endregion
     }
 }

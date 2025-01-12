@@ -35,6 +35,15 @@ namespace SkySoft.DnsRecord.DTO
         {
             get; set;
         }
+
+        /// <summary>
+        /// Gets or sets flag indicating whether HTTPS needs to be used
+        /// IDnsRecordDTO interface implementation
+        /// </summary>
+        public bool UseHttps
+        {
+            get; set;
+        }
         #endregion
     }
 }

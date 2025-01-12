@@ -22,6 +22,14 @@
         {
             get; set;
         }
+
+        /// <summary>
+        /// Gets or sets message type
+        /// </summary>
+        MessageType MessageType
+        {
+            get; set;
+        }
         #endregion
     }
 }

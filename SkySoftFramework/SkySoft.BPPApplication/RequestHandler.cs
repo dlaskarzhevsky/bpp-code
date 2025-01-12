@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 
-using SkySoft.Communication;
-using SkySoft.Core;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
 
@@ -20,14 +18,34 @@ namespace SkySoft.BPPApplication
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        public virtual async Task<IDataContainer> ProcessRequest(IDataContainer dataContainer)
+        public IDataContainer ProcessRequest(IDataContainer dataContainer)
         {
             DataContainer = dataContainer;
             InitializeComponent();
             ValidateComponent();
             if (ComponentIsValid)
             {
-                await HandleRequest();
+                HandleRequest();
+                FinalizeComponent();
+            }
+
+            return dataContainer;
+        }
+
+        /// <summary>
+        /// Processes request
+        /// IRequestHandler iterface implementation
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <returns>Data container</returns>
+        public virtual async Task<IDataContainer> ProcessRequestAsync(IDataContainer dataContainer)
+        {
+            DataContainer = dataContainer;
+            InitializeComponent();
+            ValidateComponent();
+            if (ComponentIsValid)
+            {
+                await HandleRequestAsync();
                 FinalizeComponent();
             }
 
@@ -133,10 +151,43 @@ namespace SkySoft.BPPApplication
 
         #region Protected Methods
         /// <summary>
+        /// Finalizes component
+        /// </summary>
+        protected virtual void FinalizeComponent()
+        {
+        }
+
+        /// <summary>
+        /// Handles request
+        /// </summary>
+        protected virtual void HandleRequest()
+        {
+        }
+
+        /// <summary>
+        /// Handles request aynchronously
+        /// </summary>
+        protected virtual async Task HandleRequestAsync()
+        {
+            await Task.Delay(0);
+        }
+
+        /// <summary>
         /// Initializes component
         /// </summary>
         protected virtual void InitializeComponent()
         {
+        }
+
+        /// <summary>
+        /// Raises event
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <returns>Result of event handling</returns>
+        protected async Task<IDataContainer> RaiseEvent(IDataContainer dataContainer)
+        {
+            dataContainer = await OperatingSystem.RedirectRequestToRequestHandler(dataContainer);
+            return dataContainer;
         }
 
         /// <summary>
@@ -178,21 +229,6 @@ namespace SkySoft.BPPApplication
             dataContainer.AddRequestMetadata(applicationLayerName, domainName, useCaseName, stateName, transitionName);
             dataContainer = await OperatingSystem.RedirectRequestToRequestHandler(dataContainer);
             return dataContainer;
-        }
-
-        /// <summary>
-        /// Finalizes component
-        /// </summary>
-        protected virtual void FinalizeComponent()
-        {
-        }
-
-        /// <summary>
-        /// Handles request
-        /// </summary>
-        protected virtual async Task HandleRequest()
-        {
-            await Task.Delay(0);
         }
 
         /// <summary>

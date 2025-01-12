@@ -14,6 +14,4 @@ webApplication.UseHttpsRedirection();
 webApplication.UseAuthorization();
 webApplication.MapControllers();
 
-SkySoft.APIHost.CFG.ReceiverControllerStarter.Start(webApplication);
-
-webApplication.Run();
+SkySoft.BPPApplication.Runtime.ApplicationStarter.Start(webApplication);

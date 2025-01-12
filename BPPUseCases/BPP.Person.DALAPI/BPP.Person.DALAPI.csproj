@@ -8,8 +8,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\SkySoftFramework\SkySoft.APIHost.CFG\SkySoft.APIHost.CFG.csproj" />
-    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.APIHost.DPL\SkySoft.APIHost.DPL.csproj" />
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.APIHostApp.CFG\SkySoft.APIHostApp.CFG.csproj" />
     <ProjectReference Include="..\..\SkySoftFramework\SkySoft.BPPApplication.CFG\SkySoft.BPPApplication.CFG.csproj" />
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.BPPApplication.Runtime\SkySoft.BPPApplication.Runtime.csproj" />
     <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsClient.CFG\SkySoft.DnsClient.CFG.csproj" />
     <ProjectReference Include="..\BPP.Person.DALCFG\BPP.Person.DALCFG.csproj" />
   </ItemGroup>

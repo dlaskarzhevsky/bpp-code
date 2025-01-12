@@ -6,6 +6,11 @@
     public class DataCollectionTypes
     {
         /// <summary>
+        /// DNS records
+        /// </summary>
+        public const string DNS_RECORDS = "DnsRecords";
+
+        /// <summary>
         /// Exceptions collection
         /// </summary>
         public const string EXCEPTIONS = "Exceptions";

@@ -18,7 +18,7 @@ namespace SkySoft.APIHost.DPL
         public ReceiverController(IApplicationInitializer applicationInitializer, IOS operatingSystem)
         {
             OperatingSystem = operatingSystem;
-            applicationInitializer.InitializeApplication(operatingSystem);
+            ApplicationInitialized = applicationInitializer.InitializeApplication(operatingSystem);
         }
         #endregion
 
@@ -61,6 +61,17 @@ namespace SkySoft.APIHost.DPL
                 string serializedDataContainer = DataContainer.Serialize(dataContainer);
                 return Ok(serializedDataContainer);
             }
+        }
+        #endregion
+
+        #region Public Properties
+        /// <summary>
+        /// Gets flag indicating whether application initialized
+        /// IReceiverController interface implementation
+        /// </summary>
+        public bool ApplicationInitialized
+        {
+            get;
         }
         #endregion
 

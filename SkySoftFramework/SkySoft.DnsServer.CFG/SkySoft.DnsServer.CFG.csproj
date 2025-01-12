@@ -5,10 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <OutputType>Library</OutputType>
+    <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SkySoft.DnsServer.DAL\SkySoft.DnsServer.DAL.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.DPL\SkySoft.DnsServer.DPL.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.INI\SkySoft.DnsServer.INI.csproj" />
     <ProjectReference Include="..\SkySoft.IBPPApplication\SkySoft.IBPPApplication.csproj" />

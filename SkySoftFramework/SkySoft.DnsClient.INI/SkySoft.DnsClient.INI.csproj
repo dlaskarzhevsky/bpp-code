@@ -7,9 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SkySoft.BPPApplication\SkySoft.BPPApplication.csproj" />
     <ProjectReference Include="..\SkySoft.DnsClient.CON\SkySoft.DnsClient.CON.csproj" />
-    <ProjectReference Include="..\SkySoft.IBPPApplication\SkySoft.IBPPApplication.csproj" />
-    <ProjectReference Include="..\SkySoft.ICommunication\SkySoft.ICommunication.csproj" />
   </ItemGroup>
 
 </Project>

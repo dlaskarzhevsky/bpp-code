@@ -8,8 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SkySoft.APIHost.CON\SkySoft.APIHost.CON.csproj" />
-    <ProjectReference Include="..\SkySoft.IBPPApplication\SkySoft.IBPPApplication.csproj" />
-    <ProjectReference Include="..\SkySoft.ICommunication\SkySoft.ICommunication.csproj" />
+    <ProjectReference Include="..\SkySoft.BPPApplication\SkySoft.BPPApplication.csproj" />
   </ItemGroup>
 
 </Project>

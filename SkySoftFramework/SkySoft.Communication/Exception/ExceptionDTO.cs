@@ -26,6 +26,15 @@ namespace SkySoft.Communication
         {
             get; set;
         }
+
+        /// <summary>
+        /// Gets or sets message type
+        /// IExceptionDTO interface implementation
+        /// </summary>
+        public MessageType MessageType
+        {
+            get; set;
+        }
         #endregion
     }
 }

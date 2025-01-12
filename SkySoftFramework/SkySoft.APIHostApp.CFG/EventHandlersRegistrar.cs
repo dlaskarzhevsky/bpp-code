@@ -1,21 +1,21 @@
 ﻿using SkySoft.IBPPApplication;
 
-namespace SkySoft.DnsClient.CFG
+namespace SkySoft.APIHostApp.CFG
 {
     /// <summary>
-    /// Provides application initializer registrar functionality
+    /// Provides request handlers registrar functionality
     /// </summary>
-    public class ApplicationInitializerRegistrar
+    public class EventHandlersRegistrar
     {
         #region Static Methods
         /// <summary>
-        /// Register application initializer
+        /// Register request handlers
         /// </summary>
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
             // Data processing logic
-            webApplicationBuilder.Services.AddTransient<IApplicationInitializer, SkySoft.DnsClient.INI.ApplicationInitializer>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHostApp.DPL.DnsClientInitialized>();
         }
         #endregion
     }

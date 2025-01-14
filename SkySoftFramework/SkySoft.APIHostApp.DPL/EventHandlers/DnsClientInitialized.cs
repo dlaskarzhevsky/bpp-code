@@ -26,13 +26,12 @@
         /// <returns>Data container</returns>
         protected override async Task HandleEvent()
         {
-            DataContainer.RemoveCurrentRequestMetadta();
             DataContainer.AddRequestMetadata(
                 SkySoft.Contracts.ApplicationLayerNames.DPL,
                 SkySoft.Contracts.DomainNames.SKYSOFT,
-                SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER,
-                SkySoft.DnsServer.CON.StateTypes.INITIAL,
-                SkySoft.DnsServer.CON.TransitionTypes.REGISTERING_HOST);
+                SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT,
+                "",
+                SkySoft.DnsClient.CON.TransitionTypes.LOADING_USE_CASE);
 
             DataContainer = await RedirectRequestToRequestHandler(DataContainer);
         }

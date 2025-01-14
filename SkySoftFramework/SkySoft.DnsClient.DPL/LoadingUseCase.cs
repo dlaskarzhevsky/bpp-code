@@ -44,8 +44,6 @@ namespace SkySoft.DnsClient.DPL
         /// <returns>Data container</returns>
         protected override async Task HandleRequestAsync()
         {
-//            GetHostData();
-//            AddHostDataToRequest();
             GetDnsData();
             AddDnsDataToRequest();
             ConfigureRequestForDnsClientRegistrationWithDnsServer();
@@ -77,18 +75,6 @@ namespace SkySoft.DnsClient.DPL
         /// Adds DNS data to request
         /// </summary>
         void AddDnsDataToRequest()
-        {
-            DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.DnsClient.CON.DataCollectionTypes.REQUEST_SUFFIX);
-            dnsRecordDTO.ApplicationLayerName = HostApplicationLayerName;
-            dnsRecordDTO.HttpsUrl = HttpsUrl;
-            dnsRecordDTO.HttpUrl = HttpUrl;
-            dnsRecordDTO.UseHttps = UseHttps;
-        }
-
-        /// <summary>
-        /// Adds host data to request
-        /// </summary>
-        void AddHostDataToRequest()
         {
             DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.DnsClient.CON.DataCollectionTypes.REQUEST_SUFFIX);
             dnsRecordDTO.ApplicationLayerName = HostApplicationLayerName;

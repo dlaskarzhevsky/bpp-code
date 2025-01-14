@@ -18,6 +18,7 @@ namespace SkySoft.BPPApplication
         public override async Task<IDataContainer> ProcessRequestAsync(IDataContainer dataContainer)
         {
             DataContainer = dataContainer;
+            DataContainer.RemoveCurrentRequestMetadta();
             InitializeComponent();
             ValidateComponent();
             if (ComponentIsValid)

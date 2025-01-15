@@ -41,7 +41,7 @@ namespace SkySoft.DnsClient.DPL
                 if (DnsClientDataValid)
                 {
                     CacheDnsClientData();
-                    AddDnsDataToRequest();
+                    AddDnsDataToDataContainer();
                     await RaiseDnsClientRegistrationWithDnsServerRequestEvent();
                     if (RegistrationWithDnsServerWasSuccessful)
                     {
@@ -55,6 +55,8 @@ namespace SkySoft.DnsClient.DPL
                             OperatingSystem.LogMessage("DNS server is offline", LogLevel.Critical);
                         }
                     }
+
+                    RemoveDnsDataFromDataContainer();
                 }
             }
         }
@@ -70,9 +72,9 @@ namespace SkySoft.DnsClient.DPL
 
         #region Private Methods
         /// <summary>
-        /// Adds DNS data to request
+        /// Adds DNS data to data container
         /// </summary>
-        void AddDnsDataToRequest()
+        void AddDnsDataToDataContainer()
         {
             DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.DnsClient.CON.DataCollectionTypes.REQUEST_SUFFIX);
             dnsRecordDTO.ApplicationLayerName = HostApplicationLayerName;
@@ -150,6 +152,14 @@ namespace SkySoft.DnsClient.DPL
                 SkySoft.DnsClient.CON.EventTypes.REGISTERING_DNS_CLIENT_WITH_DNS_SERVER_EVENT);
             DataContainer = await RaiseEvent(DataContainer);
             DataContainer.RemoveCurrentRequestMetadta();
+        }
+
+        /// <summary>
+        /// Removes DNS data from data container
+        /// </summary>
+        void RemoveDnsDataFromDataContainer()
+        {
+            DataContainer.RemoveDataCollection(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.DnsClient.CON.DataCollectionTypes.REQUEST_SUFFIX);
         }
 
         /// <summary>

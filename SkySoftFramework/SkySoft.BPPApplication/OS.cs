@@ -28,6 +28,8 @@ namespace SkySoft.BPPApplication
             MemoryCache = memoryCache;
             Logger = logger;
             RequestHandlers = requestHandlers;
+            EventRedirector = new EventRedirector();
+            RequestRedirector = new RequestRedirector();
         }
         #endregion
 
@@ -131,7 +133,7 @@ namespace SkySoft.BPPApplication
         /// <returns>Data container</returns>
         public async Task<IDataContainer> RedirectRequestToEventHandler(IDataContainer dataContainer)
         {
-            return await RequestRedirector.RedirectRequestToEventHandler(dataContainer, this);
+            return await EventRedirector.RedirectRequestToEventHandler(dataContainer, this);
         }
 
         /// <summary>
@@ -175,6 +177,24 @@ namespace SkySoft.BPPApplication
         /// Gets or sets request handlers
         /// </summary>
         public IEnumerable<IRequestHandler> RequestHandlers
+        {
+            get; set;
+        }
+        #endregion
+
+        #region Private Properties
+        /// <summary>
+        /// Gets or sets event redirector
+        /// </summary>
+        EventRedirector EventRedirector
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets request redirector
+        /// </summary>
+        RequestRedirector RequestRedirector
         {
             get; set;
         }

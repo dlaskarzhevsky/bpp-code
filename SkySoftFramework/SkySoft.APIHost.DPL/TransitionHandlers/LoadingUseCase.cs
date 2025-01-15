@@ -37,19 +37,20 @@ namespace SkySoft.APIHost.DPL
                 if (HostDataValid)
                 {
                     CacheHostData();
-                    AddHostDataToRequest();
+                    AddHostDataToDataContainer();
                 }
             }
 
             await RaiseHostInitializedEvent();
+            RemoveHostDataFromDataContainer();
         }
         #endregion
 
         #region Private Methods
         /// <summary>
-        /// Adds host data to request
+        /// Adds host data to data container
         /// </summary>
-        void AddHostDataToRequest()
+        void AddHostDataToDataContainer()
         {
             DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.APIHost.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.APIHost.CON.DataCollectionTypes.REQUEST_SUFFIX);
             dnsRecordDTO.ApplicationLayerName = HostApplicationLayerName;
@@ -114,6 +115,14 @@ namespace SkySoft.APIHost.DPL
                 SkySoft.APIHost.CON.EventTypes.HOST_INITIALIZED_EVENT);
             DataContainer = await RaiseEvent(DataContainer);
             DataContainer.RemoveCurrentRequestMetadta();
+        }
+
+        /// <summary>
+        /// Removes host data from data container
+        /// </summary>
+        void RemoveHostDataFromDataContainer()
+        {
+            DataContainer.RemoveDataCollection(SkySoft.APIHost.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.APIHost.CON.DataCollectionTypes.REQUEST_SUFFIX);
         }
 
         /// <summary>

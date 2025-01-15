@@ -282,7 +282,7 @@ namespace SkySoft.Communication
         }
 
         /// <summary>
-        /// Removes data collection
+        /// Removes data collection if found
         /// IDataContainer interface implementation
         /// </summary>
         /// <param name="key">Data collection key (required)</param>

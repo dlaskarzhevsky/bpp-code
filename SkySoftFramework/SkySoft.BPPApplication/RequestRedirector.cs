@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
+using SkySoft.Communication;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
 
@@ -13,8 +14,29 @@ namespace SkySoft.BPPApplication
     {
         #region Public Methods
         /// <summary>
+        /// Redirect request to event handler
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <param name="operatingSystem">Operating system</param>
+        /// <returns>Data container</returns>
+        public static async Task<IDataContainer> RedirectRequestToEventHandler(IDataContainer dataContainer, OS operatingSystem)
+        {
+            string requestHandlerType = $"{dataContainer.DomainName}_{dataContainer.ApplicationLayerName}_{dataContainer.UseCaseName}_{dataContainer.StateName}_{dataContainer.TransitionName}";
+            IRequestHandler? requestHandler = RequestHandlerLocator.FindRequestHandler(operatingSystem.RequestHandlers, requestHandlerType);
+            if (requestHandler != null)
+            {
+                requestHandler.ApplicationConfiguration = operatingSystem.ApplicationConfiguration;
+                requestHandler.MemoryCache = operatingSystem.MemoryCache;
+                requestHandler.OperatingSystem = operatingSystem;
+                dataContainer = await requestHandler.ProcessRequestAsync(dataContainer);
+                requestHandler.ReleaseResources();
+            }
+
+            return dataContainer;
+        }
+
+        /// <summary>
         /// Redirect request to request handler
-        /// IOS interface implementation
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <param name="operatingSystem">Operating system</param>
@@ -70,9 +92,7 @@ namespace SkySoft.BPPApplication
                  SkySoft.Contracts.UseCaseTypes.CONTROLLER,
                 "",
                 SkySoft.Contracts.TransitionTypes.SENDING_REQUEST);
-            IDataContainer responseDataContainer = await RequestRedirector.RedirectRequestToRequestHandler(requestDataContainer, operatingSystem);
-
-            return responseDataContainer;
+            return await RequestRedirector.RedirectRequestToRequestHandler(requestDataContainer, operatingSystem);
         }
         #endregion
     }

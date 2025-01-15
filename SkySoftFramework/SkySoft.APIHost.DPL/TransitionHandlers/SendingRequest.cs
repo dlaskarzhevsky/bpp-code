@@ -30,77 +30,93 @@ namespace SkySoft.APIHost.DPL
         /// <returns>Data container</returns>
         protected override async Task HandleRequestAsync()
         {
-            GetDnsServerData();
-            CalculateDnsServerUrl();
-            if (DnsServerUrlCalculated)
+            GetRemoteServerData();
+            CalculateRemoteServerUrl();
+            if (RemoteServerUrlCalculated)
             {
+                await SendRequestToRemoteServer();
             }
-
-            DataContainer.RemoveCurrentRequestMetadta();
-
-            Transceiver transceiver = new Transceiver();
-            await transceiver.TransceiveDataContainer(DataContainer, DnsServerUrl, "/processrequest", 10000);
         }
         #endregion
 
         #region Private Methods
         /// <summary>
-        /// Determines DNS server URL
+        /// Determines remote server URL
         /// </summary>
-        void CalculateDnsServerUrl()
+        void CalculateRemoteServerUrl()
         {
             if (UseHttps)
             {
-                DnsServerUrl = HttpsUrl;
+                RemoteServerUrl = HttpsUrl;
             }
             else
             {
-                DnsServerUrl = HttpUrl;
+                RemoteServerUrl = HttpUrl;
             }
         }
 
         /// <summary>
-        /// Gets DNS server data
+        /// Gets remote server data
         /// </summary>
-        void GetDnsServerData()
+        void GetRemoteServerData()
         {
             DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOInDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS + SkySoft.Contracts.DataCollectionTypes.REQUEST_SUFFIX);
             if (dnsRecordDTO == null)
             {
-                throw new KeyNotFoundException("The required DNS record is not found");
-            }
-
-            string? dnsServerUrl = null;
-            if (dnsRecordDTO.UseHttps)
-            {
-                dnsServerUrl = dnsRecordDTO.HttpsUrl;
+                LogErrorMessage("Data container does not have the required DNS record in collection " + SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS + SkySoft.Contracts.DataCollectionTypes.REQUEST_SUFFIX);
             }
             else
             {
-                dnsServerUrl = dnsRecordDTO.HttpUrl;
+                HttpsUrl = dnsRecordDTO.HttpsUrl;
+                HttpUrl = dnsRecordDTO.HttpUrl;
+                UseHttps = dnsRecordDTO.UseHttps;
             }
+        }
 
-            if (string.IsNullOrEmpty(dnsServerUrl))
+        /// <summary>
+        /// Sends request to remote server
+        /// </summary>
+        /// <returns>Task result</returns>
+        async Task SendRequestToRemoteServer()
+        {
+            Transceiver transceiver = new Transceiver();
+            IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(DataContainer, RemoteServerUrl!, "/processrequest", 10000);
+            if (responseDataContainer == null)
             {
-                throw new KeyNotFoundException("There is no DnsServerUrl setting in appsettings.json file");
+                LogErrorMessage("Remote data server is offline: " + RemoteServerUrl);
+            }
+            else
+            {
+                DataContainer = responseDataContainer;
             }
         }
         #endregion
 
         #region Private Properties
         /// <summary>
-        /// Gets or sets DNS server URL
+        /// Gets or sets remote server URL
         /// </summary>
-        string? DnsServerUrl
+        string? RemoteServerUrl
         {
             get; set;
         }
 
-        bool DnsServerUrlCalculated
+        /// <summary>
+        /// Gets flag indicating whether remote server URL calculated
+        /// </summary>
+        bool RemoteServerUrlCalculated
         {
             get
             {
-                return !string.IsNullOrEmpty(DnsServerUrl);
+                if (string.IsNullOrEmpty(RemoteServerUrl))
+                {
+                    LogErrorMessage("There is no DnsServerUrl setting in appsettings.json file");
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
             }
         }
 

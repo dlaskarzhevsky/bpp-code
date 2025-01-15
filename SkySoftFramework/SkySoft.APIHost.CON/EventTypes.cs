@@ -6,8 +6,8 @@
     public class EventTypes : SkySoft.Contracts.EventTypes
     {
         /// <summary>
-        /// DnsClientInitialized event
+        /// HostInitialized event
         /// </summary>
-        public const string DNS_CLIENT_INITIALIZED_EVENT = "DnsClientInitializedEvent";
+        public const string HOST_INITIALIZED_EVENT = "HostInitializedEvent";
     }
 }

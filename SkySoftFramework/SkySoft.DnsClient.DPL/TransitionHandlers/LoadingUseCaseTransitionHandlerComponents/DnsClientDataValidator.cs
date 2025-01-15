@@ -1,25 +1,24 @@
-﻿using SkySoft.Communication;
+﻿using Microsoft.Extensions.Logging;
+
 using SkySoft.IBPPApplication;
 
-namespace SkySoft.APIHost.DPL
+namespace SkySoft.DnsClient.DPL
 {
     /// <summary>
-    /// Provides host data validator class
+    /// Provides DNS client data validator class
     /// </summary>
-    public class HostDataValidator : SkySoft.BPPApplication.RequestHandler
+    public class DnsClientDataValidator : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        /// <param name="hostApplicationLayerName">Host application layer name</param>
         /// <param name="httpsUrl">HTTPS URL</param>
         /// <param name="httpUrl">HTTP URL</param>
         /// <param name="useHttps">Flag indicating whether HTTPS needs to be used</param>
         /// <param name="requestHandler">Request handler</param>
-        public HostDataValidator(string? hostApplicationLayerName, string? httpsUrl, string? httpUrl, bool useHttps, IRequestHandler requestHandler)
+        public DnsClientDataValidator(string? httpsUrl, string? httpUrl, bool useHttps, IRequestHandler requestHandler)
         {
-            HostApplicationLayerName = hostApplicationLayerName;
             HttpsUrl = httpsUrl;
             HttpUrl = httpUrl;
             UseHttps = useHttps;
@@ -33,7 +32,6 @@ namespace SkySoft.APIHost.DPL
         /// </summary>
         protected override void HandleRequest()
         {
-            ValidateHostApplicationLayerName();
             ValidateHttpsUrl();
             ValidateHttpUrl();
         }
@@ -49,28 +47,14 @@ namespace SkySoft.APIHost.DPL
 
         #region Private Methods
         /// <summary>
-        /// Validates host application layer name
-        /// </summary>
-        void ValidateHostApplicationLayerName()
-        {
-            if (string.IsNullOrEmpty(HostApplicationLayerName))
-            {
-                DataContainer.ErrorMessage = "The appsettings.json file does not have required ApplicationLayerName entry";
-                RequestHandler.OperatingSystem.LogMessage(DataContainer.ErrorMessage, LogLevel.Critical);
-                HostDataValid = false;
-            }
-        }
-
-        /// <summary>
         /// Validates HTTPS URL
         /// </summary>
         void ValidateHttpsUrl()
         {
             if (string.IsNullOrEmpty(HttpsUrl) && UseHttps == true)
             {
-                DataContainer.ErrorMessage = "The appsettings.json file does not have required Kestrel:Endpoints:Https:Url entry";
-                RequestHandler.OperatingSystem.LogMessage(DataContainer.ErrorMessage, LogLevel.Critical);
-                HostDataValid = false;
+                LogErrorMessage("The appsettings.json file does not have required DnsServer:Endpoints:Https:Url entry");
+                DnsClientDataValid = false;
             }
         }
 
@@ -81,32 +65,23 @@ namespace SkySoft.APIHost.DPL
         {
             if (string.IsNullOrEmpty(HttpUrl) && UseHttps == false)
             {
-                DataContainer.ErrorMessage = "The appsettings.json file does not have required Kestrel:Endpoints:Http:Url entry";
-                RequestHandler.OperatingSystem.LogMessage(DataContainer.ErrorMessage, LogLevel.Critical);
-                HostDataValid = false;
+                LogErrorMessage("The appsettings.json file does not have required DnsServer:Endpoints:Http:Url entry");
+                DnsClientDataValid = false;
             }
         }
         #endregion
 
         #region Private Properties
         /// <summary>
-        /// Gets or sets flag indicating whether host data are valid
+        /// Gets or sets flag indicating whether DNS client data are valid
         /// </summary>
-        public bool HostDataValid
+        public bool DnsClientDataValid
         {
             get; set;
         } = true;
         #endregion
 
         #region Private Properties
-        /// <summary>
-        /// Gets or sets host application layer name
-        /// </summary>
-        string? HostApplicationLayerName
-        {
-            get; set;
-        }
-
         /// <summary>
         /// Gets or sets HTTP URL
         /// </summary>

@@ -68,6 +68,13 @@ namespace SkySoft.IBPPApplication
         Task<IDataContainer> RaiseEvent(IDataContainer dataContainer);
 
         /// <summary>
+        /// Redirects request to event handler
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <returns>Data container</returns>
+        Task<IDataContainer> RedirectRequestToEventHandler(IDataContainer dataContainer);
+
+        /// <summary>
         /// Redirects request to request handler
         /// </summary>
         /// <param name="dataContainer">Data container</param>

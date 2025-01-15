@@ -129,6 +129,17 @@ namespace SkySoft.BPPApplication
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
+        public async Task<IDataContainer> RedirectRequestToEventHandler(IDataContainer dataContainer)
+        {
+            return await RequestRedirector.RedirectRequestToEventHandler(dataContainer, this);
+        }
+
+        /// <summary>
+        /// Redirect request to request handler
+        /// IOS interface implementation
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <returns>Data container</returns>
         public async Task<IDataContainer> RedirectRequestToRequestHandler(IDataContainer dataContainer)
         {
             return await RequestRedirector.RedirectRequestToRequestHandler(dataContainer, this);

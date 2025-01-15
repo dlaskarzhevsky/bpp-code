@@ -15,7 +15,8 @@ namespace SkySoft.APIHostApp.CFG
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
             // Data processing logic
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHostApp.DPL.DnsClientInitialized>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHostApp.DPL.HostInitialized>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHostApp.DPL.RegisteringDnsClientWithDnsServer>();
         }
         #endregion
     }

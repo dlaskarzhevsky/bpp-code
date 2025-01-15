@@ -1,5 +1,4 @@
-﻿using SkySoft.BPPApplication;
-using SkySoft.DnsRecord.DTO;
+﻿using SkySoft.DnsRecord.DTO;
 using SkySoft.ICommunication;
 
 namespace SkySoft.APIHost.DPL
@@ -38,14 +37,27 @@ namespace SkySoft.APIHost.DPL
                 if (HostDataValid)
                 {
                     CacheHostData();
+                    AddHostDataToRequest();
                 }
             }
 
-            await RaiseDnsClientInitializedEvent();
+            await RaiseHostInitializedEvent();
         }
         #endregion
 
         #region Private Methods
+        /// <summary>
+        /// Adds host data to request
+        /// </summary>
+        void AddHostDataToRequest()
+        {
+            DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.APIHost.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.APIHost.CON.DataCollectionTypes.REQUEST_SUFFIX);
+            dnsRecordDTO.ApplicationLayerName = HostApplicationLayerName;
+            dnsRecordDTO.HttpsUrl = HttpsUrl;
+            dnsRecordDTO.HttpUrl = HttpUrl;
+            dnsRecordDTO.UseHttps = UseHttps;
+        }
+
         /// <summary>
         /// Caches host data
         /// </summary>
@@ -90,17 +102,18 @@ namespace SkySoft.APIHost.DPL
         }
 
         /// <summary>
-        /// Raises DnsClientInitialized event
+        /// Raises HostInitialized event
         /// </summary>
-        async Task<IDataContainer> RaiseDnsClientInitializedEvent()
+        async Task RaiseHostInitializedEvent()
         {
             DataContainer!.AddRequestMetadata(
                 SkySoft.Contracts.ApplicationLayerNames.DPL,
                 SkySoft.Contracts.DomainNames.SKYSOFT,
                 SkySoft.APIHost.CON.UseCaseContract.API_HOST,
                 "",
-                SkySoft.APIHost.CON.EventTypes.DNS_CLIENT_INITIALIZED_EVENT);
-            return await OperatingSystem.RaiseEvent(DataContainer);
+                SkySoft.APIHost.CON.EventTypes.HOST_INITIALIZED_EVENT);
+            DataContainer = await RaiseEvent(DataContainer);
+            DataContainer.RemoveCurrentRequestMetadta();
         }
 
         /// <summary>

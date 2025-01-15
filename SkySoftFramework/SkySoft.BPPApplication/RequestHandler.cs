@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
@@ -180,13 +181,23 @@ namespace SkySoft.BPPApplication
         }
 
         /// <summary>
+        /// Logs erro message
+        /// </summary>
+        /// <param name="message">Message for logging</param>
+        protected virtual void LogErrorMessage(string message)
+        {
+            DataContainer.ErrorMessage = message;
+            OperatingSystem.LogMessage(DataContainer.ErrorMessage, LogLevel.Critical);
+        }
+
+        /// <summary>
         /// Raises event
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Result of event handling</returns>
         protected async Task<IDataContainer> RaiseEvent(IDataContainer dataContainer)
         {
-            dataContainer = await OperatingSystem.RedirectRequestToRequestHandler(dataContainer);
+            dataContainer = await OperatingSystem.RedirectRequestToEventHandler(dataContainer);
             return dataContainer;
         }
 

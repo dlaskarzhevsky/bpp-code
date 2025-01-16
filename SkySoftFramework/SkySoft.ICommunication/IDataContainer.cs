@@ -94,12 +94,20 @@
         IDataCollection<T>? GetDataColletion<T>(string key);
 
         /// <summary>
-        /// Gets last data transfer object in data collection
+        /// Gets last data transfer object by removing it from data collection
         /// </summary>
         /// <typeparam name="T">Data transfer object type</typeparam>
         /// <param name="key">Data collection key (required)</param>
         /// <returns>Last data transfer object in data collection</returns>
-        T GetLastDTOInDataCollection<T>(string key);
+        T? GetLastDTOByRemovingItFromDataCollection<T>(string key);
+
+        /// <summary>
+        /// Gets last data transfer object from data collection
+        /// </summary>
+        /// <typeparam name="T">Data transfer object type</typeparam>
+        /// <param name="key">Data collection key (required)</param>
+        /// <returns>Last data transfer object in data collection</returns>
+        T? GetLastDTOFromDataCollection<T>(string key);
 
         /// <summary>
         /// Gets new data transfer object

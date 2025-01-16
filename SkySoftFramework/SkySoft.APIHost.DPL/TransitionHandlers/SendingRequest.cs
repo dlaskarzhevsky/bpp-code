@@ -60,7 +60,7 @@ namespace SkySoft.APIHost.DPL
         /// </summary>
         void GetRemoteServerData()
         {
-            DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOInDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS + SkySoft.Contracts.DataCollectionTypes.REQUEST_SUFFIX);
+            DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOByRemovingItFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS + SkySoft.Contracts.DataCollectionTypes.REQUEST_SUFFIX);
             if (dnsRecordDTO == null)
             {
                 LogErrorMessage("Data container does not have the required DNS record in collection " + SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS + SkySoft.Contracts.DataCollectionTypes.REQUEST_SUFFIX);
@@ -79,6 +79,7 @@ namespace SkySoft.APIHost.DPL
         /// <returns>Task result</returns>
         async Task SendRequestToRemoteServer()
         {
+            DataContainer.RemoveCurrentRequestMetadta();
             Transceiver transceiver = new Transceiver();
             IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(DataContainer, RemoteServerUrl!, "/processrequest", 10000);
             if (responseDataContainer == null)

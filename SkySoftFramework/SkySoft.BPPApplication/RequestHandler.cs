@@ -47,6 +47,7 @@ namespace SkySoft.BPPApplication
             if (ComponentIsValid)
             {
                 await HandleRequestAsync();
+                HandleRequest();
                 FinalizeComponent();
             }
 

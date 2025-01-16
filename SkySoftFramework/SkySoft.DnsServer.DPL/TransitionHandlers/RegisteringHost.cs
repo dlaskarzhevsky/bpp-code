@@ -34,10 +34,8 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        protected override async Task HandleRequestAsync()
+        protected override void HandleRequest()
         {
-            await Task.Delay(0);
-
             GetListOfDnsRecordsFromCache();
             FindDnsRecordByApplicationLayerName();
             if (DnsRecordFound)
@@ -79,21 +77,18 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void FindDnsRecordByApplicationLayerName()
         {
-            IDataCollection<DnsRecordDTO>? dnsRecordDTODataCollection = DataContainer.GetDataColletion<DnsRecordDTO>(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.DnsServer.CON.DataCollectionTypes.REQUEST_SUFFIX);
-            if (dnsRecordDTODataCollection == null)
+            DnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.DnsServer.CON.DataCollectionTypes.REQUEST_SUFFIX);
+            if (DnsRecordDTO != null)
             {
-                throw new KeyNotFoundException("Data container contains no data collection with key " + SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.DnsServer.CON.DataCollectionTypes.REQUEST_SUFFIX);
-            }
-
-            DnsRecordDTO = dnsRecordDTODataCollection[dnsRecordDTODataCollection.Count - 1];
-            string applicationLayerName = DnsRecordDTO.ApplicationLayerName!.ToLowerInvariant();
-            for (int i = 0; i < ListOfCachedDnsRecords.Count; i++)
-            {
-                string? registeredApplicationLayerName = ListOfCachedDnsRecords[i].ApplicationLayerName;
-                if (!string.IsNullOrEmpty(registeredApplicationLayerName) && registeredApplicationLayerName.ToLowerInvariant() == applicationLayerName)
+                string applicationLayerName = DnsRecordDTO.ApplicationLayerName!.ToLowerInvariant();
+                for (int i = 0; i < ListOfCachedDnsRecords.Count; i++)
                 {
-                    CachedDnsRecordDTO = ListOfCachedDnsRecords[i];
-                    break;
+                    string? registeredApplicationLayerName = ListOfCachedDnsRecords[i].ApplicationLayerName;
+                    if (!string.IsNullOrEmpty(registeredApplicationLayerName) && registeredApplicationLayerName.ToLowerInvariant() == applicationLayerName)
+                    {
+                        CachedDnsRecordDTO = ListOfCachedDnsRecords[i];
+                        break;
+                    }
                 }
             }
         }
@@ -225,7 +220,7 @@ namespace SkySoft.DnsServer.DPL
         List<DnsRecordDTO> ListOfCachedDnsRecords
         {
             get; set;
-        }
+        } = default!;
 
         /// <summary>
         /// Getsa or sets path to DNS records file

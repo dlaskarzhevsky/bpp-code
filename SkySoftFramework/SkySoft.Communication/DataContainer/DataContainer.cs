@@ -207,13 +207,13 @@ namespace SkySoft.Communication
         }
 
         /// <summary>
-        /// Gets last data transfer object in data collection
+        /// Gets last data transfer object by removing it from data collection
         /// IDataContainer interface implementation
         /// </summary>
         /// <typeparam name="T">Data transfer object type</typeparam>
         /// <param name="key">Data collection key (required)</param>
         /// <returns>Last data transfer object in data collection</returns>
-        public T GetLastDTOInDataCollection<T>(string key)
+        public T? GetLastDTOByRemovingItFromDataCollection<T>(string key)
         {
             IDataCollection<T>? dataCollection = GetDataColletion<T>(key);
             if (dataCollection == null)
@@ -221,7 +221,39 @@ namespace SkySoft.Communication
                 return default!;
             }
 
-            return dataCollection[dataCollection.Count - 1];
+            T? dataTransferObject = default!;
+            if (dataCollection.Count > 0)
+            {
+                dataTransferObject =dataCollection[dataCollection.Count - 1];
+                dataCollection.Remove(dataTransferObject);
+            }
+
+            return dataTransferObject;
+        }
+
+        /// <summary>
+        /// Gets last data transfer object in data collection
+        /// IDataContainer interface implementation
+        /// </summary>
+        /// <typeparam name="T">Data transfer object type</typeparam>
+        /// <param name="key">Data collection key (required)</param>
+        /// <returns>Last data transfer object in data collection</returns>
+        public T? GetLastDTOFromDataCollection<T>(string key)
+        {
+            IDataCollection<T>? dataCollection = GetDataColletion<T>(key);
+            if (dataCollection == null)
+            {
+                return default!;
+            }
+
+            if (dataCollection.Count > 0)
+            {
+                return dataCollection[dataCollection.Count - 1];
+            }
+            else
+            {
+                return default!;
+            }
         }
 
         /// <summary>

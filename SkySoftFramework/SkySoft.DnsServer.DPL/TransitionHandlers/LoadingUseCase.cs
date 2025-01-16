@@ -44,10 +44,8 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        protected override async Task HandleRequestAsync()
+        protected override void HandleRequest()
         {
-            await Task.Delay(0);
-
             GetListOfDnsRecordsFromCache();
             if (CacheHasNoDnsRecords)
             {

@@ -1,4 +1,4 @@
-﻿namespace SkySoft.APIHostApp.CON
+﻿namespace SkySoft.DnsClientApp.CON
 {
     /// <summary>
     /// Provides event types

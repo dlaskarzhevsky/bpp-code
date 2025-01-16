@@ -1,4 +1,4 @@
-﻿namespace SkySoft.APIHostApp.DPL
+﻿namespace SkySoft.DnsClientApp.DPL
 {
     /// <summary>
     /// RegisteringDnsClientWithDnsServer event handler

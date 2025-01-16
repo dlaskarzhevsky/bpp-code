@@ -9,9 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SkySoft.APIHostApp.CON\SkySoft.APIHostApp.CON.csproj" />
-    <ProjectReference Include="..\SkySoft.APIHostApp.DPL\SkySoft.APIHostApp.DPL.csproj" />
     <ProjectReference Include="..\SkySoft.DnsClient.CON\SkySoft.DnsClient.CON.csproj" />
+    <ProjectReference Include="..\SkySoft.DnsClientApp.DPL\SkySoft.DnsClientApp.DPL.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.CON\SkySoft.DnsServer.CON.csproj" />
     <ProjectReference Include="..\SkySoft.IBPPApplication\SkySoft.IBPPApplication.csproj" />
   </ItemGroup>

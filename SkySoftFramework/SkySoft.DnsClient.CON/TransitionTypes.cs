@@ -1,7 +1,7 @@
 ﻿namespace SkySoft.DnsClient.CON
 {
     /// <summary>
-    /// Provides transition types functionality
+    /// Provides transition types
     /// </summary>
     public class TransitionTypes : SkySoft.Contracts.TransitionTypes
     {

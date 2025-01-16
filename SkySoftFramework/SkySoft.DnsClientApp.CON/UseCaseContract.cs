@@ -1,13 +1,13 @@
 ﻿namespace SkySoft.DnsClientApp.CON
 {
     /// <summary>
-    /// Defines SkySoft.DnsServer use case contract
+    /// Defines DnsClientApp use case contract
     /// </summary>
     public class UseCaseContract
     {
         /// <summary>
         /// Use case name
         /// </summary>
-        public static string DNS_CLIENT = "DnsClientApp";
+        public static string DNS_CLIENT_APP = "DnsClientApp";
     }
 }

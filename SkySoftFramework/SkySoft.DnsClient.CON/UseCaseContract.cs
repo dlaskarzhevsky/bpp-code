@@ -1,7 +1,7 @@
 ﻿namespace SkySoft.DnsClient.CON
 {
     /// <summary>
-    /// Defines SkySoft.DnsServer use case contract
+    /// Defines DnsClient use case contract
     /// </summary>
     public class UseCaseContract
     {

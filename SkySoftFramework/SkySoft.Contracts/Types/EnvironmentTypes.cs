@@ -1,7 +1,7 @@
 ﻿namespace SkySoft.Contracts
 {
     /// <summary>
-    /// Provides application layer name
+    /// Provides environment types
     /// </summary>
     public class EnvironmentTypes
     {

@@ -71,9 +71,9 @@ namespace SkySoft.BPPApplication
         async Task<IDataContainer> RedirectRequestToRemoteRequestHandler(IDataContainer requestDataContainer, OS operatingSystem)
         {
             requestDataContainer.AddRequestMetadata(
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
                 SkySoft.Contracts.DomainNames.SKYSOFT,
                  SkySoft.Contracts.UseCaseTypes.CONTROLLER,
+                SkySoft.Contracts.ApplicationLayerNames.DPL,
                 "",
                 SkySoft.Contracts.TransitionTypes.SENDING_REQUEST);
             return await RedirectRequestToRequestHandler(requestDataContainer, operatingSystem);

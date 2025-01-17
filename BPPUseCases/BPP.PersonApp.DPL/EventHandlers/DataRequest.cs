@@ -1,20 +1,20 @@
-﻿namespace SkySoft.DnsClientApp.DPL
+﻿namespace BPP.PersonApp.DPL
 {
     /// <summary>
     /// HostInitialized event handler
     /// </summary>
-    public class HostInitialized : SkySoft.BPPApplication.EventHandler
+    public class DataRequest : SkySoft.BPPApplication.EventHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public HostInitialized()
+        public DataRequest()
         {
-            DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
+            DomainName = SkySoft.Contracts.DomainNames.BPP;
+            UseCaseName = BPP.Person.CON.UseCaseContract.PERSON;
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
-            UseCaseName = SkySoft.APIHost.CON.UseCaseContract.API_HOST;
-            EventName = SkySoft.APIHost.CON.EventTypes.HOST_INITIALIZED_EVENT;
+            EventName = SkySoft.Contracts.EventTypes.DATA_REQUEST_EVENT;
         }
         #endregion
 
@@ -27,11 +27,11 @@
         protected override async Task HandleEvent()
         {
             DataContainer.AddRequestMetadata(
-                SkySoft.Contracts.DomainNames.SKYSOFT,
-                SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT,
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
-                "",
-                SkySoft.DnsClient.CON.TransitionTypes.LOADING_USE_CASE);
+                SkySoft.Contracts.DomainNames.BPP,
+                BPP.Person.CON.UseCaseContract.PERSON,
+                SkySoft.Contracts.ApplicationLayerNames.DAL,
+                BPP.Person.CON.StateTypes.INITIAL,
+                BPP.Person.CON.TransitionTypes.SEARCHING);
 
             DataContainer = await RedirectRequestToRequestHandler(DataContainer);
             DataContainer.RemoveCurrentRequestMetadta();

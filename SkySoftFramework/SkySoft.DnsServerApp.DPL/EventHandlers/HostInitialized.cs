@@ -27,9 +27,9 @@
         protected override async Task HandleEvent()
         {
             DataContainer.AddRequestMetadata(
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
                 SkySoft.Contracts.DomainNames.SKYSOFT,
                 SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER,
+                SkySoft.Contracts.ApplicationLayerNames.DPL,
                 "",
                 SkySoft.DnsServer.CON.TransitionTypes.LOADING_USE_CASE);
 

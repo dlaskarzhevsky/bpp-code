@@ -27,16 +27,16 @@
         protected override async Task HandleEvent()
         {
             DataContainer.AddRequestMetadata(
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
                 SkySoft.Contracts.DomainNames.SKYSOFT,
                 SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER,
+                SkySoft.Contracts.ApplicationLayerNames.DPL,
                 SkySoft.DnsClient.CON.StateTypes.INITIAL,
                 SkySoft.DnsClient.CON.TransitionTypes.REGISTERING_HOST);
 
             DataContainer.AddRequestMetadata(
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
                 SkySoft.Contracts.DomainNames.SKYSOFT,
                 SkySoft.Contracts.UseCaseTypes.CONTROLLER,
+                SkySoft.Contracts.ApplicationLayerNames.DPL,
                 "",
                 SkySoft.Contracts.TransitionTypes.SENDING_REQUEST);
 

@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-using SkySoft.Core;
 using SkySoft.DnsRecord.DTO;
-using SkySoft.ICommunication;
 
 namespace SkySoft.DnsClient.DPL
 {
@@ -130,9 +128,9 @@ namespace SkySoft.DnsClient.DPL
         async Task RaiseDnsClientInitializedEvent()
         {
             DataContainer!.AddRequestMetadata(
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
                 SkySoft.Contracts.DomainNames.SKYSOFT,
                 SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT,
+                SkySoft.Contracts.ApplicationLayerNames.DPL,
                 "",
                 SkySoft.DnsClient.CON.EventTypes.DNS_CLIENT_INITIALIZED_EVENT);
             DataContainer = await RaiseEvent(DataContainer);
@@ -145,9 +143,9 @@ namespace SkySoft.DnsClient.DPL
         async Task RaiseDnsClientRegistrationWithDnsServerRequestEvent()
         {
             DataContainer!.AddRequestMetadata(
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
                 SkySoft.Contracts.DomainNames.SKYSOFT,
                 SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT,
+                SkySoft.Contracts.ApplicationLayerNames.DPL,
                 "",
                 SkySoft.DnsClient.CON.EventTypes.REGISTERING_DNS_CLIENT_WITH_DNS_SERVER_EVENT);
             DataContainer = await RaiseEvent(DataContainer);

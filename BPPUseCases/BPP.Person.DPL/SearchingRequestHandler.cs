@@ -1,6 +1,4 @@
-﻿using SkySoft.ICommunication;
-
-namespace BPP.Person.DPL
+﻿namespace BPP.Person.DPL
 {
     /// <summary>
     /// Provides searching request handler functionality
@@ -14,23 +12,39 @@ namespace BPP.Person.DPL
         public SearchingRequestHandler()
         {
             DomainName = SkySoft.Contracts.DomainNames.BPP;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             UseCaseName = BPP.Person.CON.UseCaseContract.PERSON;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             StateName = BPP.Person.CON.StateTypes.INITIAL;
             TransitionName = BPP.Person.CON.TransitionTypes.SEARCHING;
         }
         #endregion
 
-        #region Public Methods
+        #region Overridden Methods
         /// <summary>
-        /// Processes request
+        /// Handles request aynchronously
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        public override async Task<IDataContainer> ProcessRequest(IDataContainer dataContainer)
+        protected override async Task HandleRequestAsync()
         {
-            dataContainer = await RedirectRequestToNextApplicationLayer(dataContainer, SkySoft.Contracts.ApplicationLayerNames.DAL);
-            return dataContainer;
+            await RaiseBusinessLogicDataRequestEvent();
+        }
+        #endregion
+
+        #region Private Methods
+        /// <summary>
+        /// Requests DnsClientRegistrationWithDnsServerRequest event
+        /// </summary>
+        async Task RaiseBusinessLogicDataRequestEvent()
+        {
+            DataContainer!.AddRequestMetadata(
+                SkySoft.Contracts.DomainNames.BPP,
+                BPP.Person.CON.UseCaseContract.PERSON,
+                SkySoft.Contracts.ApplicationLayerNames.DPL,
+                "",
+                SkySoft.Contracts.EventTypes.DATA_REQUEST_EVENT);
+            DataContainer = await RaiseEvent(DataContainer);
+            DataContainer.RemoveCurrentRequestMetadta();
         }
         #endregion
     }

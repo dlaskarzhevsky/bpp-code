@@ -67,12 +67,12 @@ namespace SkySoft.Communication
         /// Adds request metadata
         /// </summary>
         /// <param name="dataContainer">Data container</param>
-        /// <param name="applicationLayerName">Application layer name</param>
         /// <param name="domainName">Domain name</param>
         /// <param name="useCaseName">Application layer name</param>
+        /// <param name="applicationLayerName">Application layer name</param>
         /// <param name="stateName">State name</param>
         /// <param name="transitionName">Transition name</param>
-        public static void AddRequestMetadata(IDataContainer dataContainer, string? applicationLayerName, string? domainName, string? useCaseName, string? stateName, string? transitionName)
+        public static void AddRequestMetadata(IDataContainer dataContainer, string? domainName, string? useCaseName, string? applicationLayerName, string? stateName, string? transitionName)
         {
             if (string.IsNullOrEmpty(applicationLayerName) && string.IsNullOrEmpty(domainName) && string.IsNullOrEmpty(useCaseName) && string.IsNullOrEmpty(stateName) && string.IsNullOrEmpty(transitionName))
             {

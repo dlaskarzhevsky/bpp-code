@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BPP.Person.DPL\BPP.Person.DPL.csproj" />
+    <ProjectReference Include="..\BPP.PersonApp.DPL\BPP.PersonApp.DPL.csproj" />
   </ItemGroup>
 
 </Project>

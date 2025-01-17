@@ -161,14 +161,14 @@ namespace SkySoft.Communication
         /// Adds request metadata
         /// IDataContainer interface implementation
         /// </summary>
-        /// <param name="applicationLayerName">Application layer name</param>
         /// <param name="domainName">Domain name</param>
         /// <param name="useCaseName">Application layer name</param>
+        /// <param name="applicationLayerName">Application layer name</param>
         /// <param name="stateName">State name</param>
         /// <param name="transitionName">Transition name</param>
-        public void AddRequestMetadata(string? applicationLayerName, string? domainName, string? useCaseName, string? stateName, string? transitionName)
+        public void AddRequestMetadata(string? domainName, string? useCaseName, string? applicationLayerName, string? stateName, string? transitionName)
         {
-            RequestMetadataDataCollection.AddRequestMetadata(this, applicationLayerName, domainName, useCaseName, stateName, transitionName);
+            RequestMetadataDataCollection.AddRequestMetadata(this, domainName, useCaseName, applicationLayerName, stateName, transitionName);
         }
 
         /// <summary>

@@ -108,9 +108,9 @@ namespace SkySoft.APIHost.DPL
         async Task RaiseHostInitializedEvent()
         {
             DataContainer!.AddRequestMetadata(
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
                 SkySoft.Contracts.DomainNames.SKYSOFT,
                 SkySoft.APIHost.CON.UseCaseContract.API_HOST,
+                SkySoft.Contracts.ApplicationLayerNames.DPL,
                 "",
                 SkySoft.APIHost.CON.EventTypes.HOST_INITIALIZED_EVENT);
             DataContainer = await RaiseEvent(DataContainer);

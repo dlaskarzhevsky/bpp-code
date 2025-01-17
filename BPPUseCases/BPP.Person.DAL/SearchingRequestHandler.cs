@@ -20,8 +20,8 @@ namespace BPP.Person.DAL
         public SearchingRequestHandler()
         {
             DomainName = SkySoft.Contracts.DomainNames.BPP;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
             UseCaseName = UseCaseContract.PERSON;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
             StateName = StateTypes.INITIAL;
             TransitionName = TransitionTypes.SEARCHING;
         }

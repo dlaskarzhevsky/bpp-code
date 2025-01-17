@@ -19,7 +19,7 @@ namespace SkySoft.BPPApplication
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        public IDataContainer ProcessRequest(IDataContainer dataContainer)
+        public virtual IDataContainer ProcessRequest(IDataContainer dataContainer)
         {
             DataContainer = dataContainer;
             InitializeComponent();
@@ -203,42 +203,12 @@ namespace SkySoft.BPPApplication
         }
 
         /// <summary>
-        /// Redirects request to next application layer
-        /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <param name="applicationLayerName">Application layer name</param>
-        /// <returns>Result of redirection</returns>
-        protected async Task<IDataContainer> RedirectRequestToNextApplicationLayer(IDataContainer dataContainer, string applicationLayerName)
-        {
-            dataContainer.AddRequestMetadata(applicationLayerName, null, null, null, null);
-            dataContainer = await OperatingSystem.RedirectRequestToRequestHandler(dataContainer);
-            return dataContainer;
-        }
-
-        /// <summary>
         /// Redirects request to request handler
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Result of redirection</returns>
         protected async Task<IDataContainer> RedirectRequestToRequestHandler(IDataContainer dataContainer)
         {
-            dataContainer = await OperatingSystem.RedirectRequestToRequestHandler(dataContainer);
-            return dataContainer;
-        }
-
-        /// <summary>
-        /// Redirects request to request handler
-        /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <param name="applicationLayerName">Application layer name</param>
-        /// <param name="domainName">Domain name</param>
-        /// <param name="useCaseName">Use case name</param>
-        /// <param name="stateName">State name</param>
-        /// <param name="transitionName">Transition name</param>
-        /// <returns>Result of redirection</returns>
-        protected async Task<IDataContainer> RedirectRequestToRequestHandler(IDataContainer dataContainer, string? applicationLayerName, string? domainName, string? useCaseName, string? stateName, string? transitionName)
-        {
-            dataContainer.AddRequestMetadata(applicationLayerName, domainName, useCaseName, stateName, transitionName);
             dataContainer = await OperatingSystem.RedirectRequestToRequestHandler(dataContainer);
             return dataContainer;
         }

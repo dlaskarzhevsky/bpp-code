@@ -19,6 +19,13 @@ namespace SkySoft.IBPPApplication
         void CacheValue<T>(string key, T value);
 
         /// <summary>
+        /// Gets driver
+        /// </summary>
+        /// <param name="driverType">Driver type</param>
+        /// <returns>Driver if found, otherwise null</returns>
+        IDriver? GetDriver(string driverType);
+
+        /// <summary>
         /// Gets new data container
         /// </summary>
         /// <returns>New data container</returns>

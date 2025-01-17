@@ -6,15 +6,15 @@ using SkySoft.DnsRecord.DTO;
 namespace SkySoft.DnsClient.DPL
 {
     /// <summary>
-    /// LoadingUseCase transition request handler
+    /// SaaSGettingRemoteServerData transition request handler
     /// </summary>
-    public class LoadingUseCase : SkySoft.BPPApplication.RequestHandler
+    public class SaaSGettingRemoteServerData : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public LoadingUseCase()
+        public SaaSGettingRemoteServerData()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
@@ -39,7 +39,7 @@ namespace SkySoft.DnsClient.DPL
                 if (DnsClientDataValid)
                 {
                     CacheDnsClientData();
-//                    AddDnsDataToDataContainer();
+                    AddDnsDataToDataContainer();
                     await RaiseDnsClientRegistrationWithDnsServerRequestEvent();
                     if (RegistrationWithDnsServerWasSuccessful)
                     {

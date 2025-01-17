@@ -1,6 +1,4 @@
-﻿using SkySoft.ICommunication;
-
-namespace BPP.Person.BL
+﻿namespace BPP.Person.BL
 {
     /// <summary>
     /// Provides searching request handler functionality
@@ -14,23 +12,39 @@ namespace BPP.Person.BL
         public SearchingRequestHandler()
         {
             DomainName = SkySoft.Contracts.DomainNames.BPP;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.BL;
             UseCaseName = BPP.Person.CON.UseCaseContract.PERSON;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.BL;
             StateName = BPP.Person.CON.StateTypes.INITIAL;
             TransitionName = BPP.Person.CON.TransitionTypes.SEARCHING;
         }
         #endregion
 
-        #region Public Methods
+        #region Overridden Methods
         /// <summary>
-        /// Processes request
+        /// Handles request aynchronously
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        public override async Task<IDataContainer> ProcessRequest(IDataContainer dataContainer)
+        protected override async Task HandleRequestAsync()
         {
-            dataContainer = await RedirectRequestToNextApplicationLayer(dataContainer, SkySoft.Contracts.ApplicationLayerNames.DPL);
-            return dataContainer;
+            await DataRequestEvent();
+        }
+        #endregion
+
+        #region Private Methods
+        /// <summary>
+        /// Raises DataRequest event
+        /// </summary>
+        async Task DataRequestEvent()
+        {
+            DataContainer!.AddRequestMetadata(
+                SkySoft.Contracts.DomainNames.BPP,
+                BPP.Person.CON.UseCaseContract.PERSON,
+                SkySoft.Contracts.ApplicationLayerNames.BL,
+                "",
+                SkySoft.Contracts.EventTypes.DATA_REQUEST_EVENT);
+            DataContainer = await RaiseEvent(DataContainer);
+            DataContainer.RemoveCurrentRequestMetadta();
         }
         #endregion
     }

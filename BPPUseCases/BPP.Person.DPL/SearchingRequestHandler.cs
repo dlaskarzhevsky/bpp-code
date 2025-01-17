@@ -27,21 +27,21 @@
         /// <returns>Data container</returns>
         protected override async Task HandleRequestAsync()
         {
-            await RaiseBusinessLogicDataRequestEvent();
+            await RaiseDataRequestEvent();
         }
         #endregion
 
         #region Private Methods
         /// <summary>
-        /// Requests DnsClientRegistrationWithDnsServerRequest event
+        /// Raises DataRequest event
         /// </summary>
-        async Task RaiseBusinessLogicDataRequestEvent()
+        async Task RaiseDataRequestEvent()
         {
             DataContainer!.AddRequestMetadata(
                 SkySoft.Contracts.DomainNames.BPP,
                 BPP.Person.CON.UseCaseContract.PERSON,
                 SkySoft.Contracts.ApplicationLayerNames.DPL,
-                "",
+                BPP.Person.CON.StateTypes.INITIAL,
                 SkySoft.Contracts.EventTypes.DATA_REQUEST_EVENT);
             DataContainer = await RaiseEvent(DataContainer);
             DataContainer.RemoveCurrentRequestMetadta();

@@ -11,8 +11,8 @@
         public const string DNS_CLIENT_INITIALIZED_EVENT = "DnsClientInitializedEvent";
 
         /// <summary>
-        /// Registering DNS client with DNS server
+        /// Register DNS client with DNS server
         /// </summary>
-        public const string REGISTERING_DNS_CLIENT_WITH_DNS_SERVER_EVENT = "RegisteringDnsClientWithDnsServerEvent";
+        public const string REGISTER_DNS_CLIENT_WITH_DNS_SERVER_EVENT = "RegisterDnsClientWithDnsServerEvent";
     }
 }

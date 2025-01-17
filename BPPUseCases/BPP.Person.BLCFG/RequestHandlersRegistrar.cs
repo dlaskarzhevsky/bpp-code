@@ -1,11 +1,11 @@
 ﻿using SkySoft.IBPPApplication;
 
-namespace BPP.PersonApp.CFG
+namespace BPP.Person.BLCFG
 {
     /// <summary>
-    /// Provides event handlers registrar functionality
+    /// Provides request handlers registrar functionality
     /// </summary>
-    public class EventHandlersRegistrar
+    public class RequestHandlersRegistrar
     {
         #region Static Methods
         /// <summary>
@@ -14,7 +14,8 @@ namespace BPP.PersonApp.CFG
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, BPP.PersonApp.DPL.DataRequest>();
+            // Data access logic
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, BPP.Person.BL.SearchingRequestHandler>();
         }
         #endregion
     }

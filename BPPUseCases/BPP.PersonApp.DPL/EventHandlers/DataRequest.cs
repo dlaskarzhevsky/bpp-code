@@ -14,6 +14,7 @@
             DomainName = SkySoft.Contracts.DomainNames.BPP;
             UseCaseName = BPP.Person.CON.UseCaseContract.PERSON;
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
+            StateName = BPP.Person.CON.StateTypes.INITIAL;
             EventName = SkySoft.Contracts.EventTypes.DATA_REQUEST_EVENT;
         }
         #endregion

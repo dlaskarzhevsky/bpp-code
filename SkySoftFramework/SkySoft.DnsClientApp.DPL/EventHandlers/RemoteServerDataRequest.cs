@@ -1,20 +1,20 @@
 ﻿namespace SkySoft.DnsClientApp.DPL
 {
     /// <summary>
-    /// RegisteringDnsClientWithDnsServer event handler
+    /// RemoteServerDataRequest event handler
     /// </summary>
-    public class RegisteringDnsClientWithDnsServer : SkySoft.BPPApplication.EventHandler
+    public class RemoteServerDataRequest : SkySoft.BPPApplication.EventHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public RegisteringDnsClientWithDnsServer()
+        public RemoteServerDataRequest()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
+            UseCaseName = SkySoft.Contracts.UseCaseTypes.CONTROLLER;
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
-            UseCaseName = SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT;
-            EventName = SkySoft.DnsClient.CON.EventTypes.REGISTERING_DNS_CLIENT_WITH_DNS_SERVER_EVENT;
+            EventName = SkySoft.Contracts.EventTypes.REMOTE_SERVER_DATA_REQUEST_EVENT;
         }
         #endregion
 
@@ -28,17 +28,10 @@
         {
             DataContainer.AddRequestMetadata(
                 SkySoft.Contracts.DomainNames.SKYSOFT,
-                SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER,
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
-                SkySoft.DnsClient.CON.StateTypes.INITIAL,
-                SkySoft.DnsClient.CON.TransitionTypes.REGISTERING_HOST);
-
-            DataContainer.AddRequestMetadata(
-                SkySoft.Contracts.DomainNames.SKYSOFT,
-                SkySoft.Contracts.UseCaseTypes.CONTROLLER,
+                SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT,
                 SkySoft.Contracts.ApplicationLayerNames.DPL,
                 "",
-                SkySoft.Contracts.TransitionTypes.SENDING_REQUEST);
+                SkySoft.DnsClient.CON.TransitionTypes.GETTING_REMOTE_SERVER_DATA);
 
             DataContainer = await RedirectRequestToRequestHandler(DataContainer);
             DataContainer.RemoveCurrentRequestMetadta();

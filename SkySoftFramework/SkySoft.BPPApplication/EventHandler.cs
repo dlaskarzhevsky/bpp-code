@@ -6,7 +6,7 @@ namespace SkySoft.BPPApplication
     /// <summary>
     /// Provides event handler functionality
     /// </summary>
-    public class EventHandler : RequestHandler, IEventHandler
+    public class EventHandler : RequestHandler
     {
         #region Overriden Methods
         /// <summary>

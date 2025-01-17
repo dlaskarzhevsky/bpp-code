@@ -21,8 +21,8 @@
         public const string SEARCHING = "Searching";
 
         /// <summary>
-        /// Sending request
+        /// Sending request to remote server
         /// </summary>
-        public const string SENDING_REQUEST = "SendingRequest";
+        public const string SENDING_REQUEST_TO_REMOTE_SERVER = "SendingRequestToRemoteServer";
     }
 }

@@ -66,7 +66,7 @@ namespace SkySoft.APIHost.DPL
         {
             if (string.IsNullOrEmpty(HttpsUrl) && UseHttps == true)
             {
-                LogErrorMessage("The appsettings.json file does not have required Kestrel:Endpoints:Https:Url entry");
+                LogErrorMessage("The appsettings.json file does not have required Host:Endpoints:Https:Url entry");
                 HostDataValid = false;
             }
         }
@@ -78,7 +78,7 @@ namespace SkySoft.APIHost.DPL
         {
             if (string.IsNullOrEmpty(HttpUrl) && UseHttps == false)
             {
-                LogErrorMessage("The appsettings.json file does not have required Kestrel:Endpoints:Http:Url entry");
+                LogErrorMessage("The appsettings.json file does not have required Host:Endpoints:Http:Url entry");
                 HostDataValid = false;
             }
         }

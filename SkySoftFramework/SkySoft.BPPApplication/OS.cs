@@ -22,12 +22,13 @@ namespace SkySoft.BPPApplication
         /// <param name="requestHandlers">Request handlers</param>
         /// <param name="logger">Logger instance</param>
         /// <param name="drivers">Set of drivers</param>
-        public OS(IConfiguration applicationConfiguration, IMemoryCache memoryCache, ILogger<OS> logger, IEnumerable<IRequestHandler> requestHandlers)
+        public OS(IConfiguration applicationConfiguration, IMemoryCache memoryCache, ILogger<OS> logger, IEnumerable<IRequestHandler> requestHandlers, IEnumerable<IDriver> drivers)
         {
             ApplicationConfiguration = applicationConfiguration;
             MemoryCache = memoryCache;
             Logger = logger;
             RequestHandlers = requestHandlers;
+            Drivers = drivers;
             EventRedirector = new EventRedirector();
             RequestRedirector = new RequestRedirector();
         }
@@ -44,6 +45,17 @@ namespace SkySoft.BPPApplication
         public void CacheValue<T>(string key, T value)
         {
             MemoryCache.Set(key, value);
+        }
+
+        /// <summary>
+        /// Gets driver
+        /// IOS interface implementation
+        /// </summary>
+        /// <param name="controllerType">Controller type</param>
+        /// <returns>Driver if found, otherwise null</returns>
+        public IDriver? GetDriver(string controllerType)
+        {
+            return DriverLocator.FindDriver(Drivers, controllerType);
         }
 
         /// <summary>
@@ -153,6 +165,14 @@ namespace SkySoft.BPPApplication
         /// Gets or sets application configuration
         /// </summary>
         public IConfiguration ApplicationConfiguration
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets drivers
+        /// </summary>
+        public IEnumerable<IDriver> Drivers
         {
             get; set;
         }

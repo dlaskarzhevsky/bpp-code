@@ -12,8 +12,8 @@
         public HostInitialized()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             UseCaseName = SkySoft.APIHost.CON.UseCaseContract.API_HOST;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             EventName = SkySoft.APIHost.CON.EventTypes.HOST_INITIALIZED_EVENT;
         }
         #endregion

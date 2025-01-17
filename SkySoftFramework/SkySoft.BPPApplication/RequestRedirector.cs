@@ -70,12 +70,19 @@ namespace SkySoft.BPPApplication
         /// <returns>Data container</returns>
         async Task<IDataContainer> RedirectRequestToRemoteRequestHandler(IDataContainer requestDataContainer, OS operatingSystem)
         {
+            IDriver? transceiverDriver = operatingSystem.GetDriver(SkySoft.Contracts.ControllerTypes.TRANSCEIVER);
+            if (transceiverDriver == null)
+            {
+                requestDataContainer.ErrorMessage = "Driver is not registered:" + SkySoft.Contracts.ControllerTypes.TRANSCEIVER;
+                operatingSystem.LogMessage(requestDataContainer.ErrorMessage, LogLevel.Critical);
+            }
+
             requestDataContainer.AddRequestMetadata(
-                SkySoft.Contracts.DomainNames.SKYSOFT,
-                 SkySoft.Contracts.UseCaseTypes.CONTROLLER,
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
-                "",
-                SkySoft.Contracts.TransitionTypes.SENDING_REQUEST);
+                transceiverDriver!.DomainName,
+                transceiverDriver.UseCaseName,
+                transceiverDriver.ApplicationLayerName,
+                transceiverDriver.StateName,
+                transceiverDriver.TransitionName);
             return await RedirectRequestToRequestHandler(requestDataContainer, operatingSystem);
         }
         #endregion

@@ -16,6 +16,9 @@ namespace SkySoft.DnsClient.CFG
         {
             // Data processing logic
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DPL.LoadingUseCase>();
+
+            // SaaS
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DPL.SaaSGettingRemoteServerData>();
         }
         #endregion
     }

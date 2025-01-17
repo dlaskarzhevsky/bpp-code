@@ -1,24 +1,23 @@
 ﻿using SkySoft.DnsRecord.DTO;
 using SkySoft.ICommunication;
-using SkySoft.Net.Http;
 
 namespace SkySoft.APIHost.DPL
 {
     /// <summary>
-    /// SendingRequest transition request handler
+    /// Provides transceiver functionality
     /// </summary>
-    public class SendingRequest : SkySoft.BPPApplication.RequestHandler
+    public class Transceiver : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public SendingRequest()
+        public Transceiver()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             UseCaseName = SkySoft.Contracts.UseCaseTypes.CONTROLLER;
-            TransitionName = SkySoft.Contracts.TransitionTypes.SENDING_REQUEST;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.NFA;
+            TransitionName = SkySoft.Contracts.TransitionTypes.SENDING_REQUEST_TO_REMOTE_SERVER;
         }
         #endregion
 
@@ -30,7 +29,7 @@ namespace SkySoft.APIHost.DPL
         /// <returns>Data container</returns>
         protected override async Task HandleRequestAsync()
         {
-            GetRemoteServerData();
+            await GetRemoteServerData();
             CalculateRemoteServerUrl();
             if (RemoteServerUrlCalculated)
             {
@@ -58,12 +57,13 @@ namespace SkySoft.APIHost.DPL
         /// <summary>
         /// Gets remote server data
         /// </summary>
-        void GetRemoteServerData()
+        async Task GetRemoteServerData()
         {
             DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOByRemovingItFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS + SkySoft.Contracts.DataCollectionTypes.REQUEST_SUFFIX);
             if (dnsRecordDTO == null)
             {
-                LogErrorMessage("Data container does not have the required DNS record in collection " + SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS + SkySoft.Contracts.DataCollectionTypes.REQUEST_SUFFIX);
+                DataContainer.RemoveCurrentRequestMetadta();
+                await RaiseRemoteServerDataRequestEvent();
             }
             else
             {
@@ -74,13 +74,28 @@ namespace SkySoft.APIHost.DPL
         }
 
         /// <summary>
+        /// Raises RemoteServerDataRequest event
+        /// </summary>
+        async Task RaiseRemoteServerDataRequestEvent()
+        {
+            DataContainer!.AddRequestMetadata(
+                SkySoft.Contracts.DomainNames.SKYSOFT,
+                SkySoft.Contracts.UseCaseTypes.CONTROLLER,
+                SkySoft.Contracts.ApplicationLayerNames.DPL,
+                "",
+                SkySoft.Contracts.EventTypes.REMOTE_SERVER_DATA_REQUEST_EVENT);
+            DataContainer = await RaiseEvent(DataContainer);
+            DataContainer.RemoveCurrentRequestMetadta();
+        }
+
+        /// <summary>
         /// Sends request to remote server
         /// </summary>
         /// <returns>Task result</returns>
         async Task SendRequestToRemoteServer()
         {
             DataContainer.RemoveCurrentRequestMetadta();
-            Transceiver transceiver = new Transceiver();
+            Net.Http.Transceiver transceiver = new Net.Http.Transceiver();
             IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(DataContainer, RemoteServerUrl!, "/processrequest", 10000);
             if (responseDataContainer == null)
             {

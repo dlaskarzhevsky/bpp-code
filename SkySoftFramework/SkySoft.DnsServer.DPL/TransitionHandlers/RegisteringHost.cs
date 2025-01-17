@@ -124,29 +124,23 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void UpdateDnsRecordInChache()
         {
-
             if (CachedDnsRecordDTO!.HttpsUrl != DnsRecordDTO!.HttpsUrl)
             {
                 CachedDnsRecordDTO!.HttpsUrl = DnsRecordDTO!.HttpsUrl;
-                CachedDnsRecordUpdated = true;
             }
 
             if (CachedDnsRecordDTO.HttpUrl != DnsRecordDTO.HttpUrl)
             {
                 CachedDnsRecordDTO.HttpUrl = DnsRecordDTO.HttpUrl;
-                CachedDnsRecordUpdated = true;
             }
 
             if (CachedDnsRecordDTO.DateOfCreation == null)
             {
                 CachedDnsRecordDTO.DateOfCreation = DateTime.Now;
-                CachedDnsRecordUpdated = true;
             }
 
-            if (CachedDnsRecordUpdated)
-            {
-                CachedDnsRecordDTO.DateOfModification = DateTime.Now;
-            }
+            CachedDnsRecordDTO.DateOfModification = DateTime.Now;
+            CachedDnsRecordUpdated = true;
         }
 
         /// <summary>

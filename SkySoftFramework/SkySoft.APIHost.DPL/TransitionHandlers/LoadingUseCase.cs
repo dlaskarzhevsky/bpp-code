@@ -81,8 +81,8 @@ namespace SkySoft.APIHost.DPL
         void LoadHostDataFromConfigurationFile()
         {
             HostApplicationLayerName = ApplicationConfiguration!.GetValue<string>("ApplicationLayerName");
-            HttpUrl = ApplicationConfiguration!.GetValue<string>("Kestrel:Endpoints:Http:Url");
-            HttpsUrl = ApplicationConfiguration!.GetValue<string>("Kestrel:Endpoints:Https:Url");
+            HttpUrl = ApplicationConfiguration!.GetValue<string>("Host:Endpoints:Http:Url");
+            HttpsUrl = ApplicationConfiguration!.GetValue<string>("Host:Endpoints:Https:Url");
             UseHttps = ApplicationConfiguration.GetValue<bool>("UseHttps");
         }
 

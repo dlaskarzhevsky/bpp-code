@@ -21,6 +21,11 @@
         public const string DPL = "DPL";
 
         /// <summary>
+        /// Non-functional architecture layer
+        /// </summary>
+        public const string NFA = "NFA";
+
+        /// <summary>
         /// State logic layer
         /// </summary>
         public const string SL = "SL";

@@ -5,7 +5,7 @@ namespace SkySoft.APIHost.CFG
     /// <summary>
     /// Provides request handlers registrar functionality
     /// </summary>
-    public class RequestHandlersRegistrar
+    class RequestHandlersRegistrar
     {
         #region Static Methods
         /// <summary>
@@ -15,7 +15,6 @@ namespace SkySoft.APIHost.CFG
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHost.DPL.LoadingUseCase>();
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHost.DPL.Transceiver>();
         }
         #endregion
     }

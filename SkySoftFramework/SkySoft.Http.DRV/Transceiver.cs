@@ -1,10 +1,7 @@
-﻿using System.Runtime.CompilerServices;
-
-using SkySoft.Communication;
+﻿using SkySoft.Communication;
 using SkySoft.DnsRecord.DTO;
-using SkySoft.ICommunication;
 
-namespace SkySoft.APIHost.DPL
+namespace SkySoft.Http.DRV
 {
     /// <summary>
     /// Provides transceiver functionality

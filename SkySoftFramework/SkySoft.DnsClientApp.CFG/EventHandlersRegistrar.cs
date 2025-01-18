@@ -3,9 +3,9 @@
 namespace SkySoft.DnsClientApp.CFG
 {
     /// <summary>
-    /// Provides request handlers registrar functionality
+    /// Provides event handlers registrar functionality
     /// </summary>
-    public class EventHandlersRegistrar
+    class EventHandlersRegistrar
     {
         #region Static Methods
         /// <summary>

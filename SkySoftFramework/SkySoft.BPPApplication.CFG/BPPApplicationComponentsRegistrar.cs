@@ -5,7 +5,7 @@ namespace SkySoft.BPPApplication.CFG
     /// <summary>
     /// Provides BPP application components registrar functionality
     /// </summary>
-    public class BPPApplicationComponentsRegistrar
+    class BPPApplicationComponentsRegistrar
     {
         #region Static Methods
         /// <summary>

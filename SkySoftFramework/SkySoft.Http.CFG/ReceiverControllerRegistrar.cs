@@ -5,7 +5,7 @@ namespace SkySoft.Http.CFG
     /// <summary>
     /// Provides receiver controller registrar functionality
     /// </summary>
-    public class ReceiverControllerRegistrar
+    class ReceiverControllerRegistrar
     {
         #region Static Methods
         /// <summary>

@@ -1,20 +1,18 @@
-﻿using SkySoft.IBPPApplication;
-
-namespace SkySoft.Http.CFG
+﻿namespace SkySoft.APIHost.CFG
 {
     /// <summary>
-    /// Provides drivers registrar functionality
+    /// Provides registrar functionality
     /// </summary>
-    class DriversRegistrar
+    public class Registrar
     {
         #region Static Methods
         /// <summary>
-        /// Register request handlers
+        /// Register application initializer
         /// </summary>
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
-            webApplicationBuilder.Services.AddTransient<IDriver, SkySoft.Http.DRV.TransceiverDriver>();
+            RequestHandlersRegistrar.Register(webApplicationBuilder);
         }
         #endregion
     }

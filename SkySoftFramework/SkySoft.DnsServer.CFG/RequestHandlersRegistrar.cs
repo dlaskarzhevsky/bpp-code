@@ -5,7 +5,7 @@ namespace SkySoft.DnsServer.CFG
     /// <summary>
     /// Provides request handlers registrar functionality
     /// </summary>
-    public class RequestHandlersRegistrar
+    class RequestHandlersRegistrar
     {
         #region Static Methods
         /// <summary>

@@ -5,7 +5,7 @@ namespace SkySoft.DnsClient.CFG
     /// <summary>
     /// Provides request handlers registrar functionality
     /// </summary>
-    public class RequestHandlersRegistrar
+    class RequestHandlersRegistrar
     {
         #region Static Methods
         /// <summary>
@@ -14,11 +14,7 @@ namespace SkySoft.DnsClient.CFG
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
-            // Data processing logic
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DPL.LoadingUseCase>();
-
-            // SaaS
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DPL.SaaSGettingRemoteServerData>();
         }
         #endregion
     }

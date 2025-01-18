@@ -16,6 +16,7 @@
     <ProjectReference Include="..\SkySoft.BPPApplication.Runtime\SkySoft.BPPApplication.Runtime.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.CFG\SkySoft.DnsServer.CFG.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServerApp.CFG\SkySoft.DnsServerApp.CFG.csproj" />
+    <ProjectReference Include="..\SkySoft.Http.CFG\SkySoft.Http.CFG.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -15,7 +15,6 @@
     <ProjectReference Include="..\SkySoft.Communication\SkySoft.Communication.csproj" />
     <ProjectReference Include="..\SkySoft.DnsRecord.DTO\SkySoft.DnsRecord.DTO.csproj" />
     <ProjectReference Include="..\SkySoft.IBPPApplication\SkySoft.IBPPApplication.csproj" />
-    <ProjectReference Include="..\SkySoft.Net.Http\SkySoft.Net.Http.csproj" />
   </ItemGroup>
 
 </Project>

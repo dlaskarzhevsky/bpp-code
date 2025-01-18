@@ -1,7 +1,6 @@
-﻿using SkySoft.APIHost.DPL;
-using SkySoft.IBPPApplication;
+﻿using SkySoft.IBPPApplication;
 
-namespace SkySoft.APIHost.CFG
+namespace SkySoft.Http.CFG
 {
     /// <summary>
     /// Provides receiver controller registrar functionality

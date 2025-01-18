@@ -12,6 +12,7 @@
     <ProjectReference Include="..\..\SkySoftFramework\SkySoft.BPPApplication.Runtime\SkySoft.BPPApplication.Runtime.csproj" />
     <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsClient.CFG\SkySoft.DnsClient.CFG.csproj" />
     <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsClientApp.CFG\SkySoft.DnsClientApp.CFG.csproj" />
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.Http.CFG\SkySoft.Http.CFG.csproj" />
     <ProjectReference Include="..\BPP.Person.DALCFG\BPP.Person.DALCFG.csproj" />
   </ItemGroup>
 

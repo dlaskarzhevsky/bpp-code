@@ -1,7 +1,7 @@
 ﻿using SkySoft.Communication;
 using SkySoft.ICommunication;
 
-namespace SkySoft.Net.Http
+namespace SkySoft.Http
 {
     /// <summary>
     /// Provides transceiver functionality

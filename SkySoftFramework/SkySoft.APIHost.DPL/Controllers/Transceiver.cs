@@ -1,4 +1,7 @@
-﻿using SkySoft.DnsRecord.DTO;
+﻿using System.Runtime.CompilerServices;
+
+using SkySoft.Communication;
+using SkySoft.DnsRecord.DTO;
 using SkySoft.ICommunication;
 
 namespace SkySoft.APIHost.DPL
@@ -29,12 +32,25 @@ namespace SkySoft.APIHost.DPL
         /// <returns>Data container</returns>
         protected override async Task HandleRequestAsync()
         {
-            await GetRemoteServerData();
+            if (RequestNotReadyForSubmissionToRemoteServer)
+            {
+                await GetRemoteServerData();
+            }
+
             CalculateRemoteServerUrl();
             if (RemoteServerUrlCalculated)
             {
-                await SendRequestToRemoteServer();
+//                await SendRequestToRemoteServer();
             }
+        }
+
+        /// <summary>
+        /// Initializes component
+        /// </summary>
+        protected override void InitializeComponent()
+        {
+            RequestMetadataDTO = DataContainer.GetLastDTOByRemovingItFromDataCollection<RequestMetadataDTO>(SkySoft.Contracts.DataCollectionTypes.REQUEST_METADATA);
+            DnsRecordDTO = DataContainer.GetLastDTOByRemovingItFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS + SkySoft.Contracts.DataCollectionTypes.REQUEST_SUFFIX);
         }
         #endregion
 
@@ -87,7 +103,7 @@ namespace SkySoft.APIHost.DPL
             DataContainer = await RaiseEvent(DataContainer);
             DataContainer.RemoveCurrentRequestMetadta();
         }
-
+/*
         /// <summary>
         /// Sends request to remote server
         /// </summary>
@@ -106,9 +122,42 @@ namespace SkySoft.APIHost.DPL
                 DataContainer = responseDataContainer;
             }
         }
+*/
         #endregion
 
         #region Private Properties
+        /// <summary>
+        /// Gets or sets DNS record
+        /// </summary>
+        DnsRecordDTO? DnsRecordDTO
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets request metadata
+        /// </summary>
+        RequestMetadataDTO? RequestMetadataDTO
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets HTTP URL
+        /// </summary>
+        string? HttpUrl
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets HTTPS URL
+        /// </summary>
+        string? HttpsUrl
+        {
+            get; set;
+        }
+
         /// <summary>
         /// Gets or sets remote server URL
         /// </summary>
@@ -137,19 +186,14 @@ namespace SkySoft.APIHost.DPL
         }
 
         /// <summary>
-        /// Gets or sets HTTP URL
+        /// Gets flag indicating whether request not ready for submission to remote server
         /// </summary>
-        string? HttpUrl
+        bool RequestNotReadyForSubmissionToRemoteServer
         {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets HTTPS URL
-        /// </summary>
-        string? HttpsUrl
-        {
-            get; set;
+            get
+            {
+                return RequestMetadataDTO == null || DnsRecordDTO == null || RequestMetadataDTO.ApplicationLayerName != DnsRecordDTO.ApplicationLayerName;
+            }
         }
 
         /// <summary>

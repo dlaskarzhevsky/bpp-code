@@ -4,7 +4,7 @@ using SkySoft.Communication;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
 
-namespace SkySoft.APIHost.DPL
+namespace SkySoft.Http
 {
     [ApiController]
     public class ReceiverController : ControllerBase, IReceiverController

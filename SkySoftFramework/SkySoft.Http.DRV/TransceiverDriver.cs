@@ -1,6 +1,6 @@
 ﻿using SkySoft.BPPApplication;
 
-namespace SkySoft.APIHost.DPL
+namespace SkySoft.Http.DRV
 {
     /// <summary>
     /// Provides transceiver driver functionality

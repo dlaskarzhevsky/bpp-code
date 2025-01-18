@@ -1,6 +1,6 @@
 ﻿using SkySoft.IBPPApplication;
 
-namespace SkySoft.APIHost.CFG
+namespace SkySoft.Http.CFG
 {
     /// <summary>
     /// Provides drivers registrar functionality
@@ -14,7 +14,7 @@ namespace SkySoft.APIHost.CFG
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
-            webApplicationBuilder.Services.AddTransient<IDriver, SkySoft.APIHost.DPL.TransceiverDriver>();
+            webApplicationBuilder.Services.AddTransient<IDriver, SkySoft.Http.DRV.TransceiverDriver>();
         }
         #endregion
     }

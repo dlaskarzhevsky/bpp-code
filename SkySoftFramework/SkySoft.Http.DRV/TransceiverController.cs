@@ -4,15 +4,15 @@ using SkySoft.DnsRecord.DTO;
 namespace SkySoft.Http.DRV
 {
     /// <summary>
-    /// Provides transceiver functionality
+    /// Provides transceiver controller functionality
     /// </summary>
-    public class Transceiver : SkySoft.BPPApplication.RequestHandler
+    public class TransceiverController : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public Transceiver()
+        public TransceiverController()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             UseCaseName = SkySoft.Contracts.UseCaseTypes.CONTROLLER;

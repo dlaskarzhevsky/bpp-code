@@ -14,7 +14,7 @@ namespace SkySoft.Http.CFG
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.Http.DRV.Transceiver>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.Http.DRV.TransceiverController>();
         }
         #endregion
     }

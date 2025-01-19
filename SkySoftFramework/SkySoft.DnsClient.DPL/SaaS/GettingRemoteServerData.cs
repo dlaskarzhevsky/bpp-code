@@ -6,20 +6,20 @@ using SkySoft.DnsRecord.DTO;
 namespace SkySoft.DnsClient.DPL
 {
     /// <summary>
-    /// SaaSGettingRemoteServerData transition request handler
+    /// GettingRemoteServerData transition request handler
     /// </summary>
-    public class SaaSGettingRemoteServerData : SkySoft.BPPApplication.RequestHandler
+    public class GettingRemoteServerData : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public SaaSGettingRemoteServerData()
+        public GettingRemoteServerData()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             UseCaseName = SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT;
-            TransitionName = SkySoft.DnsClient.CON.TransitionTypes.LOADING_USE_CASE;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
+            TransitionName = SkySoft.Contracts.TransitionTypes.GETTING_REMOTE_SERVER_DATA;
         }
         #endregion
 
@@ -215,6 +215,14 @@ namespace SkySoft.DnsClient.DPL
         {
             get; set;
         }
+
+        /// <summary>
+        /// Getsa or sets path to DNS records file
+        /// </summary>
+        string PathToDnsRecordsFile
+        {
+            get; set;
+        } = SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS + ".json";
 
         /// <summary>
         /// Gets flag indicating whether registration with DNS server was successful

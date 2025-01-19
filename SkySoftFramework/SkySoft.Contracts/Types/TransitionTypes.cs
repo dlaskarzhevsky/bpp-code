@@ -11,6 +11,11 @@
         public const string CREATING = "Creating";
 
         /// <summary>
+        /// Getting remote server data
+        /// </summary>
+        public const string GETTING_REMOTE_SERVER_DATA = "GettingRemoteServerData";
+
+        /// <summary>
         /// Loading use case transition
         /// </summary>
         public const string LOADING_USE_CASE = "LoadingUseCase";

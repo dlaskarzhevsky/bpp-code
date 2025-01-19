@@ -1,20 +1,20 @@
 ﻿namespace SkySoft.DnsClientApp.DPL
 {
     /// <summary>
-    /// RemoteServerDataRequest event handler
+    /// GettingRemoteServerData event handler
     /// </summary>
-    public class RemoteServerDataRequest : SkySoft.BPPApplication.EventHandler
+    public class GettingRemoteServerData : SkySoft.BPPApplication.EventHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public RemoteServerDataRequest()
+        public GettingRemoteServerData()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             UseCaseName = SkySoft.Contracts.UseCaseTypes.CONTROLLER;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
-            EventName = SkySoft.Contracts.EventTypes.REMOTE_SERVER_DATA_REQUEST_EVENT;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.NFA;
+            TransitionName = SkySoft.Contracts.TransitionTypes.GETTING_REMOTE_SERVER_DATA;
         }
         #endregion
 
@@ -31,7 +31,7 @@
                 SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT,
                 SkySoft.Contracts.ApplicationLayerNames.DPL,
                 "",
-                SkySoft.DnsClient.CON.TransitionTypes.GETTING_REMOTE_SERVER_DATA);
+                SkySoft.Contracts.TransitionTypes.GETTING_REMOTE_SERVER_DATA);
 
             DataContainer = await RedirectRequestToRequestHandler(DataContainer);
             DataContainer.RemoveCurrentRequestMetadta();

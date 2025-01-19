@@ -29,10 +29,7 @@ namespace SkySoft.Http.DRV
         /// <returns>Data container</returns>
         protected override async Task HandleRequestAsync()
         {
-            if (RequestNotReadyForSubmissionToRemoteServer)
-            {
-                await GetRemoteServerData();
-            }
+            await RaiseGetRemoteServerDataEvent();
 
             CalculateRemoteServerUrl();
             if (RemoteServerUrlCalculated)
@@ -68,22 +65,32 @@ namespace SkySoft.Http.DRV
         }
 
         /// <summary>
-        /// Gets remote server data
+        /// Raises GetRemoteServerData event
         /// </summary>
-        async Task GetRemoteServerData()
+        async Task RaiseGetRemoteServerDataEvent()
         {
-            DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOByRemovingItFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS + SkySoft.Contracts.DataCollectionTypes.REQUEST_SUFFIX);
-            if (dnsRecordDTO == null)
-            {
-                DataContainer.RemoveCurrentRequestMetadta();
-                await RaiseRemoteServerDataRequestEvent();
-            }
-            else
-            {
-                HttpsUrl = dnsRecordDTO.HttpsUrl;
-                HttpUrl = dnsRecordDTO.HttpUrl;
-                UseHttps = dnsRecordDTO.UseHttps;
-            }
+            DataContainer.AddRequestMetadata(
+                SkySoft.Contracts.DomainNames.SKYSOFT,
+                SkySoft.Contracts.UseCaseTypes.CONTROLLER,
+                SkySoft.Contracts.ApplicationLayerNames.NFA,
+                "",
+                SkySoft.Contracts.TransitionTypes.GETTING_REMOTE_SERVER_DATA);
+            DataContainer = await RaiseEvent(DataContainer);
+            DataContainer.RemoveCurrentRequestMetadta();
+    /*
+                DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOByRemovingItFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS + SkySoft.Contracts.DataCollectionTypes.REQUEST_SUFFIX);
+                if (dnsRecordDTO == null)
+                {
+                    DataContainer.RemoveCurrentRequestMetadta();
+                    await RaiseRemoteServerDataRequestEvent();
+                }
+                else
+                {
+                    HttpsUrl = dnsRecordDTO.HttpsUrl;
+                    HttpUrl = dnsRecordDTO.HttpUrl;
+                    UseHttps = dnsRecordDTO.UseHttps;
+                }
+    */
         }
 
         /// <summary>
@@ -179,17 +186,6 @@ namespace SkySoft.Http.DRV
                 {
                     return true;
                 }
-            }
-        }
-
-        /// <summary>
-        /// Gets flag indicating whether request not ready for submission to remote server
-        /// </summary>
-        bool RequestNotReadyForSubmissionToRemoteServer
-        {
-            get
-            {
-                return RequestMetadataDTO == null || DnsRecordDTO == null || RequestMetadataDTO.ApplicationLayerName != DnsRecordDTO.ApplicationLayerName;
             }
         }
 

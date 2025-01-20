@@ -6,12 +6,17 @@
     public class UseCaseTypes
     {
         /// <summary>
-        /// Controller use acse
+        /// Application use case
+        /// </summary>
+        public const string APPLICATION = "Application";
+
+        /// <summary>
+        /// Controller use case
         /// </summary>
         public const string CONTROLLER = "Controller";
 
         /// <summary>
-        /// Driver use acse
+        /// Driver use case
         /// </summary>
         public const string DRIVER = "Driver";
     }

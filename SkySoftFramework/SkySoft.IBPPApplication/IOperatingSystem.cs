@@ -65,7 +65,8 @@ namespace SkySoft.IBPPApplication
         /// </summary>
         /// <param name="message">Message for logging</param>
         /// <param name="logLevel">Log level</param>
-        void LogMessage(string message, LogLevel logLevel);
+        /// <returns>Logged message</returns>
+        string LogMessage(string message, LogLevel logLevel);
 
         /// <summary>
         /// Raises event

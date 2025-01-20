@@ -91,7 +91,7 @@ namespace SkySoft.APIHost.DPL
         /// </summary>
         void RemoveHostDataFromDataContainer()
         {
-            DataContainer.RemoveDataCollection(SkySoft.APIHost.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.APIHost.CON.DataCollectionTypes.REQUEST_SUFFIX);
+            DataContainer.RemoveDataCollection(SkySoft.APIHost.CON.DataCollectionTypes.DNS_RECORDS);
         }
 
         /// <summary>

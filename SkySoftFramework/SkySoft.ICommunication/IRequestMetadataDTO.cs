@@ -23,6 +23,14 @@
         }
 
         /// <summary>
+        /// Gets or sets flag indicating whether request handled
+        /// </summary>
+        bool RequestHandled
+        {
+            get; set;
+        }
+
+        /// <summary>
         /// Gets or sets state name
         /// </summary>
         string? StateName

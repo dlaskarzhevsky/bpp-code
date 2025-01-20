@@ -13,8 +13,13 @@ namespace SkySoft.Communication
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <param name="errorMessage">Error message</param>
-        public static void AddErrorMessage(IDataContainer dataContainer, string errorMessage)
+        public static void AddErrorMessage(IDataContainer dataContainer, string? errorMessage)
         {
+            if (string.IsNullOrEmpty(errorMessage))
+            {
+                return;
+            }
+
             IDataCollection<ExceptionDTO>? exceptionDataCollection = dataContainer.GetDataColletion<ExceptionDTO>(SkySoft.Contracts.DataCollectionTypes.EXCEPTIONS);
             IExceptionDTO exceptionDTO = dataContainer.GetNewDTO<ExceptionDTO>(exceptionDataCollection!);
             exceptionDTO.Message = errorMessage;

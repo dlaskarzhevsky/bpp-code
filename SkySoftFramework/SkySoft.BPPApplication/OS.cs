@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using System.Globalization;
+
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -121,9 +123,19 @@ namespace SkySoft.BPPApplication
         /// </summary>
         /// <param name="message">Message for logging</param>
         /// <param name="logLevel">Log level</param>
-        public void LogMessage(string message, LogLevel logLevel)
+        /// <returns>Logged message</returns>
+        public string LogMessage(string message, LogLevel logLevel)
         {
-            Logger.Log(logLevel, $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()} {message}");
+            string messageMetadata = string.Empty;
+            if (!message.StartsWith("Logged on", StringComparison.InvariantCultureIgnoreCase))
+            {
+                messageMetadata = $"Logged on {DateTime.Now.ToString("s").Replace("T", "")} at {GetValueFromApplicationConfiguration<string>("Host:ApplicationLayerName")} ({GetValueFromApplicationConfiguration<string>("Host:Endpoints:Http:Url")})" + Environment.NewLine;
+            }
+
+            string compiledMessage = messageMetadata + message;
+            Logger.Log(logLevel, compiledMessage);
+
+            return compiledMessage;
         }
 
         /// <summary>

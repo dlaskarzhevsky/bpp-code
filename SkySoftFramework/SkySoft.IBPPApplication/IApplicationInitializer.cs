@@ -11,7 +11,7 @@
         /// </summary>
         /// <param name="operatingSystem">Operating system</param>
         /// <returns>True if application was initialized, otherwise false</returns>
-        bool InitializeApplication(IOS operatingSystem);
+        Task<bool> InitializeApplication(IOS operatingSystem);
         #endregion
     }
 }

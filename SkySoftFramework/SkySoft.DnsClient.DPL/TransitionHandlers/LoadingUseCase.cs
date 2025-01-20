@@ -52,14 +52,18 @@ namespace SkySoft.DnsClient.DPL
 
                 if (RegistrationWithDnsServerWasSuccessful)
                 {
-                    OperatingSystem.LogMessage("Host was registered with DNS server successfully", LogLevel.Information);
+                    DataContainer.ErrorMessage = OperatingSystem.LogMessage("Host was registered with DNS server successfully", LogLevel.Information);
                     await RaiseDnsClientInitializedEvent();
                 }
                 else
                 {
                     if (DataContainer.Exception != null)
                     {
-                        OperatingSystem.LogMessage("DNS server is offline", LogLevel.Critical);
+                        DataContainer.ErrorMessage = OperatingSystem.LogMessage(DataContainer.Exception.Message, LogLevel.Critical);
+                    }
+                    else if (!string.IsNullOrEmpty(DataContainer.ErrorMessage))
+                    {
+                        DataContainer.ErrorMessage = OperatingSystem.LogMessage(DataContainer.ErrorMessage, LogLevel.Error);
                     }
                 }
 
@@ -322,7 +326,7 @@ namespace SkySoft.DnsClient.DPL
         {
             get
             {
-                return DataContainer.Exception == null;
+                return DataContainer.Exception == null && string.IsNullOrEmpty(DataContainer.ErrorMessage);
             }
         }
 

@@ -22,11 +22,12 @@ namespace SkySoft.BPPApplication
             ValidateComponent();
             if (ComponentIsValid)
             {
-                await HandleEvent();
+                await HandleEventAsync();
+                HandleEvent();
                 FinalizeComponent();
             }
 
-            return dataContainer;
+            return DataContainer;
         }
         #endregion
 
@@ -49,17 +50,16 @@ namespace SkySoft.BPPApplication
 
         #region Protected Methods
         /// <summary>
-        /// Handles request
+        /// Handles event
         /// </summary>
-        protected virtual async Task HandleEvent()
+        protected virtual void HandleEvent()
         {
-            await Task.Delay(0);
         }
 
         /// <summary>
-        /// Handles request
+        /// Handles event aynchronously
         /// </summary>
-        private new async Task HandleRequest()
+        protected virtual async Task HandleEventAsync()
         {
             await Task.Delay(0);
         }

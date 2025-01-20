@@ -19,5 +19,10 @@
         /// RemoteServerDataRequest event
         /// </summary>
         public const string REMOTE_SERVER_DATA_REQUEST_EVENT = "RemoteServerDataRequestEvent";
+
+        /// <summary>
+        /// RequestHandlerNotFound event
+        /// </summary>
+        public const string REQUEST_HANDLER_NOT_FOUND_EVENT = "RequestHandlerNotFoundEvent";
     }
 }

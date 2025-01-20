@@ -28,6 +28,15 @@ namespace SkySoft.Communication
         }
 
         /// <summary>
+        /// Gets or sets flag indicating whether request handled
+        /// IRequestMetadataDTO interface implementation
+        /// </summary>
+        public bool RequestHandled
+        {
+            get; set;
+        }
+
+        /// <summary>
         /// Gets or sets state name
         /// IRequestMetadataDTO interface implementation
         /// </summary>

@@ -15,14 +15,14 @@ namespace SkySoft.BPPApplication
         /// </summary>
         /// <param name="operatingSystem">Operating system</param>
         /// <returns>True if application was initialized, otherwise false</returns>
-        public virtual bool InitializeApplication(IOS operatingSystem)
+        public virtual async Task<bool> InitializeApplication(IOS operatingSystem)
         {
             bool? applicationInitialized = operatingSystem.GetValueFomCache<bool?>(StateName);
             if (applicationInitialized == null || applicationInitialized == false)
             {
                 IDataContainer dataContainer = operatingSystem.GetNewDataContainer();
                 ConfigureRequestToLoadDefaultUseCase(dataContainer);
-                operatingSystem.RedirectRequestToRequestHandler(dataContainer).Wait();
+                dataContainer = await operatingSystem.RedirectRequestToRequestHandler(dataContainer);
                 if (DefaultUseCaseWasLoaded(dataContainer))
                 {
                     operatingSystem.CacheValue<bool>(StateName, true);

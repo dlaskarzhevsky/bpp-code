@@ -25,7 +25,7 @@
         /// <summary>
         /// Gets or sets error message
         /// </summary>
-        string ErrorMessage
+        string? ErrorMessage
         {
             get; set;
         }
@@ -34,6 +34,14 @@
         /// Gets or sets exception
         /// </summary>
         Exception? Exception
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets flag indicating whether request handled
+        /// </summary>
+        bool RequestHandled
         {
             get; set;
         }

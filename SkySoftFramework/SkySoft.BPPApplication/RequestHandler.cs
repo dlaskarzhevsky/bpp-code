@@ -38,7 +38,7 @@ namespace SkySoft.BPPApplication
             DataContainer = dataContainer;
             ProcessRequest();
 
-            return dataContainer;
+            return DataContainer;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace SkySoft.BPPApplication
                 FinalizeComponent();
             }
 
-            return dataContainer;
+            return DataContainer;
         }
 
         /// <summary>
@@ -195,8 +195,7 @@ namespace SkySoft.BPPApplication
         /// <param name="message">Message for logging</param>
         protected virtual void LogErrorMessage(string message)
         {
-            DataContainer.ErrorMessage = message;
-            OperatingSystem.LogMessage(DataContainer.ErrorMessage, LogLevel.Critical);
+            DataContainer.ErrorMessage = OperatingSystem.LogMessage(message, LogLevel.Critical);
         }
 
         /// <summary>

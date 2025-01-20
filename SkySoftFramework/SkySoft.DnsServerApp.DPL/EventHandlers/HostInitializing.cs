@@ -1,20 +1,20 @@
 ﻿namespace SkySoft.DnsServerApp.DPL
 {
     /// <summary>
-    /// HostInitialized event handler
+    /// HostInitializing event handler
     /// </summary>
-    public class HostInitialized : SkySoft.BPPApplication.EventHandler
+    public class HostInitializing : SkySoft.BPPApplication.EventHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public HostInitialized()
+        public HostInitializing()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             UseCaseName = SkySoft.APIHost.CON.UseCaseContract.API_HOST;
-            EventName = SkySoft.APIHost.CON.EventTypes.HOST_INITIALIZED_EVENT;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
+            EventName = SkySoft.APIHost.CON.EventTypes.HOST_INITIALIZING_EVENT;
         }
         #endregion
 
@@ -24,7 +24,7 @@
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        protected override async Task HandleEvent()
+        protected override async Task HandleEventAsync()
         {
             DataContainer.AddRequestMetadata(
                 SkySoft.Contracts.DomainNames.SKYSOFT,

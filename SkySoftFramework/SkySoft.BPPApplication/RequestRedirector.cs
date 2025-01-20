@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
+using SkySoft.Communication;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
 
@@ -28,17 +31,26 @@ namespace SkySoft.BPPApplication
                 string? applicationLayerNameOfHost = operatingSystem.ApplicationConfiguration.GetValue<string>("Host:ApplicationLayerName");
                 if (string.IsNullOrEmpty(applicationLayerNameOfHost))
                 {
-                    operatingSystem.LogMessage("appsettings.json file does not have ApplicationLayerName setting", LogLevel.Error);
+                    dataContainer.ErrorMessage = operatingSystem.LogMessage("appsettings.json file does not have ApplicationLayerName setting", LogLevel.Error);
                 }
                 else
                 {
                     if (string.Equals(applicationLayerFullNameOfRequest, applicationLayerNameOfHost, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        operatingSystem.LogMessage($"The {requestHandlerType} request handler is not registered inside APIHostInitializer file", LogLevel.Error);
+                        dataContainer.ErrorMessage = operatingSystem.LogMessage($"The {requestHandlerType} request handler is not registered inside APIHostInitializer file", LogLevel.Error);
                     }
                     else
                     {
-                        dataContainer = await RedirectRequestToRemoteRequestHandler(dataContainer, operatingSystem);
+                        dataContainer = await RaiseRequestHandlerNotFoundEvent(dataContainer, operatingSystem);
+                        if (dataContainer.RequestHandled)
+                        {
+                            dataContainer.RemoveCurrentRequestMetadta();
+                        }
+                        else
+                        {
+                            dataContainer.RemoveCurrentRequestMetadta();
+                            dataContainer = await RedirectRequestToRemoteRequestHandler(dataContainer, operatingSystem);
+                        }
                     }
                 }
             }
@@ -50,6 +62,7 @@ namespace SkySoft.BPPApplication
                 try
                 {
                     dataContainer = await requestHandler.ProcessRequestAsync(dataContainer);
+                    dataContainer.RequestHandled = true;
                 }
                 catch (Exception exception) {
                     dataContainer.Exception = exception;
@@ -64,6 +77,22 @@ namespace SkySoft.BPPApplication
 
         #region Private Methods
         /// <summary>
+        /// Raises RequestHandlerNotFound event
+        /// <param name="dataContainer">Data container</param>
+        /// </summary>
+        /// <returns>Data container</returns>
+        async Task<IDataContainer> RaiseRequestHandlerNotFoundEvent(IDataContainer requestDataContainer, OS operatingSystem)
+        {
+            requestDataContainer!.AddRequestMetadata(
+                SkySoft.Contracts.DomainNames.SKYSOFT,
+                SkySoft.Contracts.UseCaseTypes.APPLICATION,
+                SkySoft.Contracts.ApplicationLayerNames.NFA,
+                "",
+                SkySoft.Contracts.EventTypes.REQUEST_HANDLER_NOT_FOUND_EVENT);
+            return await operatingSystem.RedirectRequestToEventHandler(requestDataContainer);
+        }
+
+        /// <summary>
         /// Redirect request to remote request handler
         /// </summary>
         /// <param name="requestDataContainer">Request data container</param>
@@ -73,8 +102,8 @@ namespace SkySoft.BPPApplication
             IDriver? transceiverDriver = operatingSystem.GetDriver(SkySoft.Contracts.ControllerTypes.TRANSCEIVER);
             if (transceiverDriver == null)
             {
-                requestDataContainer.ErrorMessage = "Driver is not registered:" + SkySoft.Contracts.ControllerTypes.TRANSCEIVER;
-                operatingSystem.LogMessage(requestDataContainer.ErrorMessage, LogLevel.Critical);
+                string errorMessage = "Driver is not registered:" + SkySoft.Contracts.ControllerTypes.TRANSCEIVER;
+                requestDataContainer.ErrorMessage = operatingSystem.LogMessage(errorMessage, LogLevel.Critical);
             }
 
             requestDataContainer.AddRequestMetadata(

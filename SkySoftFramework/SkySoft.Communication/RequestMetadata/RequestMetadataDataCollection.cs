@@ -31,6 +31,17 @@ namespace SkySoft.Communication
         }
 
         /// <summary>
+        /// Gets flag indicating whether request handled
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <returns>Flag indicating whether request handled</returns>
+        public static bool GetRequestHandled(IDataContainer dataContainer)
+        {
+            IRequestMetadataDTO requestMetadata = GetRequestMetadata(dataContainer);
+            return requestMetadata.RequestHandled;
+        }
+
+        /// <summary>
         /// Gets state name
         /// </summary>
         /// <param name="dataContainer">Data container</param>
@@ -170,6 +181,17 @@ namespace SkySoft.Communication
         {
             IRequestMetadataDTO requestMetadata = GetRequestMetadata(dataContainer);
             requestMetadata.DomainName = domainName;
+        }
+
+        /// <summary>
+        /// Sets flag indicating whether request handled
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <param name="requestHandled">State name</param>
+        public static void SetRequestHandled(IDataContainer dataContainer, bool requestHandled)
+        {
+            IRequestMetadataDTO requestMetadata = GetRequestMetadata(dataContainer);
+            requestMetadata.RequestHandled = requestHandled;
         }
 
         /// <summary>

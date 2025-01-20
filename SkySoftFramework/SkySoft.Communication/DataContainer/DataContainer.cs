@@ -45,7 +45,7 @@ namespace SkySoft.Communication
         /// Gets or sets error message
         /// IDataContainer interface implementation
         /// </summary>
-        public string ErrorMessage
+        public string? ErrorMessage
         {
             get
             {
@@ -70,6 +70,22 @@ namespace SkySoft.Communication
             set
             {
                 ExceptionDataCollection.AddException(this, value);
+            }
+        }
+
+        /// <summary>
+        /// IDataContainer interface implementation
+        /// Gets or sets flag indicating whether request handled
+        /// </summary>
+        public bool RequestHandled
+        {
+            get
+            {
+                return RequestMetadataDataCollection.GetRequestHandled(this);
+            }
+            set
+            {
+                RequestMetadataDataCollection.SetRequestHandled(this, value);
             }
         }
 

@@ -5,7 +5,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 
 using SkySoft.DnsRecord.DTO;
-using SkySoft.ICommunication;
 
 namespace SkySoft.DnsServer.DPL
 {
@@ -21,8 +20,8 @@ namespace SkySoft.DnsServer.DPL
         public RegisteringHost()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             StateName = SkySoft.DnsServer.CON.StateTypes.INITIAL;
             TransitionName = SkySoft.DnsServer.CON.TransitionTypes.REGISTERING_HOST;
         }
@@ -37,6 +36,7 @@ namespace SkySoft.DnsServer.DPL
         protected override void HandleRequest()
         {
             GetListOfDnsRecordsFromCache();
+            GetDnsRecordFromRequest();
             FindDnsRecordByApplicationLayerName();
             if (DnsRecordFound)
             {
@@ -52,6 +52,17 @@ namespace SkySoft.DnsServer.DPL
                 VerifyThatPathToDnsRecordsFileContainsDirectoryName();
                 SaveUpdatedData();
             }
+        }
+
+        /// <summary>
+        /// Releases resources
+        /// </summary>
+        public override void ReleaseResources()
+        {
+            CachedDnsRecordDTO = null;
+            DnsRecordDTO = null;
+            ListOfCachedDnsRecords = default!;
+            base.ReleaseResources();
         }
         #endregion
 
@@ -77,7 +88,6 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void FindDnsRecordByApplicationLayerName()
         {
-            DnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.DnsServer.CON.DataCollectionTypes.REQUEST_SUFFIX);
             if (DnsRecordDTO != null)
             {
                 string applicationLayerName = DnsRecordDTO.ApplicationLayerName!.ToLowerInvariant();
@@ -91,6 +101,14 @@ namespace SkySoft.DnsServer.DPL
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets DNS record from request
+        /// </summary>
+        void GetDnsRecordFromRequest()
+        {
+            DnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS);
         }
 
         /// <summary>

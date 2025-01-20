@@ -27,6 +27,7 @@ namespace SkySoft.BPPApplication
                 try
                 {
                     dataContainer = await requestHandler.ProcessRequestAsync(dataContainer);
+                    dataContainer.RequestHandled = true;
                 }
                 catch (Exception exception)
                 {

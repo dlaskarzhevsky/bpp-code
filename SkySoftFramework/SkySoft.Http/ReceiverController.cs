@@ -18,7 +18,7 @@ namespace SkySoft.Http
         public ReceiverController(IApplicationInitializer applicationInitializer, IOS operatingSystem)
         {
             OperatingSystem = operatingSystem;
-            ApplicationInitialized = applicationInitializer.InitializeApplication(operatingSystem);
+            ApplicationInitialized = applicationInitializer.InitializeApplication(operatingSystem).Result;
         }
         #endregion
 

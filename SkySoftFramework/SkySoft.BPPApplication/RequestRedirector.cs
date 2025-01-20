@@ -24,15 +24,15 @@ namespace SkySoft.BPPApplication
             IRequestHandler? requestHandler = RequestHandlerLocator.FindRequestHandler(operatingSystem.RequestHandlers, requestHandlerType);
             if (requestHandler == null)
             {
-                string applicationLayerNameOfRequest = $"{dataContainer.DomainName}_{dataContainer.ApplicationLayerName}_{dataContainer.UseCaseName}";
-                string? applicationLayerNameOfHost = operatingSystem.ApplicationConfiguration.GetValue<string>("ApplicationLayerName");
+                string applicationLayerFullNameOfRequest = $"{dataContainer.DomainName}_{dataContainer.ApplicationLayerName}_{dataContainer.UseCaseName}";
+                string? applicationLayerNameOfHost = operatingSystem.ApplicationConfiguration.GetValue<string>("Host:ApplicationLayerName");
                 if (string.IsNullOrEmpty(applicationLayerNameOfHost))
                 {
                     operatingSystem.LogMessage("appsettings.json file does not have ApplicationLayerName setting", LogLevel.Error);
                 }
                 else
                 {
-                    if (applicationLayerNameOfRequest.ToLowerInvariant() == applicationLayerNameOfHost.ToLowerInvariant())
+                    if (string.Equals(applicationLayerFullNameOfRequest, applicationLayerNameOfHost, StringComparison.InvariantCultureIgnoreCase))
                     {
                         operatingSystem.LogMessage($"The {requestHandlerType} request handler is not registered inside APIHostInitializer file", LogLevel.Error);
                     }

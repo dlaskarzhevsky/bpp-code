@@ -1,20 +1,20 @@
 ﻿namespace SkySoft.DnsClientApp.DPL
 {
     /// <summary>
-    /// HostInitialized event handler
+    /// HostInitializing event handler
     /// </summary>
-    public class HostInitialized : SkySoft.BPPApplication.EventHandler
+    public class HostInitializing : SkySoft.BPPApplication.EventHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public HostInitialized()
+        public HostInitializing()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             UseCaseName = SkySoft.APIHost.CON.UseCaseContract.API_HOST;
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
-            EventName = SkySoft.APIHost.CON.EventTypes.HOST_INITIALIZED_EVENT;
+            EventName = SkySoft.APIHost.CON.EventTypes.HOST_INITIALIZING_EVENT;
         }
         #endregion
 

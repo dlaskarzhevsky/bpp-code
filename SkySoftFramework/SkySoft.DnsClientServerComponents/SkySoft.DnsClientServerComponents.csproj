@@ -8,9 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SkySoft.BPPApplication\SkySoft.BPPApplication.csproj" />
-    <ProjectReference Include="..\SkySoft.DnsClientServerComponents\SkySoft.DnsClientServerComponents.csproj" />
+    <ProjectReference Include="..\SkySoft.Contracts\SkySoft.Contracts.csproj" />
     <ProjectReference Include="..\SkySoft.DnsRecord.DTO\SkySoft.DnsRecord.DTO.csproj" />
-    <ProjectReference Include="..\SkySoft.Http\SkySoft.Http.csproj" />
   </ItemGroup>
 
 </Project>

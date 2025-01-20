@@ -6,8 +6,8 @@
     public class EventTypes : SkySoft.Contracts.EventTypes
     {
         /// <summary>
-        /// HostInitialized event
+        /// HostInitializing event
         /// </summary>
-        public const string HOST_INITIALIZED_EVENT = "HostInitializedEvent";
+        public const string HOST_INITIALIZING_EVENT = "HostInitializingEvent";
     }
 }

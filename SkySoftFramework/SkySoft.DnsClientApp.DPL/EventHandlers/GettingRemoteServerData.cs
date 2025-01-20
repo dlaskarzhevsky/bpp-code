@@ -29,7 +29,7 @@
             DataContainer.AddRequestMetadata(
                 SkySoft.Contracts.DomainNames.SKYSOFT,
                 SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT,
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
+                SkySoft.Contracts.ApplicationLayerNames.DPL_SAAS,
                 "",
                 SkySoft.Contracts.TransitionTypes.GETTING_REMOTE_SERVER_DATA);
 

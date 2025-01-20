@@ -15,13 +15,9 @@ namespace SkySoft.BPPApplication
         #region Public Methods
         /// <summary>
         /// Processes request
-        /// IRequestHandler iterface implementation
         /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <returns>Data container</returns>
-        public virtual IDataContainer ProcessRequest(IDataContainer dataContainer)
+        public void ProcessRequest()
         {
-            DataContainer = dataContainer;
             InitializeComponent();
             ValidateComponent();
             if (ComponentIsValid)
@@ -29,6 +25,18 @@ namespace SkySoft.BPPApplication
                 HandleRequest();
                 FinalizeComponent();
             }
+        }
+
+        /// <summary>
+        /// Processes request
+        /// IRequestHandler iterface implementation
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <returns>Data container</returns>
+        public virtual IDataContainer ProcessRequest(IDataContainer dataContainer)
+        {
+            DataContainer = dataContainer;
+            ProcessRequest();
 
             return dataContainer;
         }
@@ -223,15 +231,12 @@ namespace SkySoft.BPPApplication
 
         #region Protected Properties
         /// <summary>
-        /// Gets flag indicating whether component is valid
+        /// Gets or sets flag indicating whether component is valid
         /// </summary>
         protected virtual bool ComponentIsValid
         {
-            get
-            {
-                return true;
-            }
-        }
+            get; set;
+        } = true;
 
         /// <summary>
         /// Gets or sets data container

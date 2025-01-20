@@ -1,5 +1,8 @@
 ﻿using SkySoft.Communication;
+using SkySoft.DnsClientServerComponents;
+using SkySoft.DnsRecord.DTI;
 using SkySoft.DnsRecord.DTO;
+using SkySoft.ICommunication;
 
 namespace SkySoft.Http.DRV
 {
@@ -29,39 +32,76 @@ namespace SkySoft.Http.DRV
         /// <returns>Data container</returns>
         protected override async Task HandleRequestAsync()
         {
+            AddDnsRecordWithApplicationLayerFullNameOfRequestToDataContainer();
+            
             await RaiseGetRemoteServerDataEvent();
 
-            CalculateRemoteServerUrl();
-            if (RemoteServerUrlCalculated)
+            GetRemoteServerDnsRecordByRemovingItFromDataContainer();
+            ValidateRemoteServerDnsRecord();
+            if (RemoteServerDnsRecordValid)
             {
-//                await SendRequestToRemoteServer();
+                CalculateRemoteServerUrl();
+                CacheLastRequestMetadataByRemovingItFromDataContainer();
+
+                await SendRequestToRemoteServer();
+
+                RestoreLastRequestMetadataFromCache();
             }
         }
 
         /// <summary>
-        /// Initializes component
+        /// Releases resources
         /// </summary>
-        protected override void InitializeComponent()
+        public override void ReleaseResources()
         {
-            RequestMetadataDTO = DataContainer.GetLastDTOByRemovingItFromDataCollection<RequestMetadataDTO>(SkySoft.Contracts.DataCollectionTypes.REQUEST_METADATA);
-            DnsRecordDTO = DataContainer.GetLastDTOByRemovingItFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS + SkySoft.Contracts.DataCollectionTypes.REQUEST_SUFFIX);
+            RemoteServerDnsRecord = null;
+            RequestMetadataDTO = null;
+            base.ReleaseResources();
         }
         #endregion
 
         #region Private Methods
         /// <summary>
-        /// Determines remote server URL
+        /// Adds DNS record with application layer full name of request to data container
+        /// </summary>
+        void AddDnsRecordWithApplicationLayerFullNameOfRequestToDataContainer()
+        {
+            IDataCollection<RequestMetadataDTO>? requestMetadataDataCollection = DataContainer.GetDataColletion<RequestMetadataDTO>(SkySoft.Contracts.DataCollectionTypes.REQUEST_METADATA);
+            IRequestMetadataDTO requestMetadataDTO = requestMetadataDataCollection![requestMetadataDataCollection.Count - 2];
+            string applicationLayerFullNameOfRequest = $"{requestMetadataDTO.DomainName}_{requestMetadataDTO.ApplicationLayerName}_{requestMetadataDTO.UseCaseName}";
+            IDnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
+            dnsRecordDTO.ApplicationLayerName = applicationLayerFullNameOfRequest;
+        }
+
+        /// <summary>
+        /// Caches last request metadata by removing it from data container
+        /// </summary>
+        void CacheLastRequestMetadataByRemovingItFromDataContainer()
+        {
+            RequestMetadataDTO = DataContainer.GetLastDTOByRemovingItFromDataCollection<RequestMetadataDTO>(SkySoft.Contracts.DataCollectionTypes.REQUEST_METADATA);
+        }
+
+        /// <summary>
+        /// Calculates remote server URL
         /// </summary>
         void CalculateRemoteServerUrl()
         {
-            if (UseHttps)
+            if (RemoteServerDnsRecord!.UseHttps)
             {
-                RemoteServerUrl = HttpsUrl;
+                RemoteServerUrl = RemoteServerDnsRecord.HttpsUrl;
             }
             else
             {
-                RemoteServerUrl = HttpUrl;
+                RemoteServerUrl = RemoteServerDnsRecord.HttpUrl;
             }
+        }
+
+        /// <summary>
+        /// Gets remote server DNS record by removing it from data container
+        /// </summary>
+        void GetRemoteServerDnsRecordByRemovingItFromDataContainer()
+        {
+            RemoteServerDnsRecord = DataContainer.GetLastDTOByRemovingItFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
         }
 
         /// <summary>
@@ -77,37 +117,17 @@ namespace SkySoft.Http.DRV
                 SkySoft.Contracts.TransitionTypes.GETTING_REMOTE_SERVER_DATA);
             DataContainer = await RaiseEvent(DataContainer);
             DataContainer.RemoveCurrentRequestMetadta();
-    /*
-                DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOByRemovingItFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS + SkySoft.Contracts.DataCollectionTypes.REQUEST_SUFFIX);
-                if (dnsRecordDTO == null)
-                {
-                    DataContainer.RemoveCurrentRequestMetadta();
-                    await RaiseRemoteServerDataRequestEvent();
-                }
-                else
-                {
-                    HttpsUrl = dnsRecordDTO.HttpsUrl;
-                    HttpUrl = dnsRecordDTO.HttpUrl;
-                    UseHttps = dnsRecordDTO.UseHttps;
-                }
-    */
         }
 
         /// <summary>
-        /// Raises RemoteServerDataRequest event
+        /// Restores last request metadata from cache
         /// </summary>
-        async Task RaiseRemoteServerDataRequestEvent()
+        void RestoreLastRequestMetadataFromCache()
         {
-            DataContainer!.AddRequestMetadata(
-                SkySoft.Contracts.DomainNames.SKYSOFT,
-                SkySoft.Contracts.UseCaseTypes.CONTROLLER,
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
-                "",
-                SkySoft.Contracts.EventTypes.REMOTE_SERVER_DATA_REQUEST_EVENT);
-            DataContainer = await RaiseEvent(DataContainer);
-            DataContainer.RemoveCurrentRequestMetadta();
+            IDataCollection<RequestMetadataDTO>? requestMetadataDataCollection = DataContainer.GetDataColletion<RequestMetadataDTO>(SkySoft.Contracts.DataCollectionTypes.REQUEST_METADATA);
+            requestMetadataDataCollection!.Add(RequestMetadataDTO!);
         }
-/*
+
         /// <summary>
         /// Sends request to remote server
         /// </summary>
@@ -115,7 +135,7 @@ namespace SkySoft.Http.DRV
         async Task SendRequestToRemoteServer()
         {
             DataContainer.RemoveCurrentRequestMetadta();
-            Net.Http.Transceiver transceiver = new Net.Http.Transceiver();
+            SkySoft.Http.Transceiver transceiver = new SkySoft.Http.Transceiver();
             IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(DataContainer, RemoteServerUrl!, "/processrequest", 10000);
             if (responseDataContainer == null)
             {
@@ -126,14 +146,32 @@ namespace SkySoft.Http.DRV
                 DataContainer = responseDataContainer;
             }
         }
-*/
+
+        /// <summary>
+        /// Validates remote server DNS record
+        /// </summary>
+        void ValidateRemoteServerDnsRecord()
+        {
+            DnsRecordValidator dnsRecordValidator = new DnsRecordValidator(RemoteServerDnsRecord!.ApplicationLayerName, RemoteServerDnsRecord.HttpsUrl, RemoteServerDnsRecord.HttpUrl, RemoteServerDnsRecord.UseHttps, this);
+            dnsRecordValidator.ProcessRequest(DataContainer);
+            dnsRecordValidator.ReleaseResources();
+            RemoteServerDnsRecordValid = dnsRecordValidator.DnsRecordDataValid;
+        }
         #endregion
 
         #region Private Properties
         /// <summary>
-        /// Gets or sets DNS record
+        /// Gets or sets remote server DNS record
         /// </summary>
-        DnsRecordDTO? DnsRecordDTO
+        DnsRecordDTO? RemoteServerDnsRecord
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets flag indicating whether remote server DNS record valid
+        /// </summary>
+        bool RemoteServerDnsRecordValid
         {
             get; set;
         }
@@ -147,52 +185,9 @@ namespace SkySoft.Http.DRV
         }
 
         /// <summary>
-        /// Gets or sets HTTP URL
-        /// </summary>
-        string? HttpUrl
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets HTTPS URL
-        /// </summary>
-        string? HttpsUrl
-        {
-            get; set;
-        }
-
-        /// <summary>
         /// Gets or sets remote server URL
         /// </summary>
         string? RemoteServerUrl
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets flag indicating whether remote server URL calculated
-        /// </summary>
-        bool RemoteServerUrlCalculated
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(RemoteServerUrl))
-                {
-                    LogErrorMessage("There is no DnsServerUrl setting in appsettings.json file");
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets flag indicating whether HTTPS needs to be used
-        /// </summary>
-        bool UseHttps
         {
             get; set;
         }

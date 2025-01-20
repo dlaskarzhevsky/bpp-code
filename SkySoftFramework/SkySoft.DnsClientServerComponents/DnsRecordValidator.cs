@@ -1,24 +1,24 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using SkySoft.IBPPApplication;
 
-using SkySoft.IBPPApplication;
-
-namespace SkySoft.DnsClient.DPL
+namespace SkySoft.DnsClientServerComponents
 {
     /// <summary>
-    /// Provides DNS client data validator class
+    /// Provides host data validator class
     /// </summary>
-    public class DnsClientDataValidator : SkySoft.BPPApplication.RequestHandler
+    public class DnsRecordValidator : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
+        /// <param name="hostApplicationLayerName">Host application layer name</param>
         /// <param name="httpsUrl">HTTPS URL</param>
         /// <param name="httpUrl">HTTP URL</param>
         /// <param name="useHttps">Flag indicating whether HTTPS needs to be used</param>
         /// <param name="requestHandler">Request handler</param>
-        public DnsClientDataValidator(string? httpsUrl, string? httpUrl, bool useHttps, IRequestHandler requestHandler)
+        public DnsRecordValidator(string? hostApplicationLayerName, string? httpsUrl, string? httpUrl, bool useHttps, IRequestHandler requestHandler)
         {
+            HostApplicationLayerName = hostApplicationLayerName;
             HttpsUrl = httpsUrl;
             HttpUrl = httpUrl;
             UseHttps = useHttps;
@@ -32,6 +32,7 @@ namespace SkySoft.DnsClient.DPL
         /// </summary>
         protected override void HandleRequest()
         {
+            ValidateHostApplicationLayerName();
             ValidateHttpsUrl();
             ValidateHttpUrl();
         }
@@ -47,14 +48,26 @@ namespace SkySoft.DnsClient.DPL
 
         #region Private Methods
         /// <summary>
+        /// Validates host application layer name
+        /// </summary>
+        void ValidateHostApplicationLayerName()
+        {
+            if (string.IsNullOrEmpty(HostApplicationLayerName))
+            {
+                LogErrorMessage("DNS data does not have required ApplicationLayerName entry");
+                DnsRecordDataValid = false;
+            }
+        }
+
+        /// <summary>
         /// Validates HTTPS URL
         /// </summary>
         void ValidateHttpsUrl()
         {
             if (string.IsNullOrEmpty(HttpsUrl) && UseHttps == true)
             {
-                LogErrorMessage("The appsettings.json file does not have required DnsServer:Endpoints:Https:Url entry");
-                DnsClientDataValid = false;
+                LogErrorMessage("DNS data file does not have required Host:Endpoints:Https:Url entry");
+                DnsRecordDataValid = false;
             }
         }
 
@@ -65,23 +78,31 @@ namespace SkySoft.DnsClient.DPL
         {
             if (string.IsNullOrEmpty(HttpUrl) && UseHttps == false)
             {
-                LogErrorMessage("The appsettings.json file does not have required DnsServer:Endpoints:Http:Url entry");
-                DnsClientDataValid = false;
+                LogErrorMessage("DNS data file does not have required Host:Endpoints:Http:Url entry");
+                DnsRecordDataValid = false;
             }
         }
         #endregion
 
-        #region Private Properties
+        #region Public Properties
         /// <summary>
-        /// Gets or sets flag indicating whether DNS client data are valid
+        /// Gets or sets flag indicating whether host data valid
         /// </summary>
-        public bool DnsClientDataValid
+        public bool DnsRecordDataValid
         {
             get; set;
         } = true;
         #endregion
 
         #region Private Properties
+        /// <summary>
+        /// Gets or sets host application layer name
+        /// </summary>
+        string? HostApplicationLayerName
+        {
+            get; set;
+        }
+
         /// <summary>
         /// Gets or sets HTTP URL
         /// </summary>

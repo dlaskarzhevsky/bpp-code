@@ -14,6 +14,11 @@ namespace SkySoft.IBPPApplication
         /// <summary>
         /// Processes request
         /// </summary>
+        void ProcessRequest();
+
+        /// <summary>
+        /// Processes request
+        /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
         IDataContainer ProcessRequest(IDataContainer dataContainer);

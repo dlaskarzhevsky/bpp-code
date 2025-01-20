@@ -1,5 +1,5 @@
-﻿using SkySoft.DnsRecord.DTO;
-using SkySoft.ICommunication;
+﻿using SkySoft.DnsClientServerComponents;
+using SkySoft.DnsRecord.DTO;
 
 namespace SkySoft.APIHost.DPL
 {
@@ -29,20 +29,8 @@ namespace SkySoft.APIHost.DPL
         /// <returns>Data container</returns>
         protected override async Task HandleRequestAsync()
         {
-            LoadHostDataFromCache();
-            if (CacheHasNoHostData)
-            {
-                LoadHostDataFromConfigurationFile();
-                ValidateHostData();
-                if (HostDataValid)
-                {
-                    CacheHostData();
-                    AddHostDataToDataContainer();
-                }
-            }
-
-            await RaiseHostInitializedEvent();
-            RemoveHostDataFromDataContainer();
+            PrepareHostDnsRecordForRegistrationWithDnsServer();
+            await SendHostDnsRecordRegistrationRequestToDnsServer();
         }
         #endregion
 
@@ -52,7 +40,7 @@ namespace SkySoft.APIHost.DPL
         /// </summary>
         void AddHostDataToDataContainer()
         {
-            DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.APIHost.CON.DataCollectionTypes.DNS_RECORDS + SkySoft.APIHost.CON.DataCollectionTypes.REQUEST_SUFFIX);
+            DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.APIHost.CON.DataCollectionTypes.DNS_RECORDS);
             dnsRecordDTO.ApplicationLayerName = HostApplicationLayerName;
             dnsRecordDTO.HttpsUrl = HttpsUrl;
             dnsRecordDTO.HttpUrl = HttpUrl;
@@ -60,59 +48,40 @@ namespace SkySoft.APIHost.DPL
         }
 
         /// <summary>
-        /// Caches host data
-        /// </summary>
-        void CacheHostData()
-        {
-            HostDataCacheManager hostDataCacheManager = new HostDataCacheManager();
-            hostDataCacheManager.Mode = HostDataCacheManagerMode.SetHostDataIntoCache;
-            hostDataCacheManager.HostApplicationLayerName = HostApplicationLayerName;
-            hostDataCacheManager.HttpsUrl = HttpsUrl;
-            hostDataCacheManager.HttpUrl = HttpUrl;
-            hostDataCacheManager.UseHttps = UseHttps;
-            hostDataCacheManager.RequestHandler = this;
-            hostDataCacheManager.ProcessRequest(DataContainer);
-            hostDataCacheManager.ReleaseResources();
-        }
-
-        /// <summary>
         /// Load host data from configuration file
         /// </summary>
         void LoadHostDataFromConfigurationFile()
         {
-            HostApplicationLayerName = ApplicationConfiguration!.GetValue<string>("ApplicationLayerName");
-            HttpUrl = ApplicationConfiguration!.GetValue<string>("Host:Endpoints:Http:Url");
+            HostApplicationLayerName = ApplicationConfiguration!.GetValue<string>("Host:ApplicationLayerName");
             HttpsUrl = ApplicationConfiguration!.GetValue<string>("Host:Endpoints:Https:Url");
+            HttpUrl = ApplicationConfiguration!.GetValue<string>("Host:Endpoints:Http:Url");
             UseHttps = ApplicationConfiguration.GetValue<bool>("UseHttps");
         }
 
         /// <summary>
-        /// Loads host data from cache
+        /// Prepares host DNS record for registration with DNS server
         /// </summary>
-        void LoadHostDataFromCache()
+        void PrepareHostDnsRecordForRegistrationWithDnsServer()
         {
-            HostDataCacheManager hostDataCacheManager = new HostDataCacheManager();
-            hostDataCacheManager.Mode = HostDataCacheManagerMode.GetHostDataFromCache;
-            hostDataCacheManager.RequestHandler = this;
-            hostDataCacheManager.ProcessRequest(DataContainer);
-            hostDataCacheManager.ReleaseResources();
-            HostApplicationLayerName = hostDataCacheManager.ApplicationLayerName;
-            HttpsUrl = hostDataCacheManager.HttpsUrl;
-            HttpUrl = hostDataCacheManager.HttpUrl;
-            UseHttps = hostDataCacheManager.UseHttps;
+            LoadHostDataFromConfigurationFile();
+            ValidateHostData();
+            if (HostDataValid)
+            {
+                AddHostDataToDataContainer();
+            }
         }
 
         /// <summary>
         /// Raises HostInitialized event
         /// </summary>
-        async Task RaiseHostInitializedEvent()
+        async Task RaiseHostInitializingEvent()
         {
             DataContainer!.AddRequestMetadata(
                 SkySoft.Contracts.DomainNames.SKYSOFT,
                 SkySoft.APIHost.CON.UseCaseContract.API_HOST,
                 SkySoft.Contracts.ApplicationLayerNames.DPL,
                 "",
-                SkySoft.APIHost.CON.EventTypes.HOST_INITIALIZED_EVENT);
+                SkySoft.APIHost.CON.EventTypes.HOST_INITIALIZING_EVENT);
             DataContainer = await RaiseEvent(DataContainer);
             DataContainer.RemoveCurrentRequestMetadta();
         }
@@ -126,14 +95,24 @@ namespace SkySoft.APIHost.DPL
         }
 
         /// <summary>
+        /// Sends host DNS record registration request to DNS server
+        /// </summary>
+        /// <returns></returns>
+        async Task SendHostDnsRecordRegistrationRequestToDnsServer()
+        {
+            await RaiseHostInitializingEvent();
+            RemoveHostDataFromDataContainer();
+        }
+
+        /// <summary>
         /// Validates host data
         /// </summary>
         void ValidateHostData()
         {
-            HostDataValidator hostDataValidator = new HostDataValidator(HostApplicationLayerName, HttpsUrl, HttpUrl, UseHttps, this);
-            hostDataValidator.ProcessRequest(DataContainer);
-            hostDataValidator.ReleaseResources();
-            HostDataValid = hostDataValidator.HostDataValid;
+            DnsRecordValidator dnsRecordValidator = new DnsRecordValidator(HostApplicationLayerName, HttpsUrl, HttpUrl, UseHttps, this);
+            dnsRecordValidator.ProcessRequest(DataContainer);
+            dnsRecordValidator.ReleaseResources();
+            HostDataValid = dnsRecordValidator.DnsRecordDataValid;
         }
         #endregion
 
@@ -153,17 +132,6 @@ namespace SkySoft.APIHost.DPL
         {
             get; set;
         } = true;
-
-        /// <summary>
-        /// Gets flag indicating whether cache has no host data
-        /// </summary>
-        bool CacheHasNoHostData
-        {
-            get
-            {
-                return string.IsNullOrEmpty(HostApplicationLayerName);
-            }
-        }
 
         /// <summary>
         /// Gets or sets HTTP URL

@@ -21,6 +21,11 @@
         public const string DPL = "DPL";
 
         /// <summary>
+        /// Data processing logic Software as a Service layer
+        /// </summary>
+        public const string DPL_SAAS = "DPL_SAAS";
+
+        /// <summary>
         /// Non-functional architecture layer
         /// </summary>
         public const string NFA = "NFA";

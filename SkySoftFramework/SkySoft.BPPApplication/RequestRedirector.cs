@@ -31,13 +31,13 @@ namespace SkySoft.BPPApplication
                 string? applicationLayerNameOfHost = operatingSystem.ApplicationConfiguration.GetValue<string>("Host:ApplicationLayerName");
                 if (string.IsNullOrEmpty(applicationLayerNameOfHost))
                 {
-                    dataContainer.ErrorMessage = operatingSystem.LogMessage("appsettings.json file does not have ApplicationLayerName setting", LogLevel.Error);
+                    dataContainer.SetMessage(operatingSystem.LogMessage("appsettings.json file does not have ApplicationLayerName setting", LogLevel.Error), MessageType.Error);
                 }
                 else
                 {
                     if (string.Equals(applicationLayerFullNameOfRequest, applicationLayerNameOfHost, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        dataContainer.ErrorMessage = operatingSystem.LogMessage($"The {requestHandlerType} request handler is not registered inside APIHostInitializer file", LogLevel.Error);
+                        dataContainer.SetMessage(operatingSystem.LogMessage($"The {requestHandlerType} request handler is not registered inside APIHostInitializer file", LogLevel.Error), MessageType.Error);
                     }
                     else
                     {
@@ -103,7 +103,7 @@ namespace SkySoft.BPPApplication
             if (transceiverDriver == null)
             {
                 string errorMessage = "Driver is not registered:" + SkySoft.Contracts.ControllerTypes.TRANSCEIVER;
-                requestDataContainer.ErrorMessage = operatingSystem.LogMessage(errorMessage, LogLevel.Critical);
+                requestDataContainer.SetMessage(operatingSystem.LogMessage(errorMessage, LogLevel.Critical), MessageType.Error);
             }
 
             requestDataContainer.AddRequestMetadata(

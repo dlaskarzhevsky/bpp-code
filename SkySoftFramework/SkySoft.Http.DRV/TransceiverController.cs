@@ -134,17 +134,10 @@ namespace SkySoft.Http.DRV
         /// <returns>Task result</returns>
         async Task SendRequestToRemoteServer()
         {
-            DataContainer.RemoveCurrentRequestMetadta();
+//            DataContainer.RemoveCurrentRequestMetadta();
             SkySoft.Http.Transceiver transceiver = new SkySoft.Http.Transceiver();
             IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(DataContainer, RemoteServerUrl!, "/processrequest", 10000);
-            if (responseDataContainer == null)
-            {
-                LogErrorMessage("Remote data server is offline: " + RemoteServerUrl);
-            }
-            else
-            {
-                DataContainer = responseDataContainer;
-            }
+            DataContainer = responseDataContainer!;
         }
 
         /// <summary>

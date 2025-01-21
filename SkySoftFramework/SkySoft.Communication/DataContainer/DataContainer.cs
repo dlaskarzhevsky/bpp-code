@@ -8,140 +8,75 @@ namespace SkySoft.Communication
     /// </summary>
     public class DataContainer : Dictionary<string, dynamic>, IDataContainer
     {
-        #region Public Properties
+        #region Static Methods
         /// <summary>
-        /// Gets or sets application layer name
-        /// IDataContainer interface implementation
+        /// Creates data container
         /// </summary>
-        public string? ApplicationLayerName
+        /// <returns>Data container</returns>
+        public static IDataContainer CreateDataContainer()
         {
-            get
-            {
-                return RequestMetadataDataCollection.GetApplicationLayerName(this);
-            }
-            set
-            {
-                RequestMetadataDataCollection.SetApplicationLayerName(this, value);
-            }
+            return DataContainerCreator.Create();
         }
 
         /// <summary>
-        /// Gets or sets domain name
-        /// IDataContainer interface implementation
+        /// Deserializes data container
         /// </summary>
-        public string? DomainName
+        /// <param name="serializedDataContainer">Sting containing serialized data container data</param>
+        /// <returns>Deserialized data container or NULL if desirialization not possible</returns>
+        public static IDataContainer? Deserialize(string serializedDataContainer)
         {
-            get
+            IDataContainer? dataContainer = DataContainerDeserializer.Deserialize(serializedDataContainer);
+            if (dataContainer != null)
             {
-                return RequestMetadataDataCollection.GetDomainName(this);
+                // The following line of code deserializes request metadata by restoring it from JArray object
+                dataContainer.GetDataColletion<RequestMetadataDTO>(SkySoft.Contracts.DataCollectionTypes.REQUEST_METADATA);
+                dataContainer.GetDataColletion<ExceptionDTO>(SkySoft.Contracts.DataCollectionTypes.EXCEPTIONS);
             }
-            set
-            {
-                RequestMetadataDataCollection.SetDomainName(this, value);
-            }
+
+            return dataContainer;
         }
 
         /// <summary>
-        /// Gets or sets error message
-        /// IDataContainer interface implementation
+        /// Gets new data transfer object
         /// </summary>
-        public string? ErrorMessage
+        /// <typeparam name="T">Data transfer object type</typeparam>
+        /// <returns>New data transfer object</returns>
+        public static T GetNewDataTransferObject<T>()
         {
-            get
+            T? newDTO = default!;
+            Type type = typeof(T);
+            if (type.IsInterface)
             {
-                return ExceptionDataCollection.GetErrorMessage(this);
-            }
-            set
-            {
-                ExceptionDataCollection.AddErrorMessage(this, value);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets exception
-        /// IDataContainer interface implementation
-        /// </summary>
-        public Exception? Exception
-        {
-            get
-            {
-                return ExceptionDataCollection.GetException(this);
-            }
-            set
-            {
-                ExceptionDataCollection.AddException(this, value);
-            }
-        }
-
-        /// <summary>
-        /// IDataContainer interface implementation
-        /// Gets or sets flag indicating whether request handled
-        /// </summary>
-        public bool RequestHandled
-        {
-            get
-            {
-                return RequestMetadataDataCollection.GetRequestHandled(this);
-            }
-            set
-            {
-                RequestMetadataDataCollection.SetRequestHandled(this, value);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets state name
-        /// IDataContainer interface implementation
-        /// </summary>
-        public string? StateName
-        {
-            get
-            {
-                return RequestMetadataDataCollection.GetStateName(this);
-            }
-            set
-            {
-                RequestMetadataDataCollection.SetStateName(this, value);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets transition name
-        /// IDataContainer interface implementation
-        /// </summary>
-
-        public string? TransitionName
-        {
-            get
-            {
-                return RequestMetadataDataCollection.GetTransitionName(this);
-            }
-            set
-            {
-                if (!string.IsNullOrWhiteSpace(value))
+                string typeName = type.Name.Substring(1);
+                Type? classType = Type.GetType(typeName);
+                if (classType == null)
                 {
-                    RequestMetadataDataCollection.SetTransitionName(this, value);
+                    throw new TypeAccessException("Cannot create new data transfer object type of " + typeName);
                 }
+
+                newDTO = (T?)Activator.CreateInstance(classType);
             }
+            else
+            {
+                newDTO = Activator.CreateInstance<T>();
+            }
+
+            if (newDTO == null)
+            {
+                throw new TypeAccessException("Cannot create new data transfer object");
+            }
+
+            return newDTO;
         }
 
         /// <summary>
-        /// Gets or sets application layer name
-        /// IDataContainer interface implementation
+        /// Serializes data container
         /// </summary>
-        public string? UseCaseName
+        /// <param name="dataContainer">Data container (required)</param>
+        /// <returns>String containing serialized data container data</returns>
+        public static string Serialize(IDataContainer dataContainer)
         {
-            get
-            {
-                return RequestMetadataDataCollection.GetUseCaseName(this);
-            }
-            set
-            {
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    RequestMetadataDataCollection.SetUseCaseName(this, value);
-                }
-            }
+            return DataContainerSerializer.Serialize(dataContainer);
         }
         #endregion
 
@@ -346,77 +281,161 @@ namespace SkySoft.Communication
                 Remove(key);
             }
         }
+
+        /// <summary>
+        /// Sets message
+        /// IDataContainer interface implementation
+        /// </summary>
+        /// <param name="message">Message text</param>
+        /// <param name="messageType">Message type</param>
+        public void SetMessage(string message, MessageType messageType)
+        {
+            ExceptionDataCollection.AddMessage(this, message, messageType);
+        }
         #endregion
 
-        #region Static Methods
+        #region Public Properties
         /// <summary>
-        /// Creates data container
+        /// Gets or sets application layer name
+        /// IDataContainer interface implementation
         /// </summary>
-        /// <returns>Data container</returns>
-        public static IDataContainer CreateDataContainer()
+        public string? ApplicationLayerName
         {
-            return DataContainerCreator.Create();
-        }
-
-        /// <summary>
-        /// Deserializes data container
-        /// </summary>
-        /// <param name="serializedDataContainer">Sting containing serialized data container data</param>
-        /// <returns>Deserialized data container or NULL if desirialization not possible</returns>
-        public static IDataContainer? Deserialize(string serializedDataContainer)
-        {
-            IDataContainer? dataContainer = DataContainerDeserializer.Deserialize(serializedDataContainer);
-            if (dataContainer != null)
+            get
             {
-                // The following line of code deserializes request metadata by restoring it from JArray object
-                dataContainer.GetDataColletion<RequestMetadataDTO>(SkySoft.Contracts.DataCollectionTypes.REQUEST_METADATA);
-                dataContainer.GetDataColletion<ExceptionDTO>(SkySoft.Contracts.DataCollectionTypes.EXCEPTIONS);
+                return RequestMetadataDataCollection.GetApplicationLayerName(this);
             }
-
-            return dataContainer;
+            set
+            {
+                RequestMetadataDataCollection.SetApplicationLayerName(this, value);
+            }
         }
 
         /// <summary>
-        /// Gets new data transfer object
+        /// Gets or sets domain name
+        /// IDataContainer interface implementation
         /// </summary>
-        /// <typeparam name="T">Data transfer object type</typeparam>
-        /// <returns>New data transfer object</returns>
-        public static T GetNewDataTransferObject<T>()
+        public string? DomainName
         {
-            T? newDTO = default!;
-            Type type = typeof(T);
-            if (type.IsInterface)
+            get
             {
-                string typeName = type.Name.Substring(1);
-                Type? classType = Type.GetType(typeName);
-                if (classType == null)
+                return RequestMetadataDataCollection.GetDomainName(this);
+            }
+            set
+            {
+                RequestMetadataDataCollection.SetDomainName(this, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets message
+        /// IDataContainer interface implementation
+        /// </summary>
+        public string? Message
+        {
+            get
+            {
+                return ExceptionDataCollection.GetMessage(this);
+            }
+        }
+
+        /// <summary>
+        /// Gets message type
+        /// IDataContainer interface implementation
+        /// </summary>
+        public MessageType MessageType
+        {
+            get
+            {
+                return ExceptionDataCollection.GetMessageType(this);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets exception
+        /// IDataContainer interface implementation
+        /// </summary>
+        public Exception? Exception
+        {
+            get
+            {
+                return ExceptionDataCollection.GetException(this);
+            }
+            set
+            {
+                ExceptionDataCollection.AddException(this, value);
+            }
+        }
+
+        /// <summary>
+        /// IDataContainer interface implementation
+        /// Gets or sets flag indicating whether request handled
+        /// </summary>
+        public bool RequestHandled
+        {
+            get
+            {
+                return RequestMetadataDataCollection.GetRequestHandled(this);
+            }
+            set
+            {
+                RequestMetadataDataCollection.SetRequestHandled(this, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets state name
+        /// IDataContainer interface implementation
+        /// </summary>
+        public string? StateName
+        {
+            get
+            {
+                return RequestMetadataDataCollection.GetStateName(this);
+            }
+            set
+            {
+                RequestMetadataDataCollection.SetStateName(this, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets transition name
+        /// IDataContainer interface implementation
+        /// </summary>
+
+        public string? TransitionName
+        {
+            get
+            {
+                return RequestMetadataDataCollection.GetTransitionName(this);
+            }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
                 {
-                    throw new TypeAccessException("Cannot create new data transfer object type of " + typeName);
+                    RequestMetadataDataCollection.SetTransitionName(this, value);
                 }
-
-                newDTO = (T?)Activator.CreateInstance(classType);
             }
-            else
-            {
-                newDTO = Activator.CreateInstance<T>();
-            }
-
-            if (newDTO == null)
-            {
-                throw new TypeAccessException("Cannot create new data transfer object");
-            }
-
-            return newDTO;
         }
 
         /// <summary>
-        /// Serializes data container
+        /// Gets or sets application layer name
+        /// IDataContainer interface implementation
         /// </summary>
-        /// <param name="dataContainer">Data container (required)</param>
-        /// <returns>String containing serialized data container data</returns>
-        public static string Serialize(IDataContainer dataContainer)
+        public string? UseCaseName
         {
-            return DataContainerSerializer.Serialize(dataContainer);
+            get
+            {
+                return RequestMetadataDataCollection.GetUseCaseName(this);
+            }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    RequestMetadataDataCollection.SetUseCaseName(this, value);
+                }
+            }
         }
         #endregion
     }

@@ -5,75 +5,6 @@
     /// </summary>
     public interface IDataContainer
     {
-        #region Properties
-        /// <summary>
-        /// Gets or sets application layer name
-        /// </summary>
-        string? ApplicationLayerName
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets domain name
-        /// </summary>
-        string? DomainName
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets error message
-        /// </summary>
-        string? ErrorMessage
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets exception
-        /// </summary>
-        Exception? Exception
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets flag indicating whether request handled
-        /// </summary>
-        bool RequestHandled
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets state name
-        /// </summary>
-        string? StateName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Gets or sets transition name
-        /// </summary>
-        string? TransitionName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Gets or sets application layer name
-        /// </summary>
-        string? UseCaseName
-        {
-            get;
-            set;
-        }
-        #endregion
-
         #region Methods
         /// <summary>
         /// Adds data collection to data container by replacing existing data collection
@@ -150,6 +81,90 @@
         /// Removes current request metadta
         /// </summary>
         void RemoveCurrentRequestMetadta();
+
+        /// <summary>
+        /// Sets message
+        /// </summary>
+        /// <param name="message">Message text</param>
+        /// <param name="messageType">Message type</param>
+        void SetMessage(string message, MessageType messageType);
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets application layer name
+        /// </summary>
+        string? ApplicationLayerName
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets domain name
+        /// </summary>
+        string? DomainName
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets message
+        /// </summary>
+        string? Message
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets message type
+        /// </summary>
+        MessageType MessageType
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets or sets exception
+        /// </summary>
+        Exception? Exception
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets flag indicating whether request handled
+        /// </summary>
+        bool RequestHandled
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets state name
+        /// </summary>
+        string? StateName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets transition name
+        /// </summary>
+        string? TransitionName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets application layer name
+        /// </summary>
+        string? UseCaseName
+        {
+            get;
+            set;
+        }
         #endregion
     }
 }

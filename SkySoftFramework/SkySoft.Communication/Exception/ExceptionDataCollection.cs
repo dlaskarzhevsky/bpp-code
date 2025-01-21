@@ -9,21 +9,22 @@ namespace SkySoft.Communication
     {
         #region Public Methods
         /// <summary>
-        /// Adds error message
+        /// Adds message
         /// </summary>
         /// <param name="dataContainer">Data container</param>
-        /// <param name="errorMessage">Error message</param>
-        public static void AddErrorMessage(IDataContainer dataContainer, string? errorMessage)
+        /// <param name="message">Message text</param>
+        /// <param name="messageType">Message type</param>
+        public static void AddMessage(IDataContainer dataContainer, string? message, MessageType messageType)
         {
-            if (string.IsNullOrEmpty(errorMessage))
+            if (string.IsNullOrEmpty(message))
             {
                 return;
             }
 
             IDataCollection<ExceptionDTO>? exceptionDataCollection = dataContainer.GetDataColletion<ExceptionDTO>(SkySoft.Contracts.DataCollectionTypes.EXCEPTIONS);
             IExceptionDTO exceptionDTO = dataContainer.GetNewDTO<ExceptionDTO>(exceptionDataCollection!);
-            exceptionDTO.Message = errorMessage;
-            exceptionDTO.MessageType = MessageType.Error;
+            exceptionDTO.Message = message;
+            exceptionDTO.MessageType = messageType;
         }
 
         /// <summary>
@@ -39,11 +40,11 @@ namespace SkySoft.Communication
         }
 
         /// <summary>
-        /// Gets error message
+        /// Gets message
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Exception instance</returns>
-        public static string? GetErrorMessage(IDataContainer dataContainer)
+        public static string? GetMessage(IDataContainer dataContainer)
         {
             IDataCollection<ExceptionDTO>? exceptionDataCollection = dataContainer.GetDataColletion<ExceptionDTO>(SkySoft.Contracts.DataCollectionTypes.EXCEPTIONS);
             if (exceptionDataCollection == null || exceptionDataCollection.Count == 0)
@@ -52,12 +53,29 @@ namespace SkySoft.Communication
             }
 
             ExceptionDTO exceptionDTO = exceptionDataCollection[exceptionDataCollection.Count - 1];
-            if (!string.IsNullOrEmpty(exceptionDTO.Message) && exceptionDTO.MessageType == MessageType.Error)
+            if (!string.IsNullOrEmpty(exceptionDTO.Message))
             {
                 return exceptionDTO.Message; 
             }
 
             return default!;
+        }
+
+        /// <summary>
+        /// Gets message type
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <returns>Exception instance</returns>
+        public static MessageType GetMessageType(IDataContainer dataContainer)
+        {
+            IDataCollection<ExceptionDTO>? exceptionDataCollection = dataContainer.GetDataColletion<ExceptionDTO>(SkySoft.Contracts.DataCollectionTypes.EXCEPTIONS);
+            if (exceptionDataCollection == null || exceptionDataCollection.Count == 0)
+            {
+                return default!;
+            }
+
+            ExceptionDTO exceptionDTO = exceptionDataCollection[exceptionDataCollection.Count - 1];
+            return exceptionDTO.MessageType;
         }
 
         /// <summary>

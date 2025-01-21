@@ -1,10 +1,12 @@
 ﻿using System.Reflection;
 
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 
 using Newtonsoft.Json;
 
 using SkySoft.DnsRecord.DTO;
+using SkySoft.ICommunication;
 
 namespace SkySoft.DnsServer.DPL
 {
@@ -51,6 +53,7 @@ namespace SkySoft.DnsServer.DPL
             {
                 VerifyThatPathToDnsRecordsFileContainsDirectoryName();
                 SaveUpdatedData();
+                LogRegistrationResult();
             }
         }
 
@@ -126,6 +129,24 @@ namespace SkySoft.DnsServer.DPL
             {
                 ListOfCachedDnsRecords = listOfDnsRecords;
             }
+        }
+
+        /// <summary>
+        /// Logs registration result
+        /// </summary>
+        void LogRegistrationResult()
+        {
+            string? hostUrl = null;
+            if (DnsRecordDTO!.UseHttps)
+            {
+                hostUrl = DnsRecordDTO.HttpsUrl;
+            }
+            else
+            {
+                hostUrl = DnsRecordDTO.HttpUrl;
+            }
+
+            DataContainer.SetMessage(OperatingSystem.LogMessage($"Host {DnsRecordDTO!.ApplicationLayerName} ({hostUrl}) was registered with DNS server successfully", LogLevel.Information), MessageType.Information);
         }
 
         /// <summary>

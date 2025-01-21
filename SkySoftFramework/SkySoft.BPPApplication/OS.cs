@@ -114,6 +114,7 @@ namespace SkySoft.BPPApplication
         /// <param name="exception">Exception for logging</param>
         public void LogException(Exception exception)
         {
+            LogMessage(exception.Message, LogLevel.Critical);
             Logger.LogCritical(exception, null);
         }
 
@@ -129,7 +130,7 @@ namespace SkySoft.BPPApplication
             string messageMetadata = string.Empty;
             if (!message.StartsWith("Logged on", StringComparison.InvariantCultureIgnoreCase))
             {
-                messageMetadata = $"Logged on {DateTime.Now.ToString("s").Replace("T", "")} at {GetValueFromApplicationConfiguration<string>("Host:ApplicationLayerName")} ({GetValueFromApplicationConfiguration<string>("Host:Endpoints:Http:Url")})" + Environment.NewLine;
+                messageMetadata = $"Logged on {DateTime.Now.ToString("s").Replace("T", " ")} at {GetValueFromApplicationConfiguration<string>("Host:ApplicationLayerName")} ({GetValueFromApplicationConfiguration<string>("Host:Endpoints:Http:Url")})" + Environment.NewLine;
             }
 
             string compiledMessage = messageMetadata + message;

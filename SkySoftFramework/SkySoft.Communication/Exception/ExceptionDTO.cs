@@ -34,7 +34,7 @@ namespace SkySoft.Communication
         public MessageType MessageType
         {
             get; set;
-        }
+        } = MessageType.NotSet;
         #endregion
     }
 }

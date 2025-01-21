@@ -1,4 +1,6 @@
-﻿namespace SkySoft.DnsServerApp.DPL
+﻿using SkySoft.ICommunication;
+
+namespace SkySoft.DnsServerApp.DPL
 {
     /// <summary>
     /// RequestHandlerNotFound event handler
@@ -27,7 +29,7 @@
         protected override void HandleEvent()
         {
             string errorMessage = $"Cannot handle request with the following metadata" + Environment.NewLine + $"Application layer full name: {DataContainer.DomainName}_{DataContainer.UseCaseName}_{DataContainer.ApplicationLayerName}, State name: {DataContainer.StateName}, Transition name: {DataContainer.TransitionName}";
-            DataContainer.ErrorMessage = OperatingSystem.LogMessage(errorMessage, Microsoft.Extensions.Logging.LogLevel.Error);
+            DataContainer.SetMessage(OperatingSystem.LogMessage(errorMessage, Microsoft.Extensions.Logging.LogLevel.Error), MessageType.Error);
             DataContainer.RequestHandled = true;
         }
         #endregion

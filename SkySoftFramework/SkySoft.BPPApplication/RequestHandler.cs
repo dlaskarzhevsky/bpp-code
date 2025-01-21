@@ -195,7 +195,7 @@ namespace SkySoft.BPPApplication
         /// <param name="message">Message for logging</param>
         protected virtual void LogErrorMessage(string message)
         {
-            DataContainer.ErrorMessage = OperatingSystem.LogMessage(message, LogLevel.Critical);
+            DataContainer.SetMessage(OperatingSystem.LogMessage(message, LogLevel.Critical), MessageType.Error);
         }
 
         /// <summary>

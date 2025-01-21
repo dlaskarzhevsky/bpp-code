@@ -1,4 +1,5 @@
-﻿using SkySoft.IBPPApplication;
+﻿using SkySoft.Communication;
+using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
 
 namespace SkySoft.BPPApplication
@@ -23,6 +24,7 @@ namespace SkySoft.BPPApplication
                 IDataContainer dataContainer = operatingSystem.GetNewDataContainer();
                 ConfigureRequestToLoadDefaultUseCase(dataContainer);
                 dataContainer = await operatingSystem.RedirectRequestToRequestHandler(dataContainer);
+                LogMessages(dataContainer, operatingSystem);
                 if (DefaultUseCaseWasLoaded(dataContainer))
                 {
                     operatingSystem.CacheValue<bool>(StateName, true);
@@ -54,7 +56,35 @@ namespace SkySoft.BPPApplication
         /// <returns>True if default use case was loaded, otherwise False</returns>
         protected virtual bool DefaultUseCaseWasLoaded(IDataContainer dataContainer)
         {
-            return dataContainer.Exception == null && string.IsNullOrEmpty(dataContainer.ErrorMessage);
+            return dataContainer.Exception == null && string.IsNullOrEmpty(dataContainer.Message) || !string.IsNullOrEmpty(dataContainer.Message) && (dataContainer.MessageType != MessageType.Critical || dataContainer.MessageType != MessageType.Error);
+        }
+
+        /// <summary>
+        /// Logs messages
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <param name="operatingSystem">Operating system</param>
+        void LogMessages(IDataContainer dataContainer, IOS operatingSystem)
+        {
+            IDataCollection<ExceptionDTO>? exceptionDataCollection = dataContainer.GetDataColletion<ExceptionDTO>(SkySoft.Contracts.DataCollectionTypes.EXCEPTIONS);
+            if (exceptionDataCollection != null)
+            {
+                for (int i = 0; i < exceptionDataCollection.Count; i++)
+                {
+                    ExceptionDTO exceptionDTO = exceptionDataCollection[i];
+                    if (exceptionDTO.Exception == null)
+                    {
+                        if (!string.IsNullOrEmpty(exceptionDTO.Message))
+                        {
+                            operatingSystem.LogMessage(exceptionDTO.Message, MessageTypeToLogLevelMapper.Map(exceptionDTO.MessageType));
+                        }
+                    }
+                    else
+                    {
+                        operatingSystem.LogException(exceptionDTO.Exception);
+                    }
+                }
+            }
         }
         #endregion
 

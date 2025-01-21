@@ -1,7 +1,7 @@
 ﻿namespace BPP.PersonApp.DPL
 {
     /// <summary>
-    /// HostInitialized event handler
+    /// DataRequest event handler
     /// </summary>
     public class DataRequest : SkySoft.BPPApplication.EventHandler
     {
@@ -25,7 +25,7 @@
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        protected override async Task HandleEvent()
+        protected override async Task HandleEventAsync()
         {
             DataContainer.AddRequestMetadata(
                 SkySoft.Contracts.DomainNames.BPP,

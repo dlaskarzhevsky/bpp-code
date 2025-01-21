@@ -3,10 +3,10 @@ using BPP.Person.DTI;
 using BPP.Person.DTO;
 
 using SkySoft.Communication;
-using SkySoft.DnsServer.DTI;
-using SkySoft.DnsServer.DTO;
+using SkySoft.DnsRecord.DTI;
+using SkySoft.DnsRecord.DTO;
+using SkySoft.Http;
 using SkySoft.ICommunication;
-using SkySoft.Net.Http;
 
 namespace BPP.Person.DALAPI.Tests
 {
@@ -22,36 +22,9 @@ namespace BPP.Person.DALAPI.Tests
         public async Task TransceiveTestData()
         {
             IDataContainer requestDataContainer = InitializeRequestDataContainer();
-            Transceiver transceiver = new Transceiver();
-            requestDataContainer.AddRequestMetadata(SkySoft.Contracts.ApplicationLayerNames.DAL, SkySoft.Contracts.DomainNames.SKYSOFT, SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER, SkySoft.DnsServer.CON.StateTypes.INITIAL, SkySoft.DnsServer.CON.TransitionTypes.SEARCHING);
-            IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, "https://localhost:7201", "/processrequest", 10000);
-            if (responseDataContainer == null)
-            {
-                Assert.Fail("DNS server response is null");
-            }
-
-            IDataCollection<DnsRecordDTO>? dnsRecordDTODataCollection = responseDataContainer.GetDataColletion<DnsRecordDTO>(SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER + DataCollectionTypes.SEARCH_RESPONSE);
-            if (dnsRecordDTODataCollection == null || dnsRecordDTODataCollection.Count == 0)
-            {
-                Assert.Fail("DNS server response is null");
-            }
-
-            IDnsRecordDTO dnsRecordDTO = dnsRecordDTODataCollection[0];
-            if (string.IsNullOrEmpty(dnsRecordDTO.HttpsUrl))
-            {
-                Assert.Fail("HTTPS URL not found for application layer " + dnsRecordDTO.ApplicationLayerName);
-            }
-
-            if (string.IsNullOrEmpty(dnsRecordDTO.HttpUrl))
-            {
-                Assert.Fail("HTTP URL not found for application layer " + dnsRecordDTO.ApplicationLayerName);
-            }
-
-            string url = dnsRecordDTO.HttpsUrl;
-            responseDataContainer.RemoveDataCollection(SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER + DataCollectionTypes.SEARCH_RESPONSE);
-            requestDataContainer = responseDataContainer;
             AddPersonSearchCriteriaToRequestDataContainer(requestDataContainer);
-            responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, url, "processrequest", 10000);
+            Transceiver transceiver = new Transceiver();
+            IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, "http://localhost:5078", "/processrequest", 10000);
             AssertResponse(responseDataContainer);
         }
         #endregion
@@ -122,8 +95,8 @@ namespace BPP.Person.DALAPI.Tests
         {
             IDataContainer requestDataContainer = DataContainer.CreateDataContainer();
             requestDataContainer.DomainName = SkySoft.Contracts.DomainNames.BPP;
-            requestDataContainer.ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
             requestDataContainer.UseCaseName = UseCaseContract.PERSON;
+            requestDataContainer.ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
             requestDataContainer.StateName = StateTypes.INITIAL;
             requestDataContainer.TransitionName = TransitionTypes.SEARCHING;
 

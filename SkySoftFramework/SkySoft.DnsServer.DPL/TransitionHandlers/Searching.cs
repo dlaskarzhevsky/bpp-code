@@ -18,8 +18,8 @@ namespace SkySoft.DnsServer.DPL
         public Searching()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             StateName = SkySoft.DnsServer.CON.StateTypes.INITIAL;
             TransitionName = SkySoft.DnsServer.CON.TransitionTypes.SEARCHING;
         }

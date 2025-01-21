@@ -27,21 +27,17 @@ namespace BPP.Person.DAL
         }
         #endregion
 
-        #region Public Methods
+        #region Overridden Methods
         /// <summary>
-        /// Processes request
+        /// Handles request
         /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <returns>Data container</returns>
-        public override async Task<IDataContainer> ProcessRequestAsync(IDataContainer dataContainer)
+        protected override void HandleRequest()
         {
-            await Task.Delay(0);
-
             // Get person search criteria from data container
-            IDataCollection<PersonSearchDTO>? personSearchDataCollection = dataContainer.GetDataColletion<PersonSearchDTO>(UseCaseContract.PERSON + DataCollectionTypes.SEARCH_REQUEST);
+            IDataCollection<PersonSearchDTO>? personSearchDataCollection = DataContainer.GetDataColletion<PersonSearchDTO>(UseCaseContract.PERSON + DataCollectionTypes.SEARCH_REQUEST);
             if (personSearchDataCollection == null)
             {
-                return dataContainer;
+                return;
             }
 
             IPersonSearchDTO personSearchCriteria = personSearchDataCollection[0];
@@ -52,7 +48,7 @@ namespace BPP.Person.DAL
             // The following is just a mocking result returning some persons with Tom first name.
 
             DataCollection<PersonDTO> personDataCollection = new DataCollection<PersonDTO>();
-            dataContainer.AddDataCollection(UseCaseContract.PERSON + DataCollectionTypes.SEARCH_RESPONSE, personDataCollection);
+            DataContainer.AddDataCollection(UseCaseContract.PERSON + DataCollectionTypes.SEARCH_RESPONSE, personDataCollection);
 
             PersonDTO personDTO = new PersonDTO();
             personDTO.FirstName = "Tom";
@@ -65,8 +61,6 @@ namespace BPP.Person.DAL
             personDTO.LastName = "Cat";
             personDTO.Location = $"{SkySoft.Contracts.DomainNames.BPP}_{SkySoft.Contracts.ApplicationLayerNames.DAL}_{UseCaseContract.PERSON}";
             personDataCollection.Add(personDTO);
-
-            return dataContainer;
         }
         #endregion
     }

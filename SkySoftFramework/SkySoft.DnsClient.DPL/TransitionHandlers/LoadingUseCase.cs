@@ -248,6 +248,7 @@ namespace SkySoft.DnsClient.DPL
         void ValidateDnsClientData()
         {
             DnsRecordValidator dnsRecordValidator = new DnsRecordValidator(HostApplicationLayerName, HttpsUrl, HttpUrl, UseHttps, this);
+            dnsRecordValidator.OperatingSystem = OperatingSystem;
             dnsRecordValidator.ProcessRequest(DataContainer);
             dnsRecordValidator.ReleaseResources();
             DnsClientDataValid = dnsRecordValidator.DnsRecordDataValid;
@@ -255,6 +256,9 @@ namespace SkySoft.DnsClient.DPL
         #endregion
 
         #region Private Properties
+        /// <summary>
+        /// Gets or sets DNS cache manager
+        /// </summary>
         DnsCacheManager DnsCacheManager
         {
             get; set;

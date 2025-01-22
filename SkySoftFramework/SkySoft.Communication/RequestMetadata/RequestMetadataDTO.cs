@@ -19,6 +19,18 @@ namespace SkySoft.Communication
         }
 
         /// <summary>
+        /// Gets or sets application layer full name
+        /// IRequestMetadataDTO interface implementation
+        /// </summary>
+        public string? ApplicationLayerFullName
+        {
+            get
+            {
+                return CompileApplicationLayerFullName();
+            }
+        }
+
+        /// <summary>
         /// Gets or sets domain name
         /// IRequestMetadataDTO interface implementation
         /// </summary>
@@ -64,6 +76,38 @@ namespace SkySoft.Communication
         {
             get;
             set;
+        }
+        #endregion
+
+        #region Private Methods
+        /// <summary>
+        /// Compiles application layer full name
+        /// </summary>
+        /// <returns>Compiled application layer full name</returns>
+        string CompileApplicationLayerFullName()
+        {
+            string applicationLayerFullName = string.Empty;
+            string applicationLayerName = string.Empty;
+            string domainName = string.Empty;
+            string useCaseName = string.Empty;
+
+            if (!string.IsNullOrEmpty(DomainName))
+            {
+                domainName = DomainName;
+            }
+
+            if (!string.IsNullOrEmpty(UseCaseName))
+            {
+                useCaseName = UseCaseName;
+            }
+
+            if (!string.IsNullOrEmpty(ApplicationLayerName))
+            {
+                applicationLayerName = ApplicationLayerName;
+            }
+
+            applicationLayerFullName = $"{domainName}_{useCaseName}_{applicationLayerName}";
+            return applicationLayerFullName;
         }
         #endregion
     }

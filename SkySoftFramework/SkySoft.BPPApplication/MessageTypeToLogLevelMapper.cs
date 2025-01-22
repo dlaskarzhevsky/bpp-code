@@ -7,7 +7,7 @@ namespace SkySoft.BPPApplication
     /// <summary>
     /// Provides message type to log level mapper functionality
     /// </summary>
-    class MessageTypeToLogLevelMapper
+    public class MessageTypeToLogLevelMapper
     {
         /// <summary>
         /// Maps message type to log level

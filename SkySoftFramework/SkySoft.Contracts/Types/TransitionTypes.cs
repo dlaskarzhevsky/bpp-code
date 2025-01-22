@@ -21,6 +21,11 @@
         public const string LOADING_USE_CASE = "LoadingUseCase";
 
         /// <summary>
+        /// Saving remote server data
+        /// </summary>
+        public const string SAVING_REMOTE_SERVER_DATA = "SavingRemoteServerData";
+
+        /// <summary>
         /// Searching transition
         /// </summary>
         public const string SEARCHING = "Searching";

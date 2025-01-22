@@ -17,7 +17,7 @@ namespace SkySoft.BPPApplication
         /// <returns>Data container</returns>
         public async Task<IDataContainer> RedirectRequestToEventHandler(IDataContainer dataContainer, OS operatingSystem)
         {
-            string requestHandlerType = $"{dataContainer.DomainName}_{dataContainer.ApplicationLayerName}_{dataContainer.UseCaseName}_{dataContainer.StateName}_{dataContainer.TransitionName}";
+            string requestHandlerType = $"{dataContainer.DomainName}_{dataContainer.UseCaseName}_{dataContainer.ApplicationLayerName}_{dataContainer.StateName}_{dataContainer.TransitionName}";
             IRequestHandler? requestHandler = RequestHandlerLocator.FindRequestHandler(operatingSystem.RequestHandlers, requestHandlerType);
             if (requestHandler != null)
             {

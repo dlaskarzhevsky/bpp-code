@@ -29,7 +29,7 @@ namespace SkySoft.DnsServerApp.DPL
         protected override void HandleEvent()
         {
             string errorMessage = $"Cannot handle request with the following metadata" + Environment.NewLine + $"Application layer full name: {DataContainer.DomainName}_{DataContainer.UseCaseName}_{DataContainer.ApplicationLayerName}, State name: {DataContainer.StateName}, Transition name: {DataContainer.TransitionName}";
-            DataContainer.SetMessage(OperatingSystem.LogMessage(errorMessage, Microsoft.Extensions.Logging.LogLevel.Error), MessageType.Error);
+            DataContainer.SetMessage(errorMessage, MessageType.Error);
             DataContainer.RequestHandled = true;
         }
         #endregion

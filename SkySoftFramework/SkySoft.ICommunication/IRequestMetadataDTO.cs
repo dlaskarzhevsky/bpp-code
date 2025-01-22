@@ -15,6 +15,14 @@
         }
 
         /// <summary>
+        /// Gets or sets application layer full name
+        /// </summary>
+        string? ApplicationLayerFullName
+        {
+            get;
+        }
+
+        /// <summary>
         /// Gets or sets domain name
         /// </summary>
         string? DomainName

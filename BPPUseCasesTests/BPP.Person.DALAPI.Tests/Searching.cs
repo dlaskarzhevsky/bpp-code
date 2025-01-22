@@ -3,8 +3,6 @@ using BPP.Person.DTI;
 using BPP.Person.DTO;
 
 using SkySoft.Communication;
-using SkySoft.DnsRecord.DTI;
-using SkySoft.DnsRecord.DTO;
 using SkySoft.Http;
 using SkySoft.ICommunication;
 

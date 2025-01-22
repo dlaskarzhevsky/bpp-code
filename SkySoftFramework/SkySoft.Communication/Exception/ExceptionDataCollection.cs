@@ -40,6 +40,16 @@ namespace SkySoft.Communication
         }
 
         /// <summary>
+        /// Clears messages
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        public static void ClearMessages(IDataContainer dataContainer)
+        {
+            IDataCollection<ExceptionDTO>? exceptionDataCollection = dataContainer.GetDataColletion<ExceptionDTO>(SkySoft.Contracts.DataCollectionTypes.EXCEPTIONS);
+            exceptionDataCollection!.Clear();
+        }
+
+        /// <summary>
         /// Gets message
         /// </summary>
         /// <param name="dataContainer">Data container</param>

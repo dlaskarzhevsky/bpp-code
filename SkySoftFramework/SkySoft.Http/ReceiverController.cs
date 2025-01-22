@@ -1,5 +1,8 @@
+using System;
+
 using Microsoft.AspNetCore.Mvc;
 
+using SkySoft.BPPApplication;
 using SkySoft.Communication;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
@@ -56,6 +59,7 @@ namespace SkySoft.Http
             else
             {
                 dataContainer = await OperatingSystem.RedirectRequestToRequestHandler(dataContainer);
+                LogMessages(dataContainer, OperatingSystem);
 
                 // Serialize data container
                 string serializedDataContainer = DataContainer.Serialize(dataContainer);
@@ -75,7 +79,38 @@ namespace SkySoft.Http
         }
         #endregion
 
-        #region Protected Properties
+        #region Private Methods
+
+        /// <summary>
+        /// Logs messages
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <param name="operatingSystem">Operating system</param>
+        void LogMessages(IDataContainer dataContainer, IOS operatingSystem)
+        {
+            IDataCollection<ExceptionDTO>? exceptionDataCollection = dataContainer.GetDataColletion<ExceptionDTO>(SkySoft.Contracts.DataCollectionTypes.EXCEPTIONS);
+            if (exceptionDataCollection != null)
+            {
+                for (int i = 0; i < exceptionDataCollection.Count; i++)
+                {
+                    ExceptionDTO exceptionDTO = exceptionDataCollection[i];
+                    if (exceptionDTO.Exception == null)
+                    {
+                        if (!string.IsNullOrEmpty(exceptionDTO.Message))
+                        {
+                            operatingSystem.LogMessage(exceptionDTO.Message, MessageTypeToLogLevelMapper.Map(exceptionDTO.MessageType));
+                        }
+                    }
+                    else
+                    {
+                        operatingSystem.LogException(exceptionDTO.Exception);
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region Private Properties
         /// <summary>
         /// Gets or sets operating system
         /// </summary>

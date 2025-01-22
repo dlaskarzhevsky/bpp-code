@@ -20,6 +20,17 @@ namespace SkySoft.Communication
         }
 
         /// <summary>
+        /// Gets application layer full name
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <returns>Application layer full name</returns>
+        public static string? GetApplicationLayerFullName(IDataContainer dataContainer)
+        {
+            IRequestMetadataDTO requestMetadata = GetRequestMetadata(dataContainer);
+            return requestMetadata.ApplicationLayerFullName;
+        }
+
+        /// <summary>
         /// Gets application domain name
         /// </summary>
         /// <param name="dataContainer">Data container</param>

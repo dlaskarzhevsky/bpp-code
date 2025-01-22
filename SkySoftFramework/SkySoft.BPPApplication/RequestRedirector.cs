@@ -23,21 +23,21 @@ namespace SkySoft.BPPApplication
         /// <returns>Data container</returns>
         public async Task<IDataContainer> RedirectRequestToRequestHandler(IDataContainer dataContainer, OS operatingSystem)
         {
-            string requestHandlerType = $"{dataContainer.DomainName}_{dataContainer.ApplicationLayerName}_{dataContainer.UseCaseName}_{dataContainer.StateName}_{dataContainer.TransitionName}";
+            string requestHandlerType = $"{dataContainer.DomainName}_{dataContainer.UseCaseName}_{dataContainer.ApplicationLayerName}_{dataContainer.StateName}_{dataContainer.TransitionName}";
             IRequestHandler? requestHandler = RequestHandlerLocator.FindRequestHandler(operatingSystem.RequestHandlers, requestHandlerType);
             if (requestHandler == null)
             {
-                string applicationLayerFullNameOfRequest = $"{dataContainer.DomainName}_{dataContainer.ApplicationLayerName}_{dataContainer.UseCaseName}";
+                string applicationLayerFullNameOfRequest = $"{dataContainer.DomainName}_{dataContainer.UseCaseName}_{dataContainer.ApplicationLayerName}";
                 string? applicationLayerNameOfHost = operatingSystem.ApplicationConfiguration.GetValue<string>("Host:ApplicationLayerName");
                 if (string.IsNullOrEmpty(applicationLayerNameOfHost))
                 {
-                    dataContainer.SetMessage(operatingSystem.LogMessage("appsettings.json file does not have ApplicationLayerName setting", LogLevel.Error), MessageType.Error);
+                    dataContainer.SetMessage("appsettings.json file does not have ApplicationLayerName setting", MessageType.Error);
                 }
                 else
                 {
                     if (string.Equals(applicationLayerFullNameOfRequest, applicationLayerNameOfHost, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        dataContainer.SetMessage(operatingSystem.LogMessage($"The {requestHandlerType} request handler is not registered inside APIHostInitializer file", LogLevel.Error), MessageType.Error);
+                        dataContainer.SetMessage($"The {requestHandlerType} request handler is not registered inside APIHostInitializer file", MessageType.Error);
                     }
                     else
                     {
@@ -103,7 +103,7 @@ namespace SkySoft.BPPApplication
             if (transceiverDriver == null)
             {
                 string errorMessage = "Driver is not registered:" + SkySoft.Contracts.ControllerTypes.TRANSCEIVER;
-                requestDataContainer.SetMessage(operatingSystem.LogMessage(errorMessage, LogLevel.Critical), MessageType.Error);
+                requestDataContainer.SetMessage(errorMessage, MessageType.Error);
             }
 
             requestDataContainer.AddRequestMetadata(

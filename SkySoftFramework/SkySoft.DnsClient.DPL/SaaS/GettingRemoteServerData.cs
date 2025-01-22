@@ -49,8 +49,7 @@ namespace SkySoft.DnsClient.DPL
         void AddDnsDataToDataContainer()
         {
             DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS);
-            dnsRecordDTO!.ApplicationLayerName = HostApplicationLayerName;
-            dnsRecordDTO.HttpsUrl = HttpsUrl;
+            dnsRecordDTO!.HttpsUrl = HttpsUrl;
             dnsRecordDTO.HttpUrl = HttpUrl;
             dnsRecordDTO.UseHttps = UseHttps;
         }

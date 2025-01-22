@@ -1,4 +1,5 @@
 ﻿using SkySoft.IBPPApplication;
+using SkySoft.ICommunication;
 
 namespace SkySoft.DnsClientServerComponents
 {
@@ -54,7 +55,7 @@ namespace SkySoft.DnsClientServerComponents
         {
             if (string.IsNullOrEmpty(HostApplicationLayerName))
             {
-                LogErrorMessage("DNS data does not have required ApplicationLayerName entry");
+                LogMessageMessage("DNS data does not have required ApplicationLayerName entry", MessageType.Error);
                 DnsRecordDataValid = false;
             }
         }
@@ -66,7 +67,7 @@ namespace SkySoft.DnsClientServerComponents
         {
             if (string.IsNullOrEmpty(HttpsUrl) && UseHttps == true)
             {
-                LogErrorMessage("DNS data file does not have required Host:Endpoints:Https:Url entry");
+                LogMessageMessage("DNS data file does not have required HTTPS URL entry for " + HostApplicationLayerName, MessageType.Warning);
                 DnsRecordDataValid = false;
             }
         }
@@ -78,7 +79,7 @@ namespace SkySoft.DnsClientServerComponents
         {
             if (string.IsNullOrEmpty(HttpUrl) && UseHttps == false)
             {
-                LogErrorMessage("DNS data file does not have required Host:Endpoints:Http:Url entry");
+                LogMessageMessage("DNS data file does not have required HTTP URL entry for " + HostApplicationLayerName, MessageType.Warning);
                 DnsRecordDataValid = false;
             }
         }

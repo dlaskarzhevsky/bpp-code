@@ -109,7 +109,7 @@ namespace SkySoft.BPPApplication
         {
             get
             {
-                return $"{DomainName}_{ApplicationLayerName}_{UseCaseName}_{StateName}_{TransitionName}";
+                return $"{DomainName}_{UseCaseName}_{ApplicationLayerName}_{StateName}_{TransitionName}";
             }
         }
 
@@ -190,12 +190,13 @@ namespace SkySoft.BPPApplication
         }
 
         /// <summary>
-        /// Logs erro message
+        /// Logs message
         /// </summary>
         /// <param name="message">Message for logging</param>
-        protected virtual void LogErrorMessage(string message)
+        /// <param name="messageType">Message type</param>
+        protected virtual void LogMessageMessage(string message, MessageType messageType)
         {
-            DataContainer.SetMessage(OperatingSystem.LogMessage(message, LogLevel.Critical), MessageType.Error);
+            DataContainer.SetMessage(message, messageType);
         }
 
         /// <summary>

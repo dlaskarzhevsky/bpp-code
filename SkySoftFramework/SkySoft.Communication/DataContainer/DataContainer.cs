@@ -123,6 +123,15 @@ namespace SkySoft.Communication
         }
 
         /// <summary>
+        /// Clears messages
+        /// IDataContainer interface implementation
+        /// </summary>
+        public void ClearMessages()
+        {
+            ExceptionDataCollection.ClearMessages(this);
+        }
+
+        /// <summary>
         /// Gets data collection with specified key from data container returning NULL if not found
         /// IDataContainer interface implementation
         /// </summary>
@@ -166,6 +175,11 @@ namespace SkySoft.Communication
         /// <returns>Last data transfer object in data collection</returns>
         public T? GetLastDTOByRemovingItFromDataCollection<T>(string key)
         {
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
             IDataCollection<T>? dataCollection = GetDataColletion<T>(key);
             if (dataCollection == null)
             {
@@ -191,6 +205,11 @@ namespace SkySoft.Communication
         /// <returns>Last data transfer object in data collection</returns>
         public T? GetLastDTOFromDataCollection<T>(string key)
         {
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
             IDataCollection<T>? dataCollection = GetDataColletion<T>(key);
             if (dataCollection == null)
             {
@@ -227,6 +246,11 @@ namespace SkySoft.Communication
         /// <returns>New data transfer object</returns>
         public T GetNewDTO<T>(string key)
         {
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
             IDataCollection<T>? dataCollection = GetDataColletion<T>(key);
             if (dataCollection == null)
             {
@@ -283,6 +307,16 @@ namespace SkySoft.Communication
         }
 
         /// <summary>
+        /// Removes last data transfer object from data collection
+        /// IDataContainer interface implementation
+        /// </summary>
+        /// <param name="key">Data collection key (required)</param>
+        public void RemoveLastDTOFromDataCollection<T>(string key)
+        {
+            GetLastDTOByRemovingItFromDataCollection<T>(key);
+        }
+
+        /// <summary>
         /// Sets message
         /// IDataContainer interface implementation
         /// </summary>
@@ -308,6 +342,18 @@ namespace SkySoft.Communication
             set
             {
                 RequestMetadataDataCollection.SetApplicationLayerName(this, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets application layer full name
+        /// IDataContainer interface implementation
+        /// </summary>
+        public string? ApplicationLayerFullName
+        {
+            get
+            {
+                return RequestMetadataDataCollection.GetApplicationLayerFullName(this);
             }
         }
 

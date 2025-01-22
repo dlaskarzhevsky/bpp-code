@@ -53,13 +53,13 @@ namespace BPP.Person.DAL
             PersonDTO personDTO = new PersonDTO();
             personDTO.FirstName = "Tom";
             personDTO.LastName = "Jerry";
-            personDTO.Location = $"{SkySoft.Contracts.DomainNames.BPP}_{SkySoft.Contracts.ApplicationLayerNames.DAL}_{UseCaseContract.PERSON}";
+            personDTO.Location = $"{SkySoft.Contracts.DomainNames.BPP}_{UseCaseContract.PERSON}_{SkySoft.Contracts.ApplicationLayerNames.DAL}";
             personDataCollection.Add(personDTO);
 
             personDTO = new PersonDTO();
             personDTO.FirstName = "Tom";
             personDTO.LastName = "Cat";
-            personDTO.Location = $"{SkySoft.Contracts.DomainNames.BPP}_{SkySoft.Contracts.ApplicationLayerNames.DAL}_{UseCaseContract.PERSON}";
+            personDTO.Location = $"{SkySoft.Contracts.DomainNames.BPP}_{UseCaseContract.PERSON}_{SkySoft.Contracts.ApplicationLayerNames.DAL}";
             personDataCollection.Add(personDTO);
         }
         #endregion

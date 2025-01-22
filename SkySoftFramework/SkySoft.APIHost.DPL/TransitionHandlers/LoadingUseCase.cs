@@ -110,6 +110,7 @@ namespace SkySoft.APIHost.DPL
         void ValidateHostData()
         {
             DnsRecordValidator dnsRecordValidator = new DnsRecordValidator(HostApplicationLayerName, HttpsUrl, HttpUrl, UseHttps, this);
+            dnsRecordValidator.OperatingSystem = OperatingSystem;
             dnsRecordValidator.ProcessRequest(DataContainer);
             dnsRecordValidator.ReleaseResources();
             HostDataValid = dnsRecordValidator.DnsRecordDataValid;

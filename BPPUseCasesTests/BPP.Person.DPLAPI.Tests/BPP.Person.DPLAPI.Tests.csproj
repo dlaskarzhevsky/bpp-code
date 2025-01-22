@@ -20,8 +20,8 @@
     <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsRecord.DTI\SkySoft.DnsRecord.DTI.csproj" />
     <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsRecord.DTO\SkySoft.DnsRecord.DTO.csproj" />
     <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsServer.CON\SkySoft.DnsServer.CON.csproj" />
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.Http\SkySoft.Http.csproj" />
     <ProjectReference Include="..\..\SkySoftFramework\SkySoft.ICommunication\SkySoft.ICommunication.csproj" />
-    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.Net.Http\SkySoft.Net.Http.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -27,17 +27,15 @@ namespace SkySoft.DnsServer.DPL
 
         #region Overridden Methods
         /// <summary>
-        /// Handles request aynchronously
+        /// Handles request
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        protected override async Task HandleRequestAsync()
+        protected override void HandleRequest()
         {
-            await Task.Delay(0);
-
             GetListOfDnsRecordsFromCache();
-            DataContainer.RemoveCurrentRequestMetadta();
-            GetUrlOfRequestedApplicationLayer();
+            GetDnsRecordFromRequest();
+            FindDataOfDnsRecordFromRequestByApplicationLayerName();
         }
 
         /// <summary>
@@ -45,12 +43,39 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         public override void ReleaseResources()
         {
+            DnsRecordFromRequest = null;
             ListOfDnsRecords = null;
             base.ReleaseResources();
         }
         #endregion
 
         #region Private Methods
+        /// <summary>
+        /// Finds data of DNS record from request by application layer name
+        /// </summary>
+        void FindDataOfDnsRecordFromRequestByApplicationLayerName()
+        {
+            for (int i = 0; i < ListOfDnsRecords!.Count; i++)
+            {
+                string? registeredApplicationLayerName = ListOfDnsRecords[i].ApplicationLayerName;
+                if (string.Equals(registeredApplicationLayerName, DnsRecordFromRequest!.ApplicationLayerName, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    DnsRecordFromRequest.HttpUrl = ListOfDnsRecords[i].HttpUrl;
+                    DnsRecordFromRequest.HttpsUrl = ListOfDnsRecords[i].HttpsUrl;
+                    DnsRecordFromRequest.UseHttps = ListOfDnsRecords[i].UseHttps;
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets DNS record from request
+        /// </summary>
+        void GetDnsRecordFromRequest()
+        {
+            DnsRecordFromRequest = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
+        }
+
         /// <summary>
         /// Gets list of DNS records from cache
         /// </summary>
@@ -63,31 +88,17 @@ namespace SkySoft.DnsServer.DPL
                 ListOfDnsRecords = listOfDnsRecords;
             }
         }
-
-        /// <summary>
-        /// Get URL of requested application layer
-        /// </summary>
-        void GetUrlOfRequestedApplicationLayer()
-        {
-            IDataCollection<DnsRecordDTO>? dnsRecordDTODataCollection = DataContainer.GetDataColletion<DnsRecordDTO>(UseCaseContract.DNS_SERVER + SkySoft.DnsServer.CON.DataCollectionTypes.SEARCH_RESPONSE);
-            string applicationLayerName = $"{DataContainer.DomainName}_{DataContainer.ApplicationLayerName}_{DataContainer.UseCaseName}".ToLowerInvariant();
-            for (int i = 0; i < ListOfDnsRecords!.Count; i++)
-            {
-                string? registeredApplicationLayerName = ListOfDnsRecords[i].ApplicationLayerName;
-                if (!string.IsNullOrEmpty(registeredApplicationLayerName) && registeredApplicationLayerName.ToLowerInvariant() == applicationLayerName)
-                {
-                    DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(dnsRecordDTODataCollection!);
-                    dnsRecordDTO.ApplicationLayerName = DataContainer.ApplicationLayerName;
-                    dnsRecordDTO.HttpUrl = ListOfDnsRecords[i].HttpUrl;
-                    dnsRecordDTO.HttpsUrl = ListOfDnsRecords[i].HttpsUrl;
-
-                    break;
-                }
-            }
-        }
         #endregion
 
         #region Private Properties
+        /// <summary>
+        /// Gets or sets DNS record from request
+        /// </summary>
+        DnsRecordDTO? DnsRecordFromRequest
+        {
+            get; set;
+        }
+
         /// <summary>
         /// Gets or sets list of DNS records
         /// </summary>

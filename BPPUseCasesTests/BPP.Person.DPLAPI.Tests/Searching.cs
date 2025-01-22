@@ -3,10 +3,8 @@ using BPP.Person.DTI;
 using BPP.Person.DTO;
 
 using SkySoft.Communication;
-using SkySoft.DnsRecord.DTI;
-using SkySoft.DnsRecord.DTO;
+using SkySoft.Http;
 using SkySoft.ICommunication;
-using SkySoft.Net.Http;
 
 namespace BPP.Person.DPLAPI.Tests
 {
@@ -23,7 +21,6 @@ namespace BPP.Person.DPLAPI.Tests
         {
             IDataContainer requestDataContainer = InitializeRequestDataContainer();
             AddPersonSearchCriteriaToRequestDataContainer(requestDataContainer);
-
             Transceiver transceiver = new Transceiver();
             IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, "http://localhost:5077", "processrequest", 10000);
             AssertResponse(responseDataContainer);
@@ -78,7 +75,7 @@ namespace BPP.Person.DPLAPI.Tests
                             Assert.Fail("One of the persons contain unexpected data");
                         }
 
-                        string personExpectedLocation = $"{SkySoft.Contracts.DomainNames.BPP}_{SkySoft.Contracts.ApplicationLayerNames.DAL}_{UseCaseContract.PERSON}";
+                        string personExpectedLocation = $"{SkySoft.Contracts.DomainNames.BPP}_{UseCaseContract.PERSON}_{SkySoft.Contracts.ApplicationLayerNames.DAL}";
                         if (person1.Location != personExpectedLocation || person2.Location != personExpectedLocation)
                         {
                             Assert.Fail("One of the persons location is not correct");

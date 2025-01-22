@@ -8,30 +8,29 @@ using Newtonsoft.Json;
 using SkySoft.DnsRecord.DTO;
 using SkySoft.ICommunication;
 
-namespace SkySoft.DnsServer.DPL
+namespace SkySoft.DnsClient.DPL
 {
     /// <summary>
-    /// RegisteringHost transition request handler
+    /// SavingRemoteServerData transition request handler
     /// </summary>
-    public class RegisteringHost : SkySoft.BPPApplication.RequestHandler
+    public class SavingRemoteServerData : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public RegisteringHost()
+        public SavingRemoteServerData()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
-            StateName = SkySoft.DnsServer.CON.StateTypes.INITIAL;
-            TransitionName = SkySoft.DnsServer.CON.TransitionTypes.REGISTERING_HOST;
+            UseCaseName = SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL_SAAS;
+            TransitionName = SkySoft.Contracts.TransitionTypes.SAVING_REMOTE_SERVER_DATA;
         }
         #endregion
 
-        #region Public Methods
+        #region Overridden Methods
         /// <summary>
-        /// Handles request aynchronously
+        /// Handles request
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
@@ -87,6 +86,31 @@ namespace SkySoft.DnsServer.DPL
         }
 
         /// <summary>
+        /// Gets DNS record from request
+        /// </summary>
+        void GetDnsRecordFromRequest()
+        {
+            DnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS);
+        }
+
+        /// <summary>
+        /// Gets list of DNS records from cache
+        /// </summary>
+        void GetListOfDnsRecordsFromCache()
+        {
+            List<DnsRecordDTO>? listOfDnsRecords;
+            MemoryCache.TryGetValue<List<DnsRecordDTO>>(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS, out listOfDnsRecords);
+            if (listOfDnsRecords == null)
+            {
+                ListOfCachedDnsRecords = new List<DnsRecordDTO>();
+            }
+            else
+            {
+                ListOfCachedDnsRecords = listOfDnsRecords;
+            }
+        }
+
+        /// <summary>
         /// Finds DNS record by application layer name
         /// </summary>
         void FindDnsRecordByApplicationLayerName()
@@ -107,31 +131,6 @@ namespace SkySoft.DnsServer.DPL
         }
 
         /// <summary>
-        /// Gets DNS record from request
-        /// </summary>
-        void GetDnsRecordFromRequest()
-        {
-            DnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS);
-        }
-
-        /// <summary>
-        /// Gets list of DNS records from cache
-        /// </summary>
-        void GetListOfDnsRecordsFromCache()
-        {
-            List<DnsRecordDTO>? listOfDnsRecords;
-            MemoryCache.TryGetValue<List<DnsRecordDTO>>(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS, out listOfDnsRecords);
-            if (listOfDnsRecords == null)
-            {
-                ListOfCachedDnsRecords = new List<DnsRecordDTO>();
-            }
-            else
-            {
-                ListOfCachedDnsRecords = listOfDnsRecords;
-            }
-        }
-
-        /// <summary>
         /// Logs registration result
         /// </summary>
         void LogRegistrationResult()
@@ -146,7 +145,7 @@ namespace SkySoft.DnsServer.DPL
                 hostUrl = DnsRecordDTO.HttpUrl;
             }
 
-            DataContainer.SetMessage($"Host {DnsRecordDTO!.ApplicationLayerName} ({hostUrl}) was registered with DNS server successfully", MessageType.Information);
+            DataContainer.SetMessage(OperatingSystem.LogMessage($"Remote server {DnsRecordDTO!.ApplicationLayerName} ({hostUrl}) data were registered with DNS client successfully", LogLevel.Information), MessageType.Information);
         }
 
         /// <summary>
@@ -261,7 +260,7 @@ namespace SkySoft.DnsServer.DPL
         string PathToDnsRecordsFile
         {
             get; set;
-        } = SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS + ".json";
+        } = SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS + ".json";
         #endregion
     }
 }

@@ -25,6 +25,11 @@
         void AddRequestMetadata(string? domainName, string? useCaseName, string? applicationLayerName, string? stateName, string? transitionName);
 
         /// <summary>
+        /// Clears messages
+        /// </summary>
+        void ClearMessages();
+
+        /// <summary>
         /// Gets data collection with specified key from data container returning NULL if not found
         /// </summary>
         /// <typeparam name="T">Data collection type</typeparam>
@@ -78,6 +83,12 @@
         void RemoveDataCollection(string key);
 
         /// <summary>
+        /// Removes last data transfer object from data collection
+        /// </summary>
+        /// <param name="key">Data collection key (required)</param>
+        void RemoveLastDTOFromDataCollection<T>(string key);
+
+        /// <summary>
         /// Removes current request metadta
         /// </summary>
         void RemoveCurrentRequestMetadta();
@@ -97,6 +108,14 @@
         string? ApplicationLayerName
         {
             get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets application layer full name
+        /// </summary>
+        string? ApplicationLayerFullName
+        {
+            get;
         }
 
         /// <summary>

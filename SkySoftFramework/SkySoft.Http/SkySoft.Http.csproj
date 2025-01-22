@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SkySoft.BPPApplication\SkySoft.BPPApplication.csproj" />
     <ProjectReference Include="..\SkySoft.Communication\SkySoft.Communication.csproj" />
     <ProjectReference Include="..\SkySoft.IBPPApplication\SkySoft.IBPPApplication.csproj" />
     <ProjectReference Include="..\SkySoft.ICommunication\SkySoft.ICommunication.csproj" />

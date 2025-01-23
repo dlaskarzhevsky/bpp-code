@@ -1,49 +1,40 @@
-﻿namespace BPP.Person.BL
+﻿namespace BPP.PersonApp.BL
 {
     /// <summary>
-    /// Provides searching request handler functionality
+    /// DataRequest event handler
     /// </summary>
-    public class SearchingRequestHandler : SkySoft.BPPApplication.RequestHandler
+    public class DataRequest : SkySoft.BPPApplication.EventHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public SearchingRequestHandler()
+        public DataRequest()
         {
             DomainName = SkySoft.Contracts.DomainNames.BPP;
             UseCaseName = BPP.Person.CON.UseCaseContract.PERSON;
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.BL;
             StateName = BPP.Person.CON.StateTypes.INITIAL;
-            TransitionName = BPP.Person.CON.TransitionTypes.SEARCHING;
+            EventName = SkySoft.Contracts.EventTypes.DATA_REQUEST_EVENT;
         }
         #endregion
 
         #region Overridden Methods
         /// <summary>
-        /// Handles request aynchronously
+        /// Handles event
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        protected override async Task HandleRequestAsync()
+        protected override async Task HandleEventAsync()
         {
-            await DataRequestEvent();
-        }
-        #endregion
-
-        #region Private Methods
-        /// <summary>
-        /// Raises DataRequest event
-        /// </summary>
-        async Task DataRequestEvent()
-        {
-            DataContainer!.AddRequestMetadata(
+            DataContainer.AddRequestMetadata(
                 SkySoft.Contracts.DomainNames.BPP,
                 BPP.Person.CON.UseCaseContract.PERSON,
-                SkySoft.Contracts.ApplicationLayerNames.BL,
+                SkySoft.Contracts.ApplicationLayerNames.DPL,
                 BPP.Person.CON.StateTypes.INITIAL,
-                SkySoft.Contracts.EventTypes.DATA_REQUEST_EVENT);
-            DataContainer = await RaiseEvent(DataContainer);
+                BPP.Person.CON.TransitionTypes.SEARCHING);
+
+            DataContainer = await RedirectRequestToRequestHandler(DataContainer);
             DataContainer.RemoveCurrentRequestMetadta();
         }
         #endregion

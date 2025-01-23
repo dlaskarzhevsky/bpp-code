@@ -56,7 +56,8 @@ namespace SkySoft.BPPApplication
         /// <returns>True if default use case was loaded, otherwise False</returns>
         protected virtual bool DefaultUseCaseWasLoaded(IDataContainer dataContainer)
         {
-            return dataContainer.Exception == null && string.IsNullOrEmpty(dataContainer.Message) || !string.IsNullOrEmpty(dataContainer.Message) && (dataContainer.MessageType != MessageType.Critical || dataContainer.MessageType != MessageType.Error);
+            bool defaultUseCaseWasLoaded = dataContainer.Exception == null && string.IsNullOrEmpty(dataContainer.Message) || !string.IsNullOrEmpty(dataContainer.Message) && dataContainer.MessageType != MessageType.Critical && dataContainer.MessageType != MessageType.Error;
+            return defaultUseCaseWasLoaded;
         }
 
         /// <summary>

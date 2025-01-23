@@ -1,23 +1,21 @@
-using SkySoft.APIHost.DPL;
-using SkySoft.IBPPApplication;
+WebApplicationBuilder webApplicationBuilder = WebApplication.CreateBuilder(args);
 
-var builder = WebApplication.CreateBuilder(args);
+SkySoft.BPPApplication.CFG.Registrar.Register(webApplicationBuilder);
+SkySoft.APIHost.CFG.Registrar.Register(webApplicationBuilder);
+SkySoft.Http.CFG.Registrar.Register(webApplicationBuilder);
+SkySoft.DnsClient.CFG.Registrar.Register(webApplicationBuilder);
+SkySoft.DnsClientApp.CFG.Registrar.Register(webApplicationBuilder);
+BPP.Person.BLCFG.Registrar.Register(webApplicationBuilder);
+BPP.PersonApp.BLCFG.Registrar.Register(webApplicationBuilder);
 
-// Add services to the container.
-builder.Services.AddTransient<IReceiverController, ReceiverController>();
-BPP.Person.BLCFG.APIHostInitializer.RegisterServices(builder);
-builder.Services.AddControllers();
-builder.Services.AddMemoryCache();
+SkySoft.APIHost.CFG.ApplicationInitializerRegistrar.Register(webApplicationBuilder);
 
-var app = builder.Build();
+webApplicationBuilder.Services.AddControllers();
+webApplicationBuilder.Services.AddMemoryCache();
 
-// Configure the HTTP request pipeline.
+WebApplication webApplication = webApplicationBuilder.Build();
+webApplication.UseHttpsRedirection();
+webApplication.UseAuthorization();
+webApplication.MapControllers();
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-BPP.Person.BLCFG.APIHostInitializer.InitializeApplication(app.Services);
-app.Run();
+SkySoft.BPPApplication.Runtime.ApplicationStarter.Start(webApplication);

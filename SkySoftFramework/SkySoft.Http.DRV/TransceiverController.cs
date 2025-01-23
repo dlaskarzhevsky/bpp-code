@@ -33,23 +33,29 @@ namespace SkySoft.Http.DRV
         protected override async Task HandleRequestAsync()
         {
             await GetRemoteServerDnsRecordFromDnsClient();
-            if (RemoteServerDnsRecordReceivedFromDnsClient)
+            ValidateRemoteServerDnsRecord();
+            if (DnsRecordOfRemoteServerValid)
             {
                 await SendRequestToRemoteServer();
             }
             else
             {
                 await GetDnsServerDnsRecordFromDnsClient();
-                if (DnsServerDnsRecordReceivedFromDnsClient)
+                ValidateDnsServerDnsRecord();
+                if (DnsRecordOfDnsServerValid)
                 {
-                    await SendRequestToRemoteServer2();
-                    // TODO
+                    await SendRequestToDnsServerToSearchRemoteServerDnsRecord();
+                    ValidateRemoteServerDnsRecord();
+                    if (DnsRecordOfRemoteServerValid)
+                    {
+                        await SendRequestToRemoteServer();
+                    }
                 }
                 else
                 {
                     IDataCollection<RequestMetadataDTO>? requestMetadataDataCollection = DataContainer.GetDataColletion<RequestMetadataDTO>(SkySoft.Contracts.DataCollectionTypes.REQUEST_METADATA);
                     IRequestMetadataDTO requestMetadataDTO = requestMetadataDataCollection![requestMetadataDataCollection.Count - 2];
-                    DataContainer.SetMessage("DNS server does not have DNS record of application layer " + requestMetadataDTO.ApplicationLayerFullName, MessageType.Critical);
+                    DataContainer.SetMessage("DNS client does not have DNS record of application layer " + requestMetadataDTO.ApplicationLayerFullName, MessageType.Critical);
                 }
             }
         }
@@ -151,7 +157,6 @@ namespace SkySoft.Http.DRV
             await RaiseGetRemoteServerDataEvent();
 
             GetRemoteServerDnsRecordFromDataContainer();
-            ValidateRemoteServerDnsRecord();
         }
 
         /// <summary>
@@ -165,7 +170,6 @@ namespace SkySoft.Http.DRV
             await RaiseGetRemoteServerDataEvent();
 
             GetDnsServerDnsRecordFromDataContainer();
-            ValidateDnsServerDnsRecord();
         }
 
         /// <summary>
@@ -216,10 +220,10 @@ namespace SkySoft.Http.DRV
         }
 
         /// <summary>
-        /// Sends request to remote server
+        /// Sends request to DNS server to search remote server DNS record
         /// </summary>
         /// <returns>Task result</returns>
-        async Task SendRequestToRemoteServer2()
+        async Task SendRequestToDnsServerToSearchRemoteServerDnsRecord()
         {
             DataContainer.RemoveLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
             DataContainer.AddRequestMetadata(
@@ -231,6 +235,9 @@ namespace SkySoft.Http.DRV
 
             CalculateDnsServerUrl();
             await TransmitRequestToRemoteServer();
+            DataContainer.RemoveCurrentRequestMetadta();
+
+            GetRemoteServerDnsRecordFromDataContainer();
         }
 
         /// <summary>
@@ -262,7 +269,7 @@ namespace SkySoft.Http.DRV
             dnsRecordValidator.OperatingSystem = OperatingSystem;
             dnsRecordValidator.ProcessRequest(DataContainer);
             dnsRecordValidator.ReleaseResources();
-            DnsServerDnsRecordReceivedFromDnsClient = dnsRecordValidator.DnsRecordDataValid;
+            DnsRecordOfDnsServerValid = dnsRecordValidator.DnsRecordDataValid;
         }
 
         /// <summary>
@@ -274,7 +281,7 @@ namespace SkySoft.Http.DRV
             dnsRecordValidator.OperatingSystem = OperatingSystem;
             dnsRecordValidator.ProcessRequest(DataContainer);
             dnsRecordValidator.ReleaseResources();
-            RemoteServerDnsRecordReceivedFromDnsClient = dnsRecordValidator.DnsRecordDataValid;
+            DnsRecordOfRemoteServerValid = dnsRecordValidator.DnsRecordDataValid;
         }
         #endregion
 
@@ -296,17 +303,17 @@ namespace SkySoft.Http.DRV
         }
 
         /// <summary>
-        /// Gets or sets flag indicating whether remote server DNS record received from DNS client
+        /// Gets or sets flag indicating whether DNS record of remote server valid
         /// </summary>
-        bool RemoteServerDnsRecordReceivedFromDnsClient
+        bool DnsRecordOfRemoteServerValid
         {
             get; set;
         }
 
         /// <summary>
-        /// Gets or sets flag indicating whether DNS server DNS record received from DNS client
+        /// Gets or sets flag indicating whether DNS record of DNS server valid
         /// </summary>
-        bool DnsServerDnsRecordReceivedFromDnsClient
+        bool DnsRecordOfDnsServerValid
         {
             get; set;
         }

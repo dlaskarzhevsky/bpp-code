@@ -75,6 +75,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{903F45F1-8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Http", "Http", "{3D42B991-F975-4C1A-BC12-F04FAE370775}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkySoft.DnsClientServerComponents", "..\SkySoftFramework\SkySoft.DnsClientServerComponents\SkySoft.DnsClientServerComponents.csproj", "{1B833144-6E9D-4840-81B6-31A53A365A18}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -177,6 +179,10 @@ Global
 		{8F190A5E-CB27-453F-ADA3-101C3EE844A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F190A5E-CB27-453F-ADA3-101C3EE844A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F190A5E-CB27-453F-ADA3-101C3EE844A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B833144-6E9D-4840-81B6-31A53A365A18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B833144-6E9D-4840-81B6-31A53A365A18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B833144-6E9D-4840-81B6-31A53A365A18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B833144-6E9D-4840-81B6-31A53A365A18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -216,5 +222,6 @@ Global
 		{9795C216-656C-4E45-8943-019644BD297E} = {5615407E-CE72-422E-8360-BBD70B82A00B}
 		{903F45F1-8521-4B49-B7A9-26CCC5478527} = {5615407E-CE72-422E-8360-BBD70B82A00B}
 		{3D42B991-F975-4C1A-BC12-F04FAE370775} = {5615407E-CE72-422E-8360-BBD70B82A00B}
+		{1B833144-6E9D-4840-81B6-31A53A365A18} = {3D42B991-F975-4C1A-BC12-F04FAE370775}
 	EndGlobalSection
 EndGlobal

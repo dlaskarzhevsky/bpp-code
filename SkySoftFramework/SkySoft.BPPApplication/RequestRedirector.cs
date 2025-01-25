@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
+using SkySoft.Communication;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
 
@@ -45,7 +46,7 @@ namespace SkySoft.BPPApplication
                         else
                         {
                             dataContainer.RemoveCurrentRequestMetadta();
-                            dataContainer = await RedirectRequestToRemoteRequestHandler(dataContainer, operatingSystem);
+                            dataContainer = await RedirectRequestToRemoteRequestHandler(dataContainer, operatingSystem, requestHandlerType);
                         }
                     }
                 }
@@ -92,8 +93,10 @@ namespace SkySoft.BPPApplication
         /// Redirect request to remote request handler
         /// </summary>
         /// <param name="requestDataContainer">Request data container</param>
+        /// <param name="operatingSystem">Operating system</param>
+        /// <param name="requestHandlerType">Request handler type</param>
         /// <returns>Data container</returns>
-        async Task<IDataContainer> RedirectRequestToRemoteRequestHandler(IDataContainer requestDataContainer, OS operatingSystem)
+        async Task<IDataContainer> RedirectRequestToRemoteRequestHandler(IDataContainer requestDataContainer, OS operatingSystem, string requestHandlerType)
         {
             IDriver? transceiverDriver = operatingSystem.GetDriver(SkySoft.Contracts.ControllerTypes.TRANSCEIVER);
             if (transceiverDriver == null)
@@ -102,13 +105,26 @@ namespace SkySoft.BPPApplication
                 requestDataContainer.SetMessage(errorMessage, MessageType.Error);
             }
 
-            requestDataContainer.AddRequestMetadata(
-                transceiverDriver!.DomainName,
-                transceiverDriver.UseCaseName,
-                transceiverDriver.ApplicationLayerName,
-                transceiverDriver.StateName,
-                transceiverDriver.TransitionName);
-            return await RedirectRequestToRequestHandler(requestDataContainer, operatingSystem);
+            RequestMetadataDTO? requestMetadataDTO = requestDataContainer.GetLastDTOFromDataCollection<RequestMetadataDTO>(SkySoft.Contracts.DataCollectionTypes.REQUEST_METADATA);
+            if (requestMetadataDTO!.DomainName == transceiverDriver!.DomainName &&
+                requestMetadataDTO!.UseCaseName == transceiverDriver!.UseCaseName &&
+                requestMetadataDTO!.ApplicationLayerName == transceiverDriver!.ApplicationLayerName &&
+                requestMetadataDTO!.StateName == transceiverDriver!.StateName &&
+                requestMetadataDTO!.TransitionName == transceiverDriver!.TransitionName)
+            {
+                requestDataContainer.SetMessage($"Cannot redirect request to {requestHandlerType} request handler", MessageType.Error);
+                return requestDataContainer;
+            }
+            else
+            {
+                requestDataContainer.AddRequestMetadata(
+                    transceiverDriver!.DomainName,
+                    transceiverDriver.UseCaseName,
+                    transceiverDriver.ApplicationLayerName,
+                    transceiverDriver.StateName,
+                    transceiverDriver.TransitionName);
+                return await RedirectRequestToRequestHandler(requestDataContainer, operatingSystem);
+            }
         }
         #endregion
     }

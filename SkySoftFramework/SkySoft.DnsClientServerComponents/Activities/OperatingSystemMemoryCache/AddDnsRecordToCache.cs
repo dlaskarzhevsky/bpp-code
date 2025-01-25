@@ -112,7 +112,7 @@ namespace SkySoft.DnsClientServerComponents
         /// <param name="newDnsRecordDTO">New DNS record</param>
         static void UpdateNewDnsRecordData(DnsRecordDTO dnsRecordDTO, DnsRecordDTO newDnsRecordDTO)
         {
-            CopyDnsRecordData.Execute(dnsRecordDTO, newDnsRecordDTO, false);
+            CopyDnsRecordData.Execute(dnsRecordDTO, newDnsRecordDTO, true);
         }
         #endregion
     }

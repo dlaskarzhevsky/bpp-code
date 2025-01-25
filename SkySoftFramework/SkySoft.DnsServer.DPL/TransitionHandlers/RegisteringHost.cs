@@ -44,7 +44,6 @@ namespace SkySoft.DnsServer.DPL
 
             if (CachedDnsRecordCreated || CachedDnsRecordUpdated)
             {
-                VerifyThatPathToDnsRecordsFileContainsDirectoryName();
                 SaveUpdatedData();
                 LogRegistrationResult();
             }

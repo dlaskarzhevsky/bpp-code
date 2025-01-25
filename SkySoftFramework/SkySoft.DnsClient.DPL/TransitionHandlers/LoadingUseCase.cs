@@ -185,7 +185,7 @@ namespace SkySoft.DnsClient.DPL
         /// </summary>
         void ValidateDnsClientData()
         {
-            DnsRecordValidator dnsRecordValidator = new DnsRecordValidator(ConfigurationDnsRecord!.ApplicationLayerName, ConfigurationDnsRecord.HttpsUrl, ConfigurationDnsRecord.HttpUrl, ConfigurationDnsRecord.UseHttps, this);
+            DnsRecordValidator dnsRecordValidator = new DnsRecordValidator(ConfigurationDnsRecord!, this, true, "Reading DNS client configuration from appsettings.json file." + Environment.NewLine);
             dnsRecordValidator.OperatingSystem = OperatingSystem;
             dnsRecordValidator.ProcessRequest(DataContainer);
             dnsRecordValidator.ReleaseResources();

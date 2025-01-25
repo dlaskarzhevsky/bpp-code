@@ -65,6 +65,10 @@ namespace SkySoft.Communication
                 throw new TypeAccessException("Cannot create new data transfer object");
             }
 
+            IDataTransferObject dataTransferObject = (IDataTransferObject)newDTO;
+            dataTransferObject.DateOfCreation = DateTime.Now;
+            dataTransferObject.DateOfModification = dataTransferObject.DateOfCreation;
+
             return newDTO;
         }
 

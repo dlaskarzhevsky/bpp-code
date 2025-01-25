@@ -17,8 +17,8 @@ namespace SkySoft.DnsClient.DPL
         public LoadingUseCase()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             UseCaseName = SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             TransitionName = SkySoft.DnsClient.CON.TransitionTypes.LOADING_USE_CASE;
         }
         #endregion
@@ -153,14 +153,7 @@ namespace SkySoft.DnsClient.DPL
         /// </summary>
         async Task RaiseDnsClientInitializedEvent()
         {
-            DataContainer!.AddRequestMetadata(
-                SkySoft.Contracts.DomainNames.SKYSOFT,
-                SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT,
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
-                "",
-                SkySoft.DnsClient.CON.EventTypes.DNS_CLIENT_INITIALIZED_EVENT);
-            DataContainer = await RaiseEvent(DataContainer);
-            DataContainer.RemoveCurrentRequestMetadta();
+            await RaiseEvent(SkySoft.DnsClient.CON.EventTypes.DNS_CLIENT_INITIALIZED_EVENT);
         }
 
         /// <summary>
@@ -168,14 +161,7 @@ namespace SkySoft.DnsClient.DPL
         /// </summary>
         async Task RaiseDnsClientRegistrationWithDnsServerRequestEvent()
         {
-            DataContainer!.AddRequestMetadata(
-                SkySoft.Contracts.DomainNames.SKYSOFT,
-                SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT,
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
-                "",
-                SkySoft.DnsClient.CON.EventTypes.REGISTER_DNS_CLIENT_WITH_DNS_SERVER_EVENT);
-            DataContainer = await RaiseEvent(DataContainer);
-            DataContainer.RemoveCurrentRequestMetadta();
+            await RaiseEvent(SkySoft.DnsClient.CON.EventTypes.REGISTER_DNS_CLIENT_WITH_DNS_SERVER_EVENT);
         }
 
         /// <summary>

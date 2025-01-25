@@ -177,14 +177,7 @@ namespace SkySoft.Http.DRV
         /// </summary>
         async Task RaiseGetRemoteServerDataEvent()
         {
-            DataContainer.AddRequestMetadata(
-                SkySoft.Contracts.DomainNames.SKYSOFT,
-                SkySoft.Contracts.UseCaseTypes.CONTROLLER,
-                SkySoft.Contracts.ApplicationLayerNames.NFA,
-                "",
-                SkySoft.Contracts.TransitionTypes.GETTING_REMOTE_SERVER_DATA);
-            DataContainer = await RaiseEvent(DataContainer);
-            DataContainer.RemoveCurrentRequestMetadta();
+            await RaiseEvent(SkySoft.Contracts.TransitionTypes.GETTING_REMOTE_SERVER_DATA);
         }
 
         /// <summary>
@@ -265,7 +258,7 @@ namespace SkySoft.Http.DRV
         /// </summary>
         void ValidateDnsServerDnsRecord()
         {
-            DnsRecordValidator dnsRecordValidator = new DnsRecordValidator(DnsServerDnsRecord!.ApplicationLayerName, DnsServerDnsRecord.HttpsUrl, DnsServerDnsRecord.HttpUrl, DnsServerDnsRecord.UseHttps, this);
+            DnsRecordValidator dnsRecordValidator = new DnsRecordValidator(DnsServerDnsRecord!, this, false);
             dnsRecordValidator.OperatingSystem = OperatingSystem;
             dnsRecordValidator.ProcessRequest(DataContainer);
             dnsRecordValidator.ReleaseResources();
@@ -277,7 +270,7 @@ namespace SkySoft.Http.DRV
         /// </summary>
         void ValidateRemoteServerDnsRecord()
         {
-            DnsRecordValidator dnsRecordValidator = new DnsRecordValidator(RemoteServerDnsRecord!.ApplicationLayerName, RemoteServerDnsRecord.HttpsUrl, RemoteServerDnsRecord.HttpUrl, RemoteServerDnsRecord.UseHttps, this);
+            DnsRecordValidator dnsRecordValidator = new DnsRecordValidator(RemoteServerDnsRecord!, this, false);
             dnsRecordValidator.OperatingSystem = OperatingSystem;
             dnsRecordValidator.ProcessRequest(DataContainer);
             dnsRecordValidator.ReleaseResources();

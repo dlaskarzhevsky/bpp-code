@@ -1,5 +1,4 @@
-﻿using SkySoft.IBPPApplication;
-using SkySoft.ICommunication;
+﻿using SkySoft.ICommunication;
 
 namespace SkySoft.BPPApplication
 {

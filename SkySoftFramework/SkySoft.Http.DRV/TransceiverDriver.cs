@@ -18,7 +18,6 @@ namespace SkySoft.Http.DRV
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             UseCaseName = SkySoft.Contracts.UseCaseTypes.CONTROLLER;
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.NFA;
-            StateName = "";
             TransitionName = SkySoft.Contracts.TransitionTypes.SENDING_REQUEST_TO_REMOTE_SERVER;
         }
         #endregion

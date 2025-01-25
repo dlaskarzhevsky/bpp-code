@@ -1,13 +1,5 @@
-﻿using System.Reflection;
-
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
-
-using Newtonsoft.Json;
-
-using SkySoft.DnsClientServerComponents;
+﻿using SkySoft.DnsClientServerComponents;
 using SkySoft.DnsRecord.DTO;
-using SkySoft.ICommunication;
 
 namespace SkySoft.DnsServer.DPL
 {

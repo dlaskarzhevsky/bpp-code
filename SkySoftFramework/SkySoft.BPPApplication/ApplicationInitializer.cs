@@ -1,5 +1,4 @@
-﻿using SkySoft.Communication;
-using SkySoft.IBPPApplication;
+﻿using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
 
 namespace SkySoft.BPPApplication
@@ -18,16 +17,16 @@ namespace SkySoft.BPPApplication
         /// <returns>True if application was initialized, otherwise false</returns>
         public virtual async Task<bool> InitializeApplication(IOS operatingSystem)
         {
-            bool? applicationInitialized = operatingSystem.GetValueFomCache<bool?>(StateName);
+            bool? applicationInitialized = operatingSystem.GetValueFomCache<bool?>(TargetStateName);
             if (applicationInitialized == null || applicationInitialized == false)
             {
                 IDataContainer dataContainer = operatingSystem.GetNewDataContainer();
-                ConfigureRequestToLoadDefaultUseCase(dataContainer);
-                dataContainer = await operatingSystem.RedirectRequestToRequestHandler(dataContainer);
-                LogMessages(dataContainer, operatingSystem);
-                if (DefaultUseCaseWasLoaded(dataContainer))
+                ConfigureRequestToInitializeApplication(dataContainer);
+                dataContainer = await operatingSystem.InitializeApplication(dataContainer);
+                LogMessages.Execute(dataContainer, operatingSystem);
+                if (ApplicationInitialized(dataContainer))
                 {
-                    operatingSystem.CacheValue<bool>(StateName, true);
+                    operatingSystem.CacheValue<bool>(TargetStateName, true);
                     return true;
                 }
             }
@@ -38,54 +37,26 @@ namespace SkySoft.BPPApplication
 
         #region Protected Methods
         /// <summary>
-        /// Configures request to load default use case
+        /// Configures request to initialize application
         /// </summary>
         /// <param name="dataContainer">Data container</param>
-        protected virtual void ConfigureRequestToLoadDefaultUseCase(IDataContainer dataContainer)
+        protected virtual void ConfigureRequestToInitializeApplication(IDataContainer dataContainer)
         {
             dataContainer.DomainName = DomainName;
-            dataContainer.ApplicationLayerName = ApplicationLayerName;
             dataContainer.UseCaseName = UseCaseName;
+            dataContainer.ApplicationLayerName = ApplicationLayerName;
             dataContainer.TransitionName = TransitionName;
         }
 
         /// <summary>
-        /// Gets flag indicating whether default use case was loaded
+        /// Gets flag indicating whether application initialized
         /// </summary>
         /// <param name="dataContainer">Data container</param>
-        /// <returns>True if default use case was loaded, otherwise False</returns>
-        protected virtual bool DefaultUseCaseWasLoaded(IDataContainer dataContainer)
+        /// <returns>True if application initialized, otherwise False</returns>
+        protected virtual bool ApplicationInitialized(IDataContainer dataContainer)
         {
-            bool defaultUseCaseWasLoaded = dataContainer.Exception == null && string.IsNullOrEmpty(dataContainer.Message) || !string.IsNullOrEmpty(dataContainer.Message) && dataContainer.MessageType != MessageType.Critical && dataContainer.MessageType != MessageType.Error;
-            return defaultUseCaseWasLoaded;
-        }
-
-        /// <summary>
-        /// Logs messages
-        /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <param name="operatingSystem">Operating system</param>
-        void LogMessages(IDataContainer dataContainer, IOS operatingSystem)
-        {
-            IDataCollection<ExceptionDTO>? exceptionDataCollection = dataContainer.GetDataColletion<ExceptionDTO>(SkySoft.Contracts.DataCollectionTypes.EXCEPTIONS);
-            if (exceptionDataCollection != null)
-            {
-                for (int i = 0; i < exceptionDataCollection.Count; i++)
-                {
-                    ExceptionDTO exceptionDTO = exceptionDataCollection[i];
-                    if (exceptionDTO.Exception == null)
-                    {
-                        if (!string.IsNullOrEmpty(exceptionDTO.Message))
-                        {
-                            operatingSystem.LogMessage(exceptionDTO.Message, MessageTypeToLogLevelMapper.Map(exceptionDTO.MessageType));
-                        }
-                    }
-                    else
-                    {
-                        operatingSystem.LogException(exceptionDTO.Exception);
-                    }
-                }
-            }
+            bool applicationInitialized = dataContainer.Exception == null && string.IsNullOrEmpty(dataContainer.Message) || !string.IsNullOrEmpty(dataContainer.Message) && dataContainer.MessageType != MessageType.Critical && dataContainer.MessageType != MessageType.Error;
+            return applicationInitialized;
         }
         #endregion
 
@@ -107,9 +78,9 @@ namespace SkySoft.BPPApplication
         } = default!;
 
         /// <summary>
-        /// Gets or sets state name
+        /// Gets or sets target state name
         /// </summary>
-        protected string StateName
+        protected string TargetStateName
         {
             get; set;
         } = default!;

@@ -37,14 +37,7 @@
         /// </summary>
         async Task RaiseDataRequestEvent()
         {
-            DataContainer!.AddRequestMetadata(
-                SkySoft.Contracts.DomainNames.BPP,
-                BPP.Person.CON.UseCaseContract.PERSON,
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
-                BPP.Person.CON.StateTypes.INITIAL,
-                SkySoft.Contracts.EventTypes.DATA_REQUEST_EVENT);
-            DataContainer = await RaiseEvent(DataContainer);
-            DataContainer.RemoveCurrentRequestMetadta();
+            await RaiseEvent(SkySoft.Contracts.EventTypes.DATA_REQUEST_EVENT);
         }
         #endregion
     }

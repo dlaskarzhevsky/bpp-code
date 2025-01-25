@@ -55,6 +55,13 @@ namespace SkySoft.IBPPApplication
         T? GetValueFomCache<T>(string key);
 
         /// <summary>
+        /// Initializes application
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <returns>Data container</returns>
+        Task<IDataContainer> InitializeApplication(IDataContainer dataContainer);
+
+        /// <summary>
         /// Logs exception
         /// </summary>
         /// <param name="exception">Exception for logging</param>

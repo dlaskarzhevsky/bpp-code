@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -105,6 +103,17 @@ namespace SkySoft.BPPApplication
         {
             MemoryCache.TryGetValue<T?>(key, out T? value);
             return value;
+        }
+
+        /// <summary>
+        /// Initializes application
+        /// IOS interface implementation
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        /// <returns>Data container</returns>
+        public async Task<IDataContainer> InitializeApplication(IDataContainer dataContainer)
+        {
+            return await RequestRedirector.RedirectRequestToRequestHandler(dataContainer, this);
         }
 
         /// <summary>

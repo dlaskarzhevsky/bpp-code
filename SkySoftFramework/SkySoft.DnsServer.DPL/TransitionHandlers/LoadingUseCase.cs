@@ -44,7 +44,6 @@ namespace SkySoft.DnsServer.DPL
             GetListOfDnsRecordsFromCache();
             if (CacheHasNoDnsRecords)
             {
-                VerifyThatPathToDnsRecordsFileContainsDirectoryName();
                 if (DnsRecordsFileExists)
                 {
                     LoadDnsRecordsFromFile();
@@ -109,14 +108,6 @@ namespace SkySoft.DnsServer.DPL
         {
             ListOfDnsRecords = ReadListOfDnsRecordsFromFile.Execute(PathToDnsRecordsFile);
         }
-
-        /// <summary>
-        /// Verifies that path to DNS records file contains directory name
-        /// </summary>
-        void VerifyThatPathToDnsRecordsFileContainsDirectoryName()
-        {
-            PathToDnsRecordsFile = SkySoft.DnsClientServerComponents.VerifyThatPathToDnsRecordsFileContainsDirectoryName.Execute(PathToDnsRecordsFile);
-        }
         #endregion
 
         #region Private Properties
@@ -127,7 +118,7 @@ namespace SkySoft.DnsServer.DPL
         {
             get
             {
-                return ListOfDnsRecords == null;
+                return ListOfDnsRecords == null || ListOfDnsRecords.Count == 0;
             }
         }
 

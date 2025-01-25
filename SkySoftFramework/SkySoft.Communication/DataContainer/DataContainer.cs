@@ -1,5 +1,4 @@
-﻿using SkySoft.Core;
-using SkySoft.ICommunication;
+﻿using SkySoft.ICommunication;
 
 namespace SkySoft.Communication
 {

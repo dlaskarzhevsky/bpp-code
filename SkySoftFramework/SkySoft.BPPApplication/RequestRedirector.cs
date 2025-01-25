@@ -1,9 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
 
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-
-using SkySoft.Communication;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
 

@@ -29,8 +29,14 @@ namespace SkySoft.APIHost.DPL
         /// <returns>Data container</returns>
         protected override async Task HandleRequestAsync()
         {
-            PrepareHostDnsRecordForRegistrationWithDnsServer();
-            await SendHostDnsRecordRegistrationRequestToDnsServer();
+            LoadHostDataFromApplicationConfiguration();
+            ValidateHostData();
+            if (HostDataValid)
+            {
+                AddHostDataToDataContainer();
+                await RaiseHostInitializingEvent();
+                RemoveHostDataFromDataContainer();
+            }
         }
         #endregion
 
@@ -41,34 +47,15 @@ namespace SkySoft.APIHost.DPL
         void AddHostDataToDataContainer()
         {
             DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.APIHost.CON.DataCollectionTypes.DNS_RECORDS);
-            dnsRecordDTO.ApplicationLayerName = HostApplicationLayerName;
-            dnsRecordDTO.HttpsUrl = HttpsUrl;
-            dnsRecordDTO.HttpUrl = HttpUrl;
-            dnsRecordDTO.UseHttps = UseHttps;
+            CopyDnsRecordData.Execute(DnsRecordWithApplicationConfigurationData!, dnsRecordDTO, true);
         }
 
         /// <summary>
-        /// Load host data from configuration file
+        /// Load host data from application configuration
         /// </summary>
-        void LoadHostDataFromConfigurationFile()
+        void LoadHostDataFromApplicationConfiguration()
         {
-            HostApplicationLayerName = ApplicationConfiguration!.GetValue<string>("Host:ApplicationLayerName");
-            HttpsUrl = ApplicationConfiguration!.GetValue<string>("Host:Endpoints:Https:Url");
-            HttpUrl = ApplicationConfiguration!.GetValue<string>("Host:Endpoints:Http:Url");
-            UseHttps = ApplicationConfiguration.GetValue<bool>("UseHttps");
-        }
-
-        /// <summary>
-        /// Prepares host DNS record for registration with DNS server
-        /// </summary>
-        void PrepareHostDnsRecordForRegistrationWithDnsServer()
-        {
-            LoadHostDataFromConfigurationFile();
-            ValidateHostData();
-            if (HostDataValid)
-            {
-                AddHostDataToDataContainer();
-            }
+            DnsRecordWithApplicationConfigurationData = ReadHostDnsRecordDataFromApplicationConfiguration.Execute(ApplicationConfiguration);
         }
 
         /// <summary>
@@ -76,14 +63,7 @@ namespace SkySoft.APIHost.DPL
         /// </summary>
         async Task RaiseHostInitializingEvent()
         {
-            DataContainer!.AddRequestMetadata(
-                SkySoft.Contracts.DomainNames.SKYSOFT,
-                SkySoft.APIHost.CON.UseCaseContract.API_HOST,
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
-                "",
-                SkySoft.APIHost.CON.EventTypes.HOST_INITIALIZING_EVENT);
-            DataContainer = await RaiseEvent(DataContainer);
-            DataContainer.RemoveCurrentRequestMetadta();
+            await RaiseEvent(SkySoft.APIHost.CON.EventTypes.HOST_INITIALIZING_EVENT);
         }
 
         /// <summary>
@@ -95,21 +75,11 @@ namespace SkySoft.APIHost.DPL
         }
 
         /// <summary>
-        /// Sends host DNS record registration request to DNS server
-        /// </summary>
-        /// <returns></returns>
-        async Task SendHostDnsRecordRegistrationRequestToDnsServer()
-        {
-            await RaiseHostInitializingEvent();
-            RemoveHostDataFromDataContainer();
-        }
-
-        /// <summary>
         /// Validates host data
         /// </summary>
         void ValidateHostData()
         {
-            DnsRecordValidator dnsRecordValidator = new DnsRecordValidator(HostApplicationLayerName, HttpsUrl, HttpUrl, UseHttps, this);
+            DnsRecordValidator dnsRecordValidator = new DnsRecordValidator(DnsRecordWithApplicationConfigurationData!, this, true, "Reading application host configuration from appsettings.json file." + Environment.NewLine);
             dnsRecordValidator.OperatingSystem = OperatingSystem;
             dnsRecordValidator.ProcessRequest(DataContainer);
             dnsRecordValidator.ReleaseResources();
@@ -119,9 +89,9 @@ namespace SkySoft.APIHost.DPL
 
         #region Private Properties
         /// <summary>
-        /// Gets or sets host application layer name
+        /// Gets or sets DNS record with application configuration data
         /// </summary>
-        string? HostApplicationLayerName
+        DnsRecordDTO? DnsRecordWithApplicationConfigurationData
         {
             get; set;
         }
@@ -133,30 +103,6 @@ namespace SkySoft.APIHost.DPL
         {
             get; set;
         } = true;
-
-        /// <summary>
-        /// Gets or sets HTTP URL
-        /// </summary>
-        string? HttpUrl
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets HTTPS URL
-        /// </summary>
-        string? HttpsUrl
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets flag indicating whether HTTPS needs to be used
-        /// </summary>
-        bool UseHttps
-        {
-            get; set;
-        }
         #endregion
     }
 }

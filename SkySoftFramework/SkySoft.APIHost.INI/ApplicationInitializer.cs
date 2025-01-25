@@ -11,11 +11,12 @@
         /// </summary>
         public ApplicationInitializer()
         {
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             UseCaseName = SkySoft.APIHost.CON.UseCaseContract.API_HOST;
-            StateName = SkySoft.APIHost.CON.StateTypes.INITIAL;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             TransitionName = SkySoft.APIHost.CON.TransitionTypes.LOADING_USE_CASE;
+
+            TargetStateName = SkySoft.APIHost.CON.StateTypes.INITIAL;
         }
         #endregion
     }

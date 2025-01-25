@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
@@ -138,7 +137,7 @@ namespace SkySoft.BPPApplication
         public string? StateName
         {
             get; protected set;
-        } = default!;
+        } = string.Empty;
 
         /// <summary>
         /// Gets transition name
@@ -202,12 +201,13 @@ namespace SkySoft.BPPApplication
         /// <summary>
         /// Raises event
         /// </summary>
-        /// <param name="dataContainer">Data container</param>
+        /// <param name="eventName"></param>
         /// <returns>Result of event handling</returns>
-        protected async Task<IDataContainer> RaiseEvent(IDataContainer dataContainer)
+        protected async Task RaiseEvent(string eventName)
         {
-            dataContainer = await OperatingSystem.RedirectRequestToEventHandler(dataContainer);
-            return dataContainer;
+            DataContainer!.AddRequestMetadata(DomainName, UseCaseName, ApplicationLayerName, StateName, eventName);
+            DataContainer = await OperatingSystem.RedirectRequestToEventHandler(DataContainer);
+            DataContainer.RemoveCurrentRequestMetadta();
         }
 
         /// <summary>

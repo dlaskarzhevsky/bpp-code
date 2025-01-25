@@ -25,92 +25,99 @@ namespace SkySoft.DnsClient.DPL
         /// <summary>
         /// Handles request
         /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <returns>Data container</returns>
         protected override void HandleRequest()
         {
-            GetDnsRecordFromCacheByApplicationLayerName();
-            AddDnsDataToDataContainer();
-        }
-
-        /// <summary>
-        /// Releases resources
-        /// </summary>
-        public override void ReleaseResources()
-        {
-            base.ReleaseResources();
+            GetDnsRecordFromRequest();
+            GetListOfDnsRecordsFromCache();
+            FindCachedDnsRecordByApplicationLayerName();
+            if (CachedDnsRecordFound)
+            {
+                UpdateDnsRecordFromRequestByDataFromCachedDnsRecord();
+            }
         }
         #endregion
 
         #region Private Methods
         /// <summary>
-        /// Adds DNS data to data container
+        /// Finds cached DNS record by application layer name
         /// </summary>
-        void AddDnsDataToDataContainer()
+        void FindCachedDnsRecordByApplicationLayerName()
         {
-            DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS);
-            dnsRecordDTO!.HttpsUrl = HttpsUrl;
-            dnsRecordDTO.HttpUrl = HttpUrl;
-            dnsRecordDTO.UseHttps = UseHttps;
+            if (DnsRecordDTOFromRequest != null)
+            {
+                string applicationLayerName = DnsRecordDTOFromRequest.ApplicationLayerName!.ToLowerInvariant();
+                CachedDnsRecordDTO = FindDnsRecordInListByApplicationLayerName.Execute(ListOfCachedDnsRecords, applicationLayerName);
+            }
         }
 
         /// <summary>
-        /// Gets DNS record from cache by application layer name
+        /// Gets DNS record from request
         /// </summary>
-        void GetDnsRecordFromCacheByApplicationLayerName()
+        void GetDnsRecordFromRequest()
         {
-            DnsCacheManager dnsClientDataCacheManager = new DnsCacheManager();
-            dnsClientDataCacheManager.Mode = DnsCacheManagerMode.GetDnsRecordFromCacheByApplicationLayerName;
-            dnsClientDataCacheManager.OperatingSystem = OperatingSystem;
-            dnsClientDataCacheManager.ProcessRequest(DataContainer);
-            dnsClientDataCacheManager.ReleaseResources();
-            HostApplicationLayerName = dnsClientDataCacheManager.ApplicationLayerName;
-            HttpsUrl = dnsClientDataCacheManager.HttpsUrl;
-            HttpUrl = dnsClientDataCacheManager.HttpUrl;
-            UseHttps = dnsClientDataCacheManager.UseHttps;
+            DnsRecordDTOFromRequest = GetLastDnsRecordFromDataContainer.Execute(DataContainer);
+        }
+
+        /// <summary>
+        /// Gets list of DNS records from cache
+        /// </summary>
+        void GetListOfDnsRecordsFromCache()
+        {
+            ListOfCachedDnsRecords = SkySoft.DnsClientServerComponents.GetListOfDnsRecordsFromCache.Execute(OperatingSystem);
+        }
+
+        /// <summary>
+        /// Updates DNS record from request by data from cached DNS record
+        /// </summary>
+        void UpdateDnsRecordFromRequestByDataFromCachedDnsRecord()
+        {
+            CopyDnsRecordData.Execute(CachedDnsRecordDTO!, DnsRecordDTOFromRequest!, false);
         }
         #endregion
 
         #region Private Properties
         /// <summary>
-        /// Gets or sets flag indicating whether application layer name of request metadata equals to last DNS record
+        /// Gets or sets flag indicating whether cached DNS record created
         /// </summary>
-        bool ApplicationLayerNameOfRequestMetadataEqualsToLastDnsRecord
+        bool CachedDnsRecordCreated
         {
             get; set;
         }
 
         /// <summary>
-        /// Gets or sets host application layer name
+        /// Gets or sets cached DNS record
         /// </summary>
-        string? HostApplicationLayerName
+        DnsRecordDTO? CachedDnsRecordDTO
         {
             get; set;
         }
 
         /// <summary>
-        /// Gets or sets HTTP URL
+        /// Gets flag indicating whether cached DNS record found
         /// </summary>
-        string? HttpUrl
+        bool CachedDnsRecordFound
+        {
+            get
+            {
+                return CachedDnsRecordDTO != null;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets DNS record from request
+        /// </summary>
+        DnsRecordDTO? DnsRecordDTOFromRequest
         {
             get; set;
         }
 
         /// <summary>
-        /// Gets or sets HTTPS URL
+        /// Gets or sets list of cached DNS records
         /// </summary>
-        string? HttpsUrl
+        List<DnsRecordDTO> ListOfCachedDnsRecords
         {
             get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets flag indicating whether HTTPS needs to be used
-        /// </summary>
-        bool UseHttps
-        {
-            get; set;
-        }
+        } = default!;
         #endregion
     }
 }

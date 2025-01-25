@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 
 using Newtonsoft.Json;
 
+using SkySoft.DnsClientServerComponents;
 using SkySoft.DnsRecord.DTO;
 using SkySoft.ICommunication;
 
@@ -37,16 +38,16 @@ namespace SkySoft.DnsServer.DPL
         /// <returns>Data container</returns>
         protected override void HandleRequest()
         {
-            GetListOfDnsRecordsFromCache();
             GetDnsRecordFromRequest();
-            FindDnsRecordByApplicationLayerName();
-            if (DnsRecordFound)
+            GetListOfDnsRecordsFromCache();
+            FindCachedDnsRecordByApplicationLayerName();
+            if (CachedDnsRecordFound)
             {
-                UpdateCachedDnsRecord();
+                UpdateCachedDnsRecordByDataFromRequest();
             }
             else
             {
-                CreateDnsRecordForCache();
+                CreateDnsRecordForCacheWithDataFromRequest();
             }
 
             if (CachedDnsRecordCreated || CachedDnsRecordUpdated)
@@ -63,7 +64,7 @@ namespace SkySoft.DnsServer.DPL
         public override void ReleaseResources()
         {
             CachedDnsRecordDTO = null;
-            DnsRecordDTO = null;
+            DnsRecordDTOFromRequest = null;
             ListOfCachedDnsRecords = default!;
             base.ReleaseResources();
         }
@@ -71,38 +72,26 @@ namespace SkySoft.DnsServer.DPL
 
         #region Private Methods
         /// <summary>
-        /// Creates DSN record for cache
+        /// Creates DSN record for cache with data from request
         /// </summary>
-        void CreateDnsRecordForCache()
+        void CreateDnsRecordForCacheWithDataFromRequest()
         {
-            CachedDnsRecordDTO = new DnsRecordDTO();
-            CachedDnsRecordDTO.ApplicationLayerName = DnsRecordDTO!.ApplicationLayerName;
-            CachedDnsRecordDTO.HttpsUrl = DnsRecordDTO.HttpsUrl;
-            CachedDnsRecordDTO.HttpUrl = DnsRecordDTO.HttpUrl;
-            CachedDnsRecordDTO.DateOfCreation = DateTime.Now;
-            CachedDnsRecordDTO.DateOfModification = CachedDnsRecordDTO.DateOfCreation;
+            CachedDnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>();
+            CopyDnsRecordData.Execute(DnsRecordDTOFromRequest!, CachedDnsRecordDTO!, true);
             ListOfCachedDnsRecords.Add(CachedDnsRecordDTO);
 
             CachedDnsRecordCreated = true;
         }
 
         /// <summary>
-        /// Finds DNS record by application layer name
+        /// Finds cached DNS record by application layer name
         /// </summary>
-        void FindDnsRecordByApplicationLayerName()
+        void FindCachedDnsRecordByApplicationLayerName()
         {
-            if (DnsRecordDTO != null)
+            if (DnsRecordDTOFromRequest != null)
             {
-                string applicationLayerName = DnsRecordDTO.ApplicationLayerName!.ToLowerInvariant();
-                for (int i = 0; i < ListOfCachedDnsRecords.Count; i++)
-                {
-                    string? registeredApplicationLayerName = ListOfCachedDnsRecords[i].ApplicationLayerName;
-                    if (!string.IsNullOrEmpty(registeredApplicationLayerName) && registeredApplicationLayerName.ToLowerInvariant() == applicationLayerName)
-                    {
-                        CachedDnsRecordDTO = ListOfCachedDnsRecords[i];
-                        break;
-                    }
-                }
+                string applicationLayerName = DnsRecordDTOFromRequest.ApplicationLayerName!.ToLowerInvariant();
+                CachedDnsRecordDTO = FindDnsRecordInListByApplicationLayerName.Execute(ListOfCachedDnsRecords, applicationLayerName);
             }
         }
 
@@ -111,7 +100,7 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void GetDnsRecordFromRequest()
         {
-            DnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS);
+            DnsRecordDTOFromRequest = GetLastDnsRecordFromDataContainer.Execute(DataContainer);
         }
 
         /// <summary>
@@ -119,16 +108,7 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void GetListOfDnsRecordsFromCache()
         {
-            List<DnsRecordDTO>? listOfDnsRecords;
-            MemoryCache.TryGetValue<List<DnsRecordDTO>>(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS, out listOfDnsRecords);
-            if (listOfDnsRecords == null)
-            {
-                ListOfCachedDnsRecords = new List<DnsRecordDTO>();
-            }
-            else
-            {
-                ListOfCachedDnsRecords = listOfDnsRecords;
-            }
+            ListOfCachedDnsRecords = SkySoft.DnsClientServerComponents.GetListOfDnsRecordsFromCache.Execute(OperatingSystem);
         }
 
         /// <summary>
@@ -136,17 +116,7 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void LogRegistrationResult()
         {
-            string? hostUrl = null;
-            if (DnsRecordDTO!.UseHttps)
-            {
-                hostUrl = DnsRecordDTO.HttpsUrl;
-            }
-            else
-            {
-                hostUrl = DnsRecordDTO.HttpUrl;
-            }
-
-            DataContainer.SetMessage($"Host {DnsRecordDTO!.ApplicationLayerName} ({hostUrl}) was registered with DNS server successfully", MessageType.Information);
+            LogDnsRecordRegistrationResult.Execute(DnsRecordDTOFromRequest!, DataContainer);
         }
 
         /// <summary>
@@ -154,31 +124,15 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void SaveUpdatedData()
         {
-            string json = JsonConvert.SerializeObject(ListOfCachedDnsRecords);
-            File.WriteAllText(PathToDnsRecordsFile, json);
+            SaveListOfDnsRecordsIntoFile.Execute(ListOfCachedDnsRecords, PathToDnsRecordsFile);
         }
 
         /// <summary>
-        /// Updates cached DNS record
+        /// Updates cached DNS record by data from request
         /// </summary>
-        void UpdateCachedDnsRecord()
+        void UpdateCachedDnsRecordByDataFromRequest()
         {
-            if (CachedDnsRecordDTO!.HttpsUrl != DnsRecordDTO!.HttpsUrl)
-            {
-                CachedDnsRecordDTO!.HttpsUrl = DnsRecordDTO!.HttpsUrl;
-            }
-
-            if (CachedDnsRecordDTO.HttpUrl != DnsRecordDTO.HttpUrl)
-            {
-                CachedDnsRecordDTO.HttpUrl = DnsRecordDTO.HttpUrl;
-            }
-
-            if (CachedDnsRecordDTO.DateOfCreation == null)
-            {
-                CachedDnsRecordDTO.DateOfCreation = DateTime.Now;
-            }
-
-            CachedDnsRecordDTO.DateOfModification = DateTime.Now;
+            CopyDnsRecordData.Execute(DnsRecordDTOFromRequest!, CachedDnsRecordDTO!, false);
             CachedDnsRecordUpdated = true;
         }
 
@@ -187,19 +141,7 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void VerifyThatPathToDnsRecordsFileContainsDirectoryName()
         {
-            string? directoryName = Path.GetDirectoryName(PathToDnsRecordsFile);
-            if (string.IsNullOrEmpty(directoryName))
-            {
-                Assembly? assembly = Assembly.GetEntryAssembly();
-                if (assembly == null)
-                {
-                    throw new ApplicationException("Entry assembly not found");
-                }
-
-                directoryName = Path.GetDirectoryName(assembly.Location);
-            }
-
-            PathToDnsRecordsFile = Path.Combine(directoryName!, PathToDnsRecordsFile!);
+            PathToDnsRecordsFile = SkySoft.DnsClientServerComponents.VerifyThatPathToDnsRecordsFileContainsDirectoryName.Execute(PathToDnsRecordsFile);
         }
         #endregion
 
@@ -229,17 +171,17 @@ namespace SkySoft.DnsServer.DPL
         }
 
         /// <summary>
-        /// Gets or sets DNS record
+        /// Gets or sets DNS record from request
         /// </summary>
-        DnsRecordDTO? DnsRecordDTO
+        DnsRecordDTO? DnsRecordDTOFromRequest
         {
             get; set;
         }
 
         /// <summary>
-        /// Gets flag indicating whether DNS record found
+        /// Gets flag indicating whether cached DNS record found
         /// </summary>
-        bool DnsRecordFound
+        bool CachedDnsRecordFound
         {
             get
             {

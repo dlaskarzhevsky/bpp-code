@@ -1,10 +1,5 @@
-﻿using System.Reflection;
-
-using Microsoft.Extensions.Caching.Memory;
-
-using Newtonsoft.Json;
-
-using SkySoft.Core;
+﻿using SkySoft.Core;
+using SkySoft.DnsClientServerComponents;
 using SkySoft.DnsRecord.DTO;
 
 namespace SkySoft.DnsServer.DPL
@@ -80,7 +75,7 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void CacheListOfDnsRecords()
         {
-            MemoryCache.Set(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS, ListOfDnsRecords);
+            SetListOfDnsRecordsIntoCache.Execute(ListOfDnsRecords!, OperatingSystem);
         }
 
         /// <summary>
@@ -88,8 +83,7 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void CreateDnsRecordsEmptyFile()
         {
-            string json = JsonConvert.SerializeObject(ListOfDnsRecords);
-            File.WriteAllText(PathToDnsRecordsFile, json);
+            SaveListOfDnsRecordsIntoFile.Execute(ListOfDnsRecords!, PathToDnsRecordsFile);
         }
 
         /// <summary>
@@ -105,12 +99,7 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void GetListOfDnsRecordsFromCache()
         {
-            List<DnsRecordDTO>? listOfDnsRecords;
-            MemoryCache.TryGetValue<List<DnsRecordDTO>>(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS, out listOfDnsRecords);
-            if (listOfDnsRecords != null)
-            {
-                ListOfDnsRecords = listOfDnsRecords;
-            }
+            ListOfDnsRecords = SkySoft.DnsClientServerComponents.GetListOfDnsRecordsFromCache.Execute(OperatingSystem);
         }
 
         /// <summary>
@@ -118,8 +107,7 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void LoadDnsRecordsFromFile()
         {
-            string json = File.ReadAllText(PathToDnsRecordsFile!);
-            ListOfDnsRecords = JsonConvert.DeserializeObject<List<DnsRecordDTO>>(json);
+            ListOfDnsRecords = ReadListOfDnsRecordsFromFile.Execute(PathToDnsRecordsFile);
         }
 
         /// <summary>
@@ -127,19 +115,7 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void VerifyThatPathToDnsRecordsFileContainsDirectoryName()
         {
-            string? directoryName = Path.GetDirectoryName(PathToDnsRecordsFile);
-            if (string.IsNullOrEmpty(directoryName))
-            {
-                Assembly? assembly = Assembly.GetEntryAssembly();
-                if (assembly == null)
-                {
-                    throw new ApplicationException("Entry assembly not found");
-                }
-
-                directoryName = Path.GetDirectoryName(assembly.Location);
-            }
-
-            PathToDnsRecordsFile = Path.Combine(directoryName!, PathToDnsRecordsFile!);
+            PathToDnsRecordsFile = SkySoft.DnsClientServerComponents.VerifyThatPathToDnsRecordsFileContainsDirectoryName.Execute(PathToDnsRecordsFile);
         }
         #endregion
 

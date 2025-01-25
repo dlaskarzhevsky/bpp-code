@@ -1,8 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-
-using SkySoft.DnsServer.CON;
-using SkySoft.DnsRecord.DTO;
-using SkySoft.ICommunication;
+﻿using SkySoft.DnsRecord.DTO;
+using SkySoft.DnsClientServerComponents;
 
 namespace SkySoft.DnsServer.DPL
 {
@@ -36,6 +33,7 @@ namespace SkySoft.DnsServer.DPL
             GetListOfDnsRecordsFromCache();
             GetDnsRecordFromRequest();
             FindDataOfDnsRecordFromRequestByApplicationLayerName();
+            CopyDnsDataFromCachedRecordIntoRecordFromRequest();
         }
 
         /// <summary>
@@ -44,6 +42,7 @@ namespace SkySoft.DnsServer.DPL
         public override void ReleaseResources()
         {
             DnsRecordFromRequest = null;
+            FoundCachedDnsRecordDTO = null;
             ListOfDnsRecords = null;
             base.ReleaseResources();
         }
@@ -51,21 +50,19 @@ namespace SkySoft.DnsServer.DPL
 
         #region Private Methods
         /// <summary>
+        /// Copies DNS data from cached record into record from request
+        /// </summary>
+        void CopyDnsDataFromCachedRecordIntoRecordFromRequest()
+        {
+            CopyDnsRecordData.Execute(FoundCachedDnsRecordDTO!, DnsRecordFromRequest!, false);
+        }
+
+        /// <summary>
         /// Finds data of DNS record from request by application layer name
         /// </summary>
         void FindDataOfDnsRecordFromRequestByApplicationLayerName()
         {
-            for (int i = 0; i < ListOfDnsRecords!.Count; i++)
-            {
-                string? registeredApplicationLayerName = ListOfDnsRecords[i].ApplicationLayerName;
-                if (string.Equals(registeredApplicationLayerName, DnsRecordFromRequest!.ApplicationLayerName, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    DnsRecordFromRequest.HttpUrl = ListOfDnsRecords[i].HttpUrl;
-                    DnsRecordFromRequest.HttpsUrl = ListOfDnsRecords[i].HttpsUrl;
-                    DnsRecordFromRequest.UseHttps = ListOfDnsRecords[i].UseHttps;
-                    break;
-                }
-            }
+            FoundCachedDnsRecordDTO = FindDnsRecordInListByApplicationLayerName.Execute(ListOfDnsRecords!, DnsRecordFromRequest!.ApplicationLayerName!);
         }
 
         /// <summary>
@@ -73,7 +70,7 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void GetDnsRecordFromRequest()
         {
-            DnsRecordFromRequest = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
+            DnsRecordFromRequest = GetLastDnsRecordFromDataContainer.Execute(DataContainer);
         }
 
         /// <summary>
@@ -81,12 +78,7 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void GetListOfDnsRecordsFromCache()
         {
-            List<DnsRecordDTO>? listOfDnsRecords;
-            MemoryCache.TryGetValue<List<DnsRecordDTO>>(SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS, out listOfDnsRecords);
-            if (listOfDnsRecords != null)
-            {
-                ListOfDnsRecords = listOfDnsRecords;
-            }
+            ListOfDnsRecords = SkySoft.DnsClientServerComponents.GetListOfDnsRecordsFromCache.Execute(OperatingSystem);
         }
         #endregion
 
@@ -95,6 +87,14 @@ namespace SkySoft.DnsServer.DPL
         /// Gets or sets DNS record from request
         /// </summary>
         DnsRecordDTO? DnsRecordFromRequest
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets found cached DNS Record
+        /// </summary>
+        DnsRecordDTO? FoundCachedDnsRecordDTO
         {
             get; set;
         }

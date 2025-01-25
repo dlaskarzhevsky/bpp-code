@@ -12,4 +12,8 @@
     <ProjectReference Include="..\SkySoft.DnsRecord.DTO\SkySoft.DnsRecord.DTO.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Activities\ApplicationConfiguration\" />
+  </ItemGroup>
+
 </Project>

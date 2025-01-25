@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 using SkySoft.DnsClientServerComponents;
 using SkySoft.DnsRecord.DTO;
-using SkySoft.ICommunication;
 
 namespace SkySoft.DnsClient.DPL
 {
@@ -22,8 +20,6 @@ namespace SkySoft.DnsClient.DPL
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             UseCaseName = SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT;
             TransitionName = SkySoft.DnsClient.CON.TransitionTypes.LOADING_USE_CASE;
-
-            DnsCacheManager = new DnsCacheManager();
         }
         #endregion
 
@@ -65,6 +61,9 @@ namespace SkySoft.DnsClient.DPL
         /// </summary>
         public override void ReleaseResources()
         {
+            ConfigurationDnsRecord = default!;
+            DnsRecordDTO = null;
+            ListOfDnsRecords = null;
             base.ReleaseResources();
         }
         #endregion
@@ -75,11 +74,7 @@ namespace SkySoft.DnsClient.DPL
         /// </summary>
         void AddDnsClientDataToDataContainer()
         {
-            DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS);
-            dnsRecordDTO.ApplicationLayerName = HostApplicationLayerName;
-            dnsRecordDTO.HttpsUrl = HttpsUrl;
-            dnsRecordDTO.HttpUrl = HttpUrl;
-            dnsRecordDTO.UseHttps = UseHttps;
+            AddDnsRecordToDataContainer.Execute(ConfigurationDnsRecord!, DataContainer);
         }
 
         /// <summary>
@@ -87,15 +82,7 @@ namespace SkySoft.DnsClient.DPL
         /// </summary>
         void AddDnsClientDnsRecordToFile()
         {
-            if (DnsRecordDTO == null)
-            {
-                return;
-            }
-
-            DnsFileWriter dnsFileWriter = new DnsFileWriter();
-            dnsFileWriter.DnsRecordDTO = DnsRecordDTO;
-            dnsFileWriter.ProcessRequest(DataContainer);
-            dnsFileWriter.ReleaseResources();
+            AddDnsRecordToFile.Execute(DnsRecordDTO, DataContainer);
         }
 
         /// <summary>
@@ -103,17 +90,9 @@ namespace SkySoft.DnsClient.DPL
         /// </summary>
         void AddDnsClientDnsRecordToMemoryCache()
         {
-            DnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
-            if (DnsRecordDTO == null)
-            {
-                return;
-            }
-
-            DnsCacheManager.Mode = DnsCacheManagerMode.AddDnsRecordToCache;
-            DnsCacheManager.DnsRecordDTO = DnsRecordDTO;
-            DnsCacheManager.OperatingSystem = OperatingSystem;
-            DnsCacheManager.ProcessRequest(DataContainer);
-            DnsCacheManager.ReleaseResources();
+            DnsRecordDTO = GetLastDnsRecordFromDataContainer.Execute(DataContainer);
+            DnsRecordDTO newDnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>();
+            AddDnsRecordToCache.Execute(DnsRecordDTO, newDnsRecordDTO, OperatingSystem);
         }
 
         /// <summary>
@@ -121,15 +100,7 @@ namespace SkySoft.DnsClient.DPL
         /// </summary>
         void AddHostDnsRecordToFile()
         {
-            if (DnsRecordDTO == null)
-            {
-                return;
-            }
-
-            DnsFileWriter dnsFileWriter = new DnsFileWriter();
-            dnsFileWriter.DnsRecordDTO = DnsRecordDTO;
-            dnsFileWriter.ProcessRequest(DataContainer);
-            dnsFileWriter.ReleaseResources();
+            AddDnsRecordToFile.Execute(DnsRecordDTO, DataContainer);
         }
 
         /// <summary>
@@ -137,17 +108,9 @@ namespace SkySoft.DnsClient.DPL
         /// </summary>
         void AddHostDnsRecordToMemoryCache()
         {
-            DnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
-            if (DnsRecordDTO == null)
-            {
-                return;
-            }
-
-            DnsCacheManager.Mode = DnsCacheManagerMode.AddDnsRecordToCache;
-            DnsCacheManager.DnsRecordDTO = DnsRecordDTO;
-            DnsCacheManager.OperatingSystem = OperatingSystem;
-            DnsCacheManager.ProcessRequest(DataContainer);
-            DnsCacheManager.ReleaseResources();
+            DnsRecordDTO = GetLastDnsRecordFromDataContainer.Execute(DataContainer);
+            DnsRecordDTO newDnsRecordDTO  = DataContainer.GetNewDTO<DnsRecordDTO>();
+            AddDnsRecordToCache.Execute(DnsRecordDTO, newDnsRecordDTO, OperatingSystem);
         }
 
         /// <summary>
@@ -156,11 +119,7 @@ namespace SkySoft.DnsClient.DPL
         void ClearTemporaryData()
         {
             DnsRecordDTO = null;
-            HostApplicationLayerName = null;
-            HttpsUrl = null;
-            HttpUrl = null;
             ListOfDnsRecords = null;
-            UseHttps = false;
         }
 
         /// <summary>
@@ -168,10 +127,11 @@ namespace SkySoft.DnsClient.DPL
         /// </summary>
         void LoadDnsClientDataFromConfigurationFile()
         {
-            HostApplicationLayerName = ApplicationConfiguration!.GetValue<string>("DnsServer:ApplicationLayerName");
-            HttpsUrl = ApplicationConfiguration!.GetValue<string>("DnsServer:Endpoints:Https:Url");
-            HttpUrl = ApplicationConfiguration!.GetValue<string>("DnsServer:Endpoints:Http:Url");
-            UseHttps = ApplicationConfiguration.GetValue<bool>("UseHttps");
+            ConfigurationDnsRecord = DataContainer.GetNewDTO<DnsRecordDTO>();
+            ConfigurationDnsRecord.ApplicationLayerName = ApplicationConfiguration!.GetValue<string>("DnsServer:ApplicationLayerName");
+            ConfigurationDnsRecord.HttpsUrl = ApplicationConfiguration!.GetValue<string>("DnsServer:Endpoints:Https:Url");
+            ConfigurationDnsRecord.HttpUrl = ApplicationConfiguration!.GetValue<string>("DnsServer:Endpoints:Http:Url");
+            ConfigurationDnsRecord.UseHttps = ApplicationConfiguration.GetValue<bool>("UseHttps");
         }
 
         /// <summary>
@@ -179,21 +139,13 @@ namespace SkySoft.DnsClient.DPL
         /// </summary>
         void LoadDnsRecordsFromFileIntoMemoryCache()
         {
-            DnsFileReader dnsFileReader = new DnsFileReader();
-            dnsFileReader.ProcessRequest();
-            ListOfDnsRecords = dnsFileReader.ListOfDnsRecords;
-            dnsFileReader.ReleaseResources();
-
+            ListOfDnsRecords = ReadListOfDnsRecordsFromFile.Execute(PathToDnsRecordsFile);
             if (ListOfDnsRecords == null)
             {
                 ListOfDnsRecords = new List<DnsRecordDTO>();
             }
 
-            DnsCacheManager.Mode = DnsCacheManagerMode.SetDnsRecordsIntoCache;
-            DnsCacheManager.OperatingSystem = OperatingSystem;
-            DnsCacheManager.ListOfDnsRecords = ListOfDnsRecords;
-            DnsCacheManager.ProcessRequest();
-            DnsCacheManager.ReleaseResources();
+            SetListOfDnsRecordsIntoCache.Execute(ListOfDnsRecords, OperatingSystem);
         }
 
         /// <summary>
@@ -247,7 +199,7 @@ namespace SkySoft.DnsClient.DPL
         /// </summary>
         void ValidateDnsClientData()
         {
-            DnsRecordValidator dnsRecordValidator = new DnsRecordValidator(HostApplicationLayerName, HttpsUrl, HttpUrl, UseHttps, this);
+            DnsRecordValidator dnsRecordValidator = new DnsRecordValidator(ConfigurationDnsRecord!.ApplicationLayerName, ConfigurationDnsRecord.HttpsUrl, ConfigurationDnsRecord.HttpUrl, ConfigurationDnsRecord.UseHttps, this);
             dnsRecordValidator.OperatingSystem = OperatingSystem;
             dnsRecordValidator.ProcessRequest(DataContainer);
             dnsRecordValidator.ReleaseResources();
@@ -257,9 +209,9 @@ namespace SkySoft.DnsClient.DPL
 
         #region Private Properties
         /// <summary>
-        /// Gets or sets DNS cache manager
+        /// Gets or sets configuration DNS record
         /// </summary>
-        DnsCacheManager DnsCacheManager
+        DnsRecordDTO? ConfigurationDnsRecord
         {
             get; set;
         }
@@ -281,36 +233,20 @@ namespace SkySoft.DnsClient.DPL
         }
 
         /// <summary>
-        /// Gets or sets host application layer name
-        /// </summary>
-        string? HostApplicationLayerName
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets HTTPS URL
-        /// </summary>
-        string? HttpsUrl
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets HTTP URL
-        /// </summary>
-        string? HttpUrl
-        {
-            get; set;
-        }
-
-        /// <summary>
         /// Gets or sets list of DNS records
         /// </summary>
         List<DnsRecordDTO>? ListOfDnsRecords
         {
             get; set;
         } = default!;
+
+        /// <summary>
+        /// Gets or sets path to DNS records file
+        /// </summary>
+        string PathToDnsRecordsFile
+        {
+            get; set;
+        } = SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS + ".json";
 
         /// <summary>
         /// Gets flag indicating whether registration with DNS server was successful
@@ -321,14 +257,6 @@ namespace SkySoft.DnsClient.DPL
             {
                 return DataContainer.Exception == null && string.IsNullOrEmpty(DataContainer.Message);
             }
-        }
-
-        /// <summary>
-        /// Gets or sets flag indicating whether HTTPS needs to be used
-        /// </summary>
-        bool UseHttps
-        {
-            get; set;
         }
         #endregion
     }

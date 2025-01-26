@@ -1,11 +1,11 @@
 ﻿using SkySoft.IBPPApplication;
 
-namespace SkySoft.APIHost.CFG
+namespace SkySoft.DnsClient.DPLCFG
 {
     /// <summary>
-    /// Provides request handlers registrar functionality
+    /// Provides SaaS request handlers registrar functionality
     /// </summary>
-    class RequestHandlersRegistrar
+    class SaaSRequestHandlersRegistrar
     {
         #region Static Methods
         /// <summary>
@@ -14,7 +14,8 @@ namespace SkySoft.APIHost.CFG
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHost.DPL.LoadingUseCase>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DPL.GettingRemoteServerData>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DPL.SavingRemoteServerData>();
         }
         #endregion
     }

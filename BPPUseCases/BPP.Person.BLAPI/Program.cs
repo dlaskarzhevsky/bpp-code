@@ -1,14 +1,14 @@
 WebApplicationBuilder webApplicationBuilder = WebApplication.CreateBuilder(args);
 
 SkySoft.BPPApplication.CFG.Registrar.Register(webApplicationBuilder);
-SkySoft.APIHost.CFG.Registrar.Register(webApplicationBuilder);
+SkySoft.APIHost.DPLCFG.Registrar.Register(webApplicationBuilder);
 SkySoft.Http.CFG.Registrar.Register(webApplicationBuilder);
-SkySoft.DnsClient.CFG.Registrar.Register(webApplicationBuilder);
-SkySoft.DnsClientApp.CFG.Registrar.Register(webApplicationBuilder);
+SkySoft.DnsClient.DPLCFG.Registrar.Register(webApplicationBuilder);
+SkySoft.DnsClientApp.DPLCFG.Registrar.Register(webApplicationBuilder);
 BPP.Person.BLCFG.Registrar.Register(webApplicationBuilder);
 BPP.PersonApp.BLCFG.Registrar.Register(webApplicationBuilder);
 
-SkySoft.APIHost.CFG.ApplicationInitializerRegistrar.Register(webApplicationBuilder);
+SkySoft.APIHost.DPLCFG.ApplicationInitializerRegistrar.Register(webApplicationBuilder);
 
 webApplicationBuilder.Services.AddControllers();
 webApplicationBuilder.Services.AddMemoryCache();

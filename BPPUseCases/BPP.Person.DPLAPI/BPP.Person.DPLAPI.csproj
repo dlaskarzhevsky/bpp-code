@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.APIHost.CFG\SkySoft.APIHost.CFG.csproj" />
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.APIHost.DPLCFG\SkySoft.APIHost.DPLCFG.csproj" />
     <ProjectReference Include="..\..\SkySoftFramework\SkySoft.BPPApplication.CFG\SkySoft.BPPApplication.CFG.csproj" />
     <ProjectReference Include="..\..\SkySoftFramework\SkySoft.BPPApplication.Runtime\SkySoft.BPPApplication.Runtime.csproj" />
-    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsClient.CFG\SkySoft.DnsClient.CFG.csproj" />
-    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsClientApp.CFG\SkySoft.DnsClientApp.CFG.csproj" />
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsClient.DPLCFG\SkySoft.DnsClient.DPLCFG.csproj" />
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsClientApp.DPLCFG\SkySoft.DnsClientApp.DPLCFG.csproj" />
     <ProjectReference Include="..\..\SkySoftFramework\SkySoft.Http.CFG\SkySoft.Http.CFG.csproj" />
     <ProjectReference Include="..\BPP.Person.DPLCFG\BPP.Person.DPLCFG.csproj" />
     <ProjectReference Include="..\BPP.PersonApp.DPLCFG\BPP.PersonApp.DPLCFG.csproj" />

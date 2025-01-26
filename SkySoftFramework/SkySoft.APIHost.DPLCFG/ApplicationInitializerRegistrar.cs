@@ -1,6 +1,6 @@
 ﻿using SkySoft.IBPPApplication;
 
-namespace SkySoft.APIHost.CFG
+namespace SkySoft.APIHost.DPLCFG
 {
     /// <summary>
     /// Provides application initializer registrar functionality

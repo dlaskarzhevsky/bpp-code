@@ -1,4 +1,4 @@
-﻿namespace SkySoft.DnsClientApp.CFG
+﻿namespace SkySoft.APIHost.DPLCFG
 {
     /// <summary>
     /// Provides registrar functionality
@@ -7,12 +7,12 @@
     {
         #region Static Methods
         /// <summary>
-        /// Register request handlers
+        /// Register application initializer
         /// </summary>
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
-            EventHandlersRegistrar.Register(webApplicationBuilder);
+            RequestHandlersRegistrar.Register(webApplicationBuilder);
         }
         #endregion
     }

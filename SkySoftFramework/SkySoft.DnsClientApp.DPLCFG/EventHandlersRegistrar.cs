@@ -1,6 +1,6 @@
 ﻿using SkySoft.IBPPApplication;
 
-namespace SkySoft.DnsClientApp.CFG
+namespace SkySoft.DnsClientApp.DPLCFG
 {
     /// <summary>
     /// Provides event handlers registrar functionality

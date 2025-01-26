@@ -1,18 +1,20 @@
-﻿namespace SkySoft.APIHost.CFG
+﻿using SkySoft.IBPPApplication;
+
+namespace SkySoft.APIHost.DPLCFG
 {
     /// <summary>
-    /// Provides registrar functionality
+    /// Provides request handlers registrar functionality
     /// </summary>
-    public class Registrar
+    class RequestHandlersRegistrar
     {
         #region Static Methods
         /// <summary>
-        /// Register application initializer
+        /// Register request handlers
         /// </summary>
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
-            RequestHandlersRegistrar.Register(webApplicationBuilder);
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.APIHost.DPL.LoadingUseCase>();
         }
         #endregion
     }

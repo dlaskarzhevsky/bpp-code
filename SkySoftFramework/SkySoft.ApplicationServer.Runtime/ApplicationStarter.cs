@@ -1,6 +1,6 @@
 ﻿using SkySoft.IBPPApplication;
 
-namespace SkySoft.BPPApplication.Runtime
+namespace SkySoft.ApplicationServer.Runtime
 {
     /// <summary>
     /// Provides receiver controller starter functionality

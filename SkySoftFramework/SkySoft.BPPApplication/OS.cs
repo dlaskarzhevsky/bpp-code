@@ -30,7 +30,6 @@ namespace SkySoft.BPPApplication
             RequestHandlers = requestHandlers;
             Drivers = drivers;
             EventRedirector = new EventRedirector();
-            RequestRedirector = new RequestRedirector();
         }
         #endregion
 
@@ -113,7 +112,7 @@ namespace SkySoft.BPPApplication
         /// <returns>Data container</returns>
         public async Task<IDataContainer> InitializeApplication(IDataContainer dataContainer)
         {
-            return await RequestRedirector.RedirectRequestToRequestHandler(dataContainer, this);
+            return await RedirectRequestToRequestHandler(dataContainer);
         }
 
         /// <summary>
@@ -156,7 +155,7 @@ namespace SkySoft.BPPApplication
         /// <returns>Data container</returns>
         public async Task<IDataContainer> RaiseEvent(IDataContainer dataContainer)
         {
-            return await RequestRedirector.RedirectRequestToRequestHandler(dataContainer, this);
+            return await RedirectRequestToRequestHandler(dataContainer);
         }
 
         /// <summary>
@@ -178,7 +177,8 @@ namespace SkySoft.BPPApplication
         /// <returns>Data container</returns>
         public async Task<IDataContainer> RedirectRequestToRequestHandler(IDataContainer dataContainer)
         {
-            return await RequestRedirector.RedirectRequestToRequestHandler(dataContainer, this);
+            RequestRedirector requestRedirector = new RequestRedirector();
+            return await requestRedirector.RedirectRequestToRequestHandler(dataContainer, this);
         }
         #endregion
 
@@ -229,14 +229,6 @@ namespace SkySoft.BPPApplication
         /// Gets or sets event redirector
         /// </summary>
         EventRedirector EventRedirector
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets request redirector
-        /// </summary>
-        RequestRedirector RequestRedirector
         {
             get; set;
         }

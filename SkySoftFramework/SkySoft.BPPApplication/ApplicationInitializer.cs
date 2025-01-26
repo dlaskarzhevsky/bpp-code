@@ -17,46 +17,21 @@ namespace SkySoft.BPPApplication
         /// <returns>True if application was initialized, otherwise false</returns>
         public virtual async Task<bool> InitializeApplication(IOS operatingSystem)
         {
-            bool? applicationInitialized = operatingSystem.GetValueFomCache<bool?>(TargetStateName);
-            if (applicationInitialized == null || applicationInitialized == false)
+            OperatingSystem = operatingSystem;
+            GetApplicationStateFromCache();
+            if (!ApplicationInItitialState)
             {
-                IDataContainer dataContainer = operatingSystem.GetNewDataContainer();
-                ConfigureRequestToInitializeApplication(dataContainer);
-                dataContainer = await operatingSystem.InitializeApplication(dataContainer);
-                LogMessages.Execute(dataContainer, operatingSystem);
-                if (ApplicationInitialized(dataContainer))
+                ConfigureRequestForApplicationInitialization();
+                await SendRequestForApplicationInitializationToOperatingSystem();
+                LogMessages.Execute(DataContainer, operatingSystem);
+                if (OperatingSystemInitializedApplication)
                 {
-                    operatingSystem.CacheValue<bool>(TargetStateName, true);
-                    return true;
+                    SetApplicationStateToInitial();
                 }
             }
 
-            return false;
-        }
-        #endregion
-
-        #region Protected Methods
-        /// <summary>
-        /// Configures request to initialize application
-        /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        protected virtual void ConfigureRequestToInitializeApplication(IDataContainer dataContainer)
-        {
-            dataContainer.DomainName = DomainName;
-            dataContainer.UseCaseName = UseCaseName;
-            dataContainer.ApplicationLayerName = ApplicationLayerName;
-            dataContainer.TransitionName = TransitionName;
-        }
-
-        /// <summary>
-        /// Gets flag indicating whether application initialized
-        /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <returns>True if application initialized, otherwise False</returns>
-        protected virtual bool ApplicationInitialized(IDataContainer dataContainer)
-        {
-            bool applicationInitialized = dataContainer.Exception == null && string.IsNullOrEmpty(dataContainer.Message) || !string.IsNullOrEmpty(dataContainer.Message) && dataContainer.MessageType != MessageType.Critical && dataContainer.MessageType != MessageType.Error;
-            return applicationInitialized;
+            ReleaseResources();
+            return ApplicationInItitialState;
         }
         #endregion
 
@@ -100,6 +75,102 @@ namespace SkySoft.BPPApplication
         {
             get; set;
         } = default!;
+        #endregion
+
+        #region Private Methods
+        /// <summary>
+        /// Configures request for application initialization
+        /// </summary>
+        void ConfigureRequestForApplicationInitialization()
+        {
+            DataContainer = OperatingSystem.GetNewDataContainer();
+            DataContainer.DomainName = DomainName;
+            DataContainer.UseCaseName = UseCaseName;
+            DataContainer.ApplicationLayerName = ApplicationLayerName;
+            DataContainer.TransitionName = TransitionName;
+        }
+
+        /// <summary>
+        /// Gets application state from cache
+        /// </summary>
+        void GetApplicationStateFromCache()
+        {
+            ApplicationState = OperatingSystem.GetValueFomCache<string?>("ApplicationState");
+        }
+
+        /// <summary>
+        /// Releases resources
+        /// </summary>
+        void ReleaseResources()
+        {
+            DataContainer = default!;
+            OperatingSystem = default!;
+        }
+
+        /// <summary>
+        /// Sends request for application initialization to operating system
+        /// </summary>
+        async Task SendRequestForApplicationInitializationToOperatingSystem()
+        {
+            DataContainer = await OperatingSystem.InitializeApplication(DataContainer);
+        }
+
+        /// <summary>
+        /// Sets application state to initial
+        /// </summary>
+        void SetApplicationStateToInitial()
+        {
+            ApplicationState = SkySoft.Contracts.StateTypes.INITIAL;
+            OperatingSystem.CacheValue<string>("ApplicationState", ApplicationState);
+        }
+        #endregion
+
+        #region Private Properties
+        /// <summary>
+        /// Gets flag indicating whether application not initialized
+        /// </summary>
+        bool ApplicationInItitialState
+        {
+            get
+            {
+                return ApplicationState == SkySoft.Contracts.StateTypes.INITIAL;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets application state
+        /// </summary>
+        string? ApplicationState
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets data container
+        /// </summary>
+        IDataContainer DataContainer
+        {
+            get; set;
+        } = default!;
+
+        /// <summary>
+        /// Gets or sets operating system
+        /// </summary>
+        IOS OperatingSystem
+        {
+            get; set;
+        } = default!;
+
+        /// <summary>
+        /// Gets flag indicating whether operating system initialized application
+        /// </summary>
+        bool OperatingSystemInitializedApplication
+        {
+            get
+            {
+                return DataContainer.Exception == null && string.IsNullOrEmpty(DataContainer.Message) || !string.IsNullOrEmpty(DataContainer.Message) && DataContainer.MessageType != MessageType.Critical && DataContainer.MessageType != MessageType.Error;
+            }
+        }
         #endregion
     }
 }

@@ -10,7 +10,7 @@ namespace SkySoft.BPPApplication
     {
         #region Public Methods
         /// <summary>
-        /// Redirect request to event handler
+        /// Redirects request to event handler
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <param name="operatingSystem">Operating system</param>

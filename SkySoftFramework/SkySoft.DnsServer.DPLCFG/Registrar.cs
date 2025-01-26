@@ -1,11 +1,9 @@
-﻿using SkySoft.IBPPApplication;
-
-namespace BPP.PersonApp.BLCFG
+﻿namespace SkySoft.DnsServer.DPLCFG
 {
     /// <summary>
-    /// Provides event handlers registrar functionality
+    /// Provides registrar functionality
     /// </summary>
-    class EventHandlersRegistrar
+    public class Registrar
     {
         #region Static Methods
         /// <summary>
@@ -14,7 +12,7 @@ namespace BPP.PersonApp.BLCFG
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, BPP.PersonApp.BL.RedirectRequestToNextApplicationLayer>();
+            RequestHandlersRegistrar.Register(webApplicationBuilder);
         }
         #endregion
     }

@@ -1,4 +1,4 @@
-﻿namespace SkySoft.DnsServer.DPL
+﻿namespace SkySoft.DnsServer.DAL
 {
     /// <summary>
     /// LoadingUseCase transition request handler
@@ -13,7 +13,7 @@
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
             TransitionName = SkySoft.DnsServer.CON.TransitionTypes.LOADING_USE_CASE;
         }
         #endregion
@@ -24,13 +24,13 @@
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        protected override async Task HandleRequestAsync()
+        protected override void HandleRequest()
         {
-            GetListOfDnsRecordsFromCache();
-            if (CacheHasNoDnsRecords)
+            LoadDnsRecordsFromFile();
+            if (!DnsRecordsLoadedFromFile)
             {
-                await LoadDnsRecordsFromStorage();
-                CacheListOfDnsRecords();
+                GetListOfDnsRecordsFromDataContainer();
+                SaveListOfDnsRecordsIntoFile();
             }
         }
 

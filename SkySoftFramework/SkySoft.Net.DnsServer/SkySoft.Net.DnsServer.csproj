@@ -14,8 +14,9 @@
     <ProjectReference Include="..\SkySoft.APIHost.CFG\SkySoft.APIHost.CFG.csproj" />
     <ProjectReference Include="..\SkySoft.BPPApplication.CFG\SkySoft.BPPApplication.CFG.csproj" />
     <ProjectReference Include="..\SkySoft.BPPApplication.Runtime\SkySoft.BPPApplication.Runtime.csproj" />
-    <ProjectReference Include="..\SkySoft.DnsServer.CFG\SkySoft.DnsServer.CFG.csproj" />
-    <ProjectReference Include="..\SkySoft.DnsServerApp.CFG\SkySoft.DnsServerApp.CFG.csproj" />
+    <ProjectReference Include="..\SkySoft.DnsServer.DALCFG\SkySoft.DnsServer.DALCFG.csproj" />
+    <ProjectReference Include="..\SkySoft.DnsServer.DPLCFG\SkySoft.DnsServer.DPLCFG.csproj" />
+    <ProjectReference Include="..\SkySoft.DnsServerApp.DPLCFG\SkySoft.DnsServerApp.DPLCFG.csproj" />
     <ProjectReference Include="..\SkySoft.Http.CFG\SkySoft.Http.CFG.csproj" />
   </ItemGroup>
 

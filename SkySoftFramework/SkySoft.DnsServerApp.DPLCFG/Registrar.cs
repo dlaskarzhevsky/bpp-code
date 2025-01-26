@@ -1,4 +1,4 @@
-﻿namespace SkySoft.DnsServerApp.CFG
+﻿namespace SkySoft.DnsServerApp.DPLCFG
 {
     /// <summary>
     /// Provides registrar functionality

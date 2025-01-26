@@ -202,10 +202,17 @@ namespace SkySoft.BPPApplication
         /// Raises event
         /// </summary>
         /// <param name="eventName"></param>
+        /// <param name="useStateData">Flag indicating whether state data needs to be used during event rasing</param>
         /// <returns>Result of event handling</returns>
-        protected async Task RaiseEvent(string eventName)
+        protected async Task RaiseEvent(string eventName, bool useStateData = true)
         {
-            DataContainer!.AddRequestMetadata(DomainName, UseCaseName, ApplicationLayerName, StateName, eventName);
+            string? stateName = StateName;
+            if (!useStateData)
+            {
+                stateName = "";
+            }
+
+            DataContainer!.AddRequestMetadata(DomainName, UseCaseName, ApplicationLayerName, stateName, eventName);
             DataContainer = await OperatingSystem.RedirectRequestToEventHandler(DataContainer);
             DataContainer.RemoveCurrentRequestMetadta();
         }

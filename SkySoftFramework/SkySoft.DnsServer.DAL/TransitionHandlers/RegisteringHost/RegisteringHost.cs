@@ -1,5 +1,4 @@
-﻿
-namespace SkySoft.DnsServer.DPL
+﻿namespace SkySoft.DnsServer.DAL
 {
     /// <summary>
     /// RegisteringHost transition request handler
@@ -14,7 +13,7 @@ namespace SkySoft.DnsServer.DPL
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
             StateName = SkySoft.DnsServer.CON.StateTypes.INITIAL;
             TransitionName = SkySoft.DnsServer.CON.TransitionTypes.REGISTERING_HOST;
         }
@@ -26,25 +25,10 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
-        protected override async Task HandleRequestAsync()
+        protected override void HandleRequest()
         {
-            GetDnsRecordFromRequest();
-            GetListOfDnsRecordsFromCache();
-            FindCachedDnsRecordByApplicationLayerName();
-            if (CachedDnsRecordFound)
-            {
-                UpdateCachedDnsRecordByDataFromRequest();
-            }
-            else
-            {
-                CreateDnsRecordForCacheWithDataFromRequest();
-            }
-
-            if (CachedDnsRecordCreated || CachedDnsRecordUpdated)
-            {
-                await SaveUpdatedData();
-                LogRegistrationResult();
-            }
+            GetLastDnsRecordFromDataContainer();
+            AddDnsRecordToFile();
         }
 
         /// <summary>
@@ -52,9 +36,7 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         public override void ReleaseResources()
         {
-            CachedDnsRecordDTO = null;
-            DnsRecordDTOFromRequest = null;
-            ListOfCachedDnsRecords = default!;
+            DnsRecord = null;
             base.ReleaseResources();
         }
         #endregion

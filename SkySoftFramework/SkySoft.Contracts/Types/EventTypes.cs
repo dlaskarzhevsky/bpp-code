@@ -6,14 +6,14 @@
     public class EventTypes
     {
         /// <summary>
-        /// DataRequest event
-        /// </summary>
-        public const string DATA_REQUEST_EVENT = "DataRequestEvent";
-
-        /// <summary>
         /// DnsServerDataRequest event
         /// </summary>
         public const string DNS_SERVER_DATA_REQUEST_EVENT = "DnsServerDataRequestEvent";
+
+        /// <summary>
+        /// RedirectRequestToNextApplicationLayer event
+        /// </summary>
+        public const string REDIRECT_REQUEST_TO_NEXT_APPLICATION_LAYER_EVENT = "RedirectRequestToNextApplicationLayerEvent";
 
         /// <summary>
         /// RemoteServerDataRequest event

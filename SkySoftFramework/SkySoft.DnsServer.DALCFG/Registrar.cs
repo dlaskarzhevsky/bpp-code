@@ -1,4 +1,4 @@
-﻿namespace SkySoft.DnsServer.CFG
+﻿namespace SkySoft.DnsServer.DALCFG
 {
     /// <summary>
     /// Provides registrar functionality

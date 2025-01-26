@@ -60,9 +60,9 @@ namespace SkySoft.DnsServer.DPL
         /// <summary>
         /// Saves updated data
         /// </summary>
-        void SaveUpdatedData()
+        async Task SaveUpdatedData()
         {
-            SaveListOfDnsRecordsIntoFile.Execute(ListOfCachedDnsRecords, PathToDnsRecordsFile);
+            await RaiseEvent(SkySoft.Contracts.EventTypes.REDIRECT_REQUEST_TO_NEXT_APPLICATION_LAYER_EVENT, false);
         }
 
         /// <summary>

@@ -1,11 +1,11 @@
 ﻿using SkySoft.IBPPApplication;
 
-namespace SkySoft.DnsServer.CFG
+namespace SkySoft.DnsServerApp.DPLCFG
 {
     /// <summary>
     /// Provides request handlers registrar functionality
     /// </summary>
-    class RequestHandlersRegistrar
+    class EventHandlersRegistrar
     {
         #region Static Methods
         /// <summary>
@@ -14,10 +14,9 @@ namespace SkySoft.DnsServer.CFG
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
-            // Data processing logic
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServer.DPL.LoadingUseCase>();
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServer.DPL.RegisteringHost>();
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServer.DPL.Searching>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServerApp.DPL.HostInitializing>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServerApp.DPL.RedirectRequestToNextApplicationLayer>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServerApp.DPL.RequestHandlerNotFound>();
         }
         #endregion
     }

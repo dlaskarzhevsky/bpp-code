@@ -17,6 +17,12 @@
         /// <summary>
         /// Adds request metadata
         /// </summary>
+        /// <param name="requestMetadataDTO">Request metadata</param>
+        void AddRequestMetadata(IRequestMetadataDTO requestMetadataDTO);
+
+        /// <summary>
+        /// Adds request metadata
+        /// </summary>
         /// <param name="domainName">Domain name</param>
         /// <param name="useCaseName">Use case name</param>
         /// <param name="applicationLayerName">Application layer name</param>
@@ -91,7 +97,8 @@
         /// <summary>
         /// Removes current request metadta
         /// </summary>
-        void RemoveCurrentRequestMetadta();
+        /// <returns>Removed request metadata</returns>
+        IRequestMetadataDTO? RemoveCurrentRequestMetadta();
 
         /// <summary>
         /// Sets message

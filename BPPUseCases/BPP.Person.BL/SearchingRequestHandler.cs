@@ -37,7 +37,7 @@
         /// </summary>
         async Task DataRequestEvent()
         {
-            await RaiseEvent(SkySoft.Contracts.EventTypes.DATA_REQUEST_EVENT);
+            await RaiseEvent(SkySoft.Contracts.EventTypes.REDIRECT_REQUEST_TO_NEXT_APPLICATION_LAYER_EVENT, false);
         }
         #endregion
     }

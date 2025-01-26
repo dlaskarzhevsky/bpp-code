@@ -115,6 +115,16 @@ namespace SkySoft.Communication
         /// Adds request metadata
         /// IDataContainer interface implementation
         /// </summary>
+        /// <param name="requestMetadataDTO">Request metadata</param>
+        public void AddRequestMetadata(IRequestMetadataDTO requestMetadataDTO)
+        {
+            RequestMetadataDataCollection.AddRequestMetadata(this, (RequestMetadataDTO)requestMetadataDTO);
+        }
+
+        /// <summary>
+        /// Adds request metadata
+        /// IDataContainer interface implementation
+        /// </summary>
         /// <param name="domainName">Domain name</param>
         /// <param name="useCaseName">Application layer name</param>
         /// <param name="applicationLayerName">Application layer name</param>
@@ -282,13 +292,15 @@ namespace SkySoft.Communication
             return newDTO;
         }
 
+
         /// <summary>
         /// Removes current request metadta
         /// IDataContainer interface implementation
         /// </summary>
-        public void RemoveCurrentRequestMetadta()
+        /// <returns>Removed request metadata</returns>
+        public IRequestMetadataDTO? RemoveCurrentRequestMetadta()
         {
-            RequestMetadataDataCollection.RemoveCurrentRequestMetadta(this);
+            return RequestMetadataDataCollection.RemoveCurrentRequestMetadta(this);
         }
 
         /// <summary>

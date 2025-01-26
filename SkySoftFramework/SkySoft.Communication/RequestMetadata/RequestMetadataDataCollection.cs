@@ -89,6 +89,22 @@ namespace SkySoft.Communication
         /// Adds request metadata
         /// </summary>
         /// <param name="dataContainer">Data container</param>
+        /// <param name="requestMetadataDTO">Request metadata</param>
+        public static void AddRequestMetadata(IDataContainer dataContainer, RequestMetadataDTO requestMetadataDTO)
+        {
+            IDataCollection<RequestMetadataDTO>? requestMetadataDataCollection = dataContainer.GetDataColletion<RequestMetadataDTO>(SkySoft.Contracts.DataCollectionTypes.REQUEST_METADATA);
+            if (requestMetadataDataCollection == null)
+            {
+                return;
+            }
+
+            requestMetadataDataCollection.Add(requestMetadataDTO);
+        }
+
+        /// <summary>
+        /// Adds request metadata
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
         /// <param name="domainName">Domain name</param>
         /// <param name="useCaseName">Application layer name</param>
         /// <param name="applicationLayerName">Application layer name</param>
@@ -161,15 +177,18 @@ namespace SkySoft.Communication
         /// Removes current request metadta
         /// <param name="dataContainer">Data container</param>
         /// </summary>
-        public static void RemoveCurrentRequestMetadta(IDataContainer dataContainer)
+        public static RequestMetadataDTO? RemoveCurrentRequestMetadta(IDataContainer dataContainer)
         {
             IDataCollection<RequestMetadataDTO>? requestMetadataDataCollection = dataContainer.GetDataColletion<RequestMetadataDTO>(SkySoft.Contracts.DataCollectionTypes.REQUEST_METADATA);
             if (requestMetadataDataCollection == null || requestMetadataDataCollection.Count < 2)
             {
-                return;
+                return null;
             }
 
-            requestMetadataDataCollection.RemoveAt(requestMetadataDataCollection.Count - 1);
+            RequestMetadataDTO requestMetadataDTO = requestMetadataDataCollection[requestMetadataDataCollection.Count - 1];
+            requestMetadataDataCollection.Remove(requestMetadataDTO);
+
+            return requestMetadataDTO;
         }
 
         /// <summary>

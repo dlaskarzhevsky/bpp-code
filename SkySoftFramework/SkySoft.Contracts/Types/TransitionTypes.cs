@@ -11,6 +11,16 @@
         public const string CREATING = "Creating";
 
         /// <summary>
+        /// Deleting transition
+        /// </summary>
+        public const string DELETING = "Deleting";
+
+        /// <summary>
+        /// Deleting transition
+        /// </summary>
+        public const string EDITING = "Editing";
+
+        /// <summary>
         /// Getting remote server data
         /// </summary>
         public const string GETTING_REMOTE_SERVER_DATA = "GettingRemoteServerData";
@@ -34,5 +44,15 @@
         /// Sending request to remote server
         /// </summary>
         public const string SENDING_REQUEST_TO_REMOTE_SERVER = "SendingRequestToRemoteServer";
+
+        /// <summary>
+        /// Updating transition
+        /// </summary>
+        public const string UPDATING = "Updating";
+
+        /// <summary>
+        /// Viewing transition
+        /// </summary>
+        public const string VIEWING = "Viewing";
     }
 }

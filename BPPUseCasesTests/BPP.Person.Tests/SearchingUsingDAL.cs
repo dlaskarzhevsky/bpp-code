@@ -6,10 +6,10 @@ using SkySoft.Communication;
 using SkySoft.Http;
 using SkySoft.ICommunication;
 
-namespace Person.BLPITest
+namespace BPP.Person.Tests
 {
     [TestClass]
-    public sealed class Searching
+    public sealed class SearchingUsingDAL
     {
         #region Public Methods
         /// <summary>
@@ -22,7 +22,7 @@ namespace Person.BLPITest
             IDataContainer requestDataContainer = InitializeRequestDataContainer();
             AddPersonSearchCriteriaToRequestDataContainer(requestDataContainer);
             Transceiver transceiver = new Transceiver();
-            IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, "http://localhost:5076", "processrequest", 10000);
+            IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, "http://localhost:5078", "/processrequest", 10000);
             AssertResponse(responseDataContainer);
         }
         #endregion
@@ -75,7 +75,7 @@ namespace Person.BLPITest
                             Assert.Fail("One of the persons contain unexpected data");
                         }
 
-                        string personExpectedLocation = $"{SkySoft.Contracts.DomainNames.BPP}_{UseCaseContract.PERSON}_{SkySoft.Contracts.ApplicationLayerNames.DAL}";
+                        string personExpectedLocation = $"{SkySoft.Contracts.DomainNames.BPP}_{SkySoft.Contracts.ApplicationLayerNames.DAL}_{UseCaseContract.PERSON}";
                         if (person1.Location != personExpectedLocation || person2.Location != personExpectedLocation)
                         {
                             Assert.Fail("One of the persons location is not correct");
@@ -93,8 +93,8 @@ namespace Person.BLPITest
         {
             IDataContainer requestDataContainer = DataContainer.CreateDataContainer();
             requestDataContainer.DomainName = SkySoft.Contracts.DomainNames.BPP;
-            requestDataContainer.ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.BL;
             requestDataContainer.UseCaseName = UseCaseContract.PERSON;
+            requestDataContainer.ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
             requestDataContainer.StateName = StateTypes.INITIAL;
             requestDataContainer.TransitionName = TransitionTypes.SEARCHING;
 

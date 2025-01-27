@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="MSTest" Version="3.6.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\BPPUseCases\BPP.Person.CON\BPP.Person.CON.csproj" />
+    <ProjectReference Include="..\..\BPPUseCases\BPP.Person.DTI\BPP.Person.DTI.csproj" />
+    <ProjectReference Include="..\..\BPPUseCases\BPP.Person.DTO\BPP.Person.DTO.csproj" />
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.Communication\SkySoft.Communication.csproj" />
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsRecord.DTI\SkySoft.DnsRecord.DTI.csproj" />
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsRecord.DTO\SkySoft.DnsRecord.DTO.csproj" />
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.DnsServer.CON\SkySoft.DnsServer.CON.csproj" />
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.Http\SkySoft.Http.csproj" />
+    <ProjectReference Include="..\..\SkySoftFramework\SkySoft.ICommunication\SkySoft.ICommunication.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
+</Project>

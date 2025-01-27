@@ -1,0 +1,21 @@
+trigger: none
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  ssas_project_path: .\SkySoftFramework\SkySoft.ApplicationServer.Assembly\SkySoft.ApplicationServer.Assembly.csproj
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
+  inputs:
+    command: 'restore'
+    projects: $(ssas_project_path)
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
+  inputs:
+    command: 'build'
+    projects: $(ssas_project_path)
+    arguments: '--configuration $(buildConfiguration)'

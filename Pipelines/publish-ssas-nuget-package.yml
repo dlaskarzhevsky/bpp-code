@@ -7,6 +7,8 @@ variables:
 - group: sky-soft-application-server-dev
 - name: ssas_project_path
   value: .\SkySoftFramework\SkySoft.ApplicationServer.Assembly\SkySoft.ApplicationServer.Assembly.csproj
+- name: ssas_solution_path
+  value: .\SkySoftFrameworkSolutions\SkySoftApplicationServerSolution.sln
 
 steps:
 - script: |
@@ -33,7 +35,7 @@ steps:
   displayName: 'dotnet pack'
   inputs:
     command: 'pack'
-    packagesToPack: $(ssas_project_path)
+    packagesToPack: $(ssas_solution_path)
     versioningScheme: byEnvVar
     versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
     outputDir: '$(System.DefaultWorkingDirectory)\..\n'
@@ -52,4 +54,4 @@ steps:
 #     feedPublish: $(ssas_nuget_feed_name)
 
 - script: |
-    nuget --help
+    nuget help

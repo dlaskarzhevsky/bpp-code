@@ -23,8 +23,8 @@ steps:
     projects: $(ssas_project_path)
 
 - task: DotNetCoreCLI@2
-  displayName: 'dotnet build ${{build_config}}'
+  displayName: 'dotnet build ${{ build_config }}'
   inputs:
     command: 'build'
     projects: $(ssas_project_path)
-    arguments: '--configuration ${{build_config}}'
+    arguments: '--configuration ${{ build_config }}'

@@ -5,7 +5,6 @@ pool:
 
 variables:
 - group: sky-soft-application-server-dev
-
 - name: ssas_project_path
   value: .\SkySoftFramework\SkySoft.ApplicationServer.Assembly\SkySoft.ApplicationServer.Assembly.csproj
 
@@ -14,6 +13,7 @@ steps:
     echo build_config:                $(build_config)
     echo ssas_nuget_package_version:  $(ssas_nuget_package_version)
     echo ssas_project_path:           $(ssas_project_path)
+  displayName: Display pipeline variables
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore'
@@ -28,9 +28,10 @@ steps:
     projects: $(ssas_project_path)
     arguments: '--configuration $(build_config) --output $(Build.ArtifactStagingDirectory)'
 
-# - task: DotNetCoreCLI@2
-#   inputs:
-#     command: 'pack'
-#     versioningScheme: byEnvVar
-#     versionEnvVar: $(SSAS_NUGET_PACKAGE_VERSION)
-#     outputDir: '$(System.DefaultWorkingDirectory)\..\n'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'pack'
+    packagesToPack: $(ssas_project_path)
+    versioningScheme: byEnvVar
+    versionEnvVar: $(SSAS_NUGET_PACKAGE_VERSION)
+    outputDir: '$(System.DefaultWorkingDirectory)\..\n'

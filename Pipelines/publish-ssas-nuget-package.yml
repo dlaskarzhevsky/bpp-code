@@ -1,3 +1,12 @@
+parameters:
+- name: build_config
+  displayName: Build configuration
+  type: string
+  default: debug
+  values:
+  - debug
+  - release
+
 trigger: none
 
 pool:
@@ -14,8 +23,8 @@ steps:
     projects: $(ssas_project_path)
 
 - task: DotNetCoreCLI@2
-  displayName: 'dotnet build'
+  displayName: 'dotnet build $(build_config)'
   inputs:
     command: 'build'
     projects: $(ssas_project_path)
-    arguments: '--configuration $(buildConfiguration)'
+    arguments: '--configuration $(build_config)'

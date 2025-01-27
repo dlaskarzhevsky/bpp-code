@@ -28,7 +28,12 @@ steps:
     projects: $(ssas_project_path)
     arguments: '--configuration $(build_config) --output $(Build.ArtifactStagingDirectory)'
 
+- script: |
+    echo $(SSAS_NUGET_PACKAGE_VERSION)
+    echo $SSAS_NUGET_PACKAGE_VERSION
+
 - task: DotNetCoreCLI@2
+  displayName: 'dotnet pack'
   inputs:
     command: 'pack'
     packagesToPack: $(ssas_project_path)

@@ -1,21 +1,20 @@
-parameters:
-- name: build_config
-  displayName: Build configuration
-  type: string
-  default: debug
-  values:
-  - debug
-  - release
-
 trigger: none
 
 pool:
   vmImage: 'windows-latest'
 
 variables:
-  ssas_project_path: .\SkySoftFramework\SkySoft.ApplicationServer.Assembly\SkySoft.ApplicationServer.Assembly.csproj
+- group: sky-soft-application-server-dev
+
+- name: ssas_project_path
+  value: .\SkySoftFramework\SkySoft.ApplicationServer.Assembly\SkySoft.ApplicationServer.Assembly.csproj
 
 steps:
+- script: |
+    echo build_config:                $(build_config)
+    echo ssas_nuget_package_version:  $(ssas_nuget_package_version)
+    echo ssas_project_path:           $(ssas_project_path)
+
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore'
   inputs:
@@ -23,8 +22,15 @@ steps:
     projects: $(ssas_project_path)
 
 - task: DotNetCoreCLI@2
-  displayName: 'dotnet build ${{ parameters.build_config }}'
+  displayName: 'dotnet build $(build_config)'
   inputs:
     command: 'build'
     projects: $(ssas_project_path)
-    arguments: '--configuration ${{ parameters.build_config }}'
+    arguments: '--configuration $(build_config) --output $(Build.ArtifactStagingDirectory)'
+
+# - task: DotNetCoreCLI@2
+#   inputs:
+#     command: 'pack'
+#     versioningScheme: byEnvVar
+#     versionEnvVar: $(SSAS_NUGET_PACKAGE_VERSION)
+#     outputDir: '$(System.DefaultWorkingDirectory)\..\n'

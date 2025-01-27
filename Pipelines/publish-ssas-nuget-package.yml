@@ -40,3 +40,7 @@ steps:
     versioningScheme: byEnvVar
     versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
     outputDir: '$(System.DefaultWorkingDirectory)\..\n'
+
+- script: |
+    cd $(System.DefaultWorkingDirectory)\..\n
+    dir

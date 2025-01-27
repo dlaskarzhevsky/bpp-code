@@ -41,10 +41,12 @@ steps:
 - script: |
     cd $(System.DefaultWorkingDirectory)\..\n
     dir
+    cd $(System.DefaultWorkingDirectory)\..
+    dir
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet push'
   inputs:
     command: 'push'
-    searchPatternPush: '$(System.DefaultWorkingDirectory)\..\*.nupkg'
+    searchPatternPush: '$(System.DefaultWorkingDirectory)\..\n\*.nupkg'
     feedPublish: $(ssas_nuget_feed_name)

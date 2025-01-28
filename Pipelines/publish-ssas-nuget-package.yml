@@ -39,13 +39,6 @@ steps:
     #     versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
     #     outputDir: '$(System.DefaultWorkingDirectory)\..\n'
 
-    # echo " `
-    #   nuget pack `
-    #     $(ssas_project_path) `
-    #     -Version $(SSAS_NUGET_PACKAGE_VERSION) `    
-    #     -OutputDirectory $(System.DefaultWorkingDirectory)\..\n `
-    #     -IncludeReferencedProjects"
-
 - script: |
     cd $(Pipeline.Workspace)
     dir
@@ -54,7 +47,7 @@ steps:
   displayName: "Debug: show folders content"
 
 - script: >
-    nuget pack $(ssas_project_path) -Version $(SSAS_NUGET_PACKAGE_VERSION) -OutputDirectory $(Pipeline.Workspace)\n -IncludeReferencedProjects
+    nuget pack $(Build.ArtifactStagingDirectory) -Version $(SSAS_NUGET_PACKAGE_VERSION) -OutputDirectory $(Pipeline.Workspace)\n -IncludeReferencedProjects
 
   displayName: "nuget pack"
 

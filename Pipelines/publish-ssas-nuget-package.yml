@@ -29,7 +29,9 @@ steps:
   inputs:
     command: 'build'
     projects: $(ssas_project_path)
-    arguments: '--configuration $(build_config) --output $(Build.ArtifactStagingDirectory)'
+    arguments: '--configuration $(build_config)'
+    #arguments: '--configuration $(build_config) --output $(Build.ArtifactStagingDirectory)'
+
     # - task: DotNetCoreCLI@2
     #   displayName: 'dotnet pack'
     #   inputs:
@@ -39,12 +41,12 @@ steps:
     #     versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
     #     outputDir: '$(System.DefaultWorkingDirectory)\..\n'
 
-- script: |
-    cd $(Pipeline.Workspace)
-    dir
-    cd $(Pipeline.Workspace)\n   
-    dir
-  displayName: "Debug: show folders content"
+    # - script: |
+    #     cd $(Pipeline.Workspace)
+    #     dir
+    #     cd $(Pipeline.Workspace)\n   
+    #     dir
+    #   displayName: "Debug: show folders content"
 
 - script: >
     nuget pack $(ssas_project_path) -Version $(SSAS_NUGET_PACKAGE_VERSION) -OutputDirectory $(Pipeline.Workspace)\n -IncludeReferencedProjects

@@ -43,15 +43,11 @@ steps:
     #     versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
     #     outputDir: '$(System.DefaultWorkingDirectory)\..\n'
 
-    # - script: |
-    #     cd $(Pipeline.Workspace)
-    #     dir
-    #     cd $(Pipeline.Workspace)\n   
-    #     dir
-    #   displayName: "Debug: show folders content"
-
 - script: >
-    nuget pack $(ssas_project_path) -Version $(SSAS_NUGET_PACKAGE_VERSION) -OutputDirectory $(Pipeline.Workspace)\n -IncludeReferencedProjects
+    nuget pack $(ssas_project_path)
+      -Version $(SSAS_NUGET_PACKAGE_VERSION)
+      -OutputDirectory $(Pipeline.Workspace)\n
+      -IncludeReferencedProjects
 
   displayName: "nuget pack"
 
@@ -61,3 +57,9 @@ steps:
     command: 'push'
     searchPatternPush: '$(Pipeline.Workspace)\n\*.nupkg'
     feedPublish: $(ssas_nuget_feed_name)
+    # - script: |
+    #     cd $(Pipeline.Workspace)
+    #     dir
+    #     cd $(Pipeline.Workspace)\n   
+    #     dir
+    #   displayName: "Debug: show folders content"

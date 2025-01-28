@@ -91,7 +91,7 @@ namespace SkySoft.BPPApplication
         void PrepareRequestHandlerToHandleRequest()
         {
             RequestHandler!.ApplicationConfiguration = OperatingSystem!.ApplicationConfiguration;
-            RequestHandler.MemoryCache = OperatingSystem.MemoryCache;
+            RequestHandler.ApplicationCache = OperatingSystem.ApplicationCache;
             RequestHandler.OperatingSystem = OperatingSystem;
         }
 

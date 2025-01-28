@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
@@ -68,7 +67,7 @@ namespace SkySoft.BPPApplication
         {
             DataContainer = default!;
             ApplicationConfiguration = default!;
-            MemoryCache = default!;
+            ApplicationCache = default!;
             OperatingSystem = default!;
         }
         #endregion
@@ -113,10 +112,10 @@ namespace SkySoft.BPPApplication
         }
 
         /// <summary>
-        /// Gets or sets memory cache
+        /// Gets or sets application cache
         /// IRequestHandler iterface implementation
         /// </summary>
-        public IMemoryCache MemoryCache
+        public IApplicationCache ApplicationCache
         {
             get; set;
         } = default!;

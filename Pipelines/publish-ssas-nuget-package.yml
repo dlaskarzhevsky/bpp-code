@@ -47,7 +47,7 @@ steps:
   displayName: "Debug: show folders content"
 
 - script: >
-    nuget pack --artifacts-path $(Build.ArtifactStagingDirectory) -Version $(SSAS_NUGET_PACKAGE_VERSION) -OutputDirectory $(Pipeline.Workspace)\n -IncludeReferencedProjects
+    nuget pack $(ssas_project_path) -Version $(SSAS_NUGET_PACKAGE_VERSION) -OutputDirectory $(Pipeline.Workspace)\n -IncludeReferencedProjects
 
   displayName: "nuget pack"
 

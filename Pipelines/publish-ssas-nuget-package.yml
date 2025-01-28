@@ -30,24 +30,24 @@ steps:
     command: 'build'
     projects: $(ssas_project_path)
     arguments: '--configuration $(build_config) --output $(Build.ArtifactStagingDirectory)'
+    # - task: DotNetCoreCLI@2
+    #   displayName: 'dotnet pack'
+    #   inputs:
+    #     command: 'pack'
+    #     packagesToPack: $(ssas_solution_path)
+    #     versioningScheme: byEnvVar
+    #     versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
+    #     outputDir: '$(System.DefaultWorkingDirectory)\..\n'
 
-# - task: DotNetCoreCLI@2
-#   displayName: 'dotnet pack'
-#   inputs:
-#     command: 'pack'
-#     packagesToPack: $(ssas_solution_path)
-#     versioningScheme: byEnvVar
-#     versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
-#     outputDir: '$(System.DefaultWorkingDirectory)\..\n'
+    # echo " `
+    #   nuget pack `
+    #     $(ssas_project_path) `
+    #     -Version $(SSAS_NUGET_PACKAGE_VERSION) `    
+    #     -OutputDirectory $(System.DefaultWorkingDirectory)\..\n `
+    #     -IncludeReferencedProjects"
 
 - script: |
-    echo " `
-      nuget pack `
-        $(ssas_project_path) `
-        -Version $(SSAS_NUGET_PACKAGE_VERSION) `    
-        -OutputDirectory $(System.DefaultWorkingDirectory)\..\n `
-        -IncludeReferencedProjects"
-
+    
     nuget pack `
       $(ssas_project_path)
       -Version $(SSAS_NUGET_PACKAGE_VERSION) `    

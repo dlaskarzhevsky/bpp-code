@@ -47,11 +47,7 @@ steps:
     #     -IncludeReferencedProjects"
 
 - script: >
-    nuget pack 
-      $(ssas_project_path) 
-      -Version $(SSAS_NUGET_PACKAGE_VERSION) 
-      -OutputDirectory $(System.DefaultWorkingDirectory)\..\n 
-      -IncludeReferencedProjects
+    nuget pack $(ssas_project_path) -Version $(SSAS_NUGET_PACKAGE_VERSION) -OutputDirectory $(System.DefaultWorkingDirectory)\..\n -IncludeReferencedProjects
 
 - script: |
     cd $(System.DefaultWorkingDirectory)\..\n

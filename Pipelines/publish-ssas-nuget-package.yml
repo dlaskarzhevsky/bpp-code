@@ -34,18 +34,22 @@ steps:
     arguments: '--configuration $(build_config)'
     #arguments: '--configuration $(build_config) --output $(Build.ArtifactStagingDirectory)'
 
+- script: |
+    echo $(SSAS_NUGET_PACKAGE_VERSION)
+  displayName: "Debug: show environment variable"
+
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
   inputs:
     command: 'pack'
     packagesToPack: $(ssas_project_path)
     versioningScheme: byEnvVar
-    versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
+    versionEnvVar: $(SSAS_NUGET_PACKAGE_VERSION)
     outputDir: '$(Pipeline.Workspace)\n'
-    # -IncludeReferencedProjects
-
+    
     # - script: >
     #     nuget pack $(ssas_project_path) -Version $(SSAS_NUGET_PACKAGE_VERSION) -OutputDirectory $(Pipeline.Workspace)\n
+    # -IncludeReferencedProjects
 
     #  displayName: "nuget pack"
 
@@ -55,9 +59,10 @@ steps:
     command: 'push'
     searchPatternPush: '$(Pipeline.Workspace)\n\*.nupkg'
     feedPublish: $(ssas_nuget_feed_name)
-    # - script: |
-    #     cd $(Pipeline.Workspace)
-    #     dir
-    #     cd $(Pipeline.Workspace)\n   
-    #     dir
-    #   displayName: "Debug: show folders content"
+
+- script: |
+    cd $(Pipeline.Workspace)
+    dir
+    cd $(Pipeline.Workspace)\n   
+    dir
+  displayName: "Debug: show folders content"

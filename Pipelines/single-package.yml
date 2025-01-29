@@ -36,7 +36,7 @@ steps:
     versioningScheme: byEnvVar
     versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
     outputDir: '$(Pipeline.Workspace)\n'
-    arguments: '--include-symbols'
+    includesymbols: true
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet push'

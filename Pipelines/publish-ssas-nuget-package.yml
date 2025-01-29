@@ -44,10 +44,7 @@ steps:
     #     outputDir: '$(System.DefaultWorkingDirectory)\..\n'
 
 - script: >
-    nuget pack $(ssas_project_path)
-      -Version $(SSAS_NUGET_PACKAGE_VERSION)
-      -OutputDirectory $(Pipeline.Workspace)\n
-      -IncludeReferencedProjects
+    nuget pack $(ssas_project_path) -Version $(SSAS_NUGET_PACKAGE_VERSION) -OutputDirectory $(Pipeline.Workspace)\n -IncludeReferencedProjects
 
   displayName: "nuget pack"
 

@@ -44,14 +44,14 @@ steps:
     command: 'pack'
     packagesToPack: $(ssas_project_path)
     versioningScheme: byEnvVar
-    versionEnvVar: $(SSAS_NUGET_PACKAGE_VERSION)
+    versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
     outputDir: '$(Pipeline.Workspace)\n'
-    
-    # - script: >
-    #     nuget pack $(ssas_project_path) -Version $(SSAS_NUGET_PACKAGE_VERSION) -OutputDirectory $(Pipeline.Workspace)\n
-    # -IncludeReferencedProjects
 
-    #  displayName: "nuget pack"
+# - script: >
+#     nuget pack $(ssas_project_path) -Version $(SSAS_NUGET_PACKAGE_VERSION) -OutputDirectory $(Pipeline.Workspace)\n
+# -IncludeReferencedProjects
+
+#  displayName: "nuget pack"
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet push'

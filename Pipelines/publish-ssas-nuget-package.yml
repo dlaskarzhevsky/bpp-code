@@ -41,7 +41,7 @@ steps:
     packagesToPack: $(ssas_project_path)
     versioningScheme: byEnvVar
     versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
-    outputDir: '$(System.DefaultWorkingDirectory)\..\n'
+    outputDir: '$(Pipeline.Workspace)\n'
     # -IncludeReferencedProjects
 
     # - script: >

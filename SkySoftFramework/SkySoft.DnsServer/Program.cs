@@ -10,7 +10,6 @@ SkySoft.DnsServerApp.DPLCFG.Registrar.Register(webApplicationBuilder);
 SkySoft.APIHost.DPLCFG.ApplicationInitializerRegistrar.Register(webApplicationBuilder);
 
 webApplicationBuilder.Services.AddControllers();
-webApplicationBuilder.Services.AddMemoryCache();
 
 WebApplication webApplication = webApplicationBuilder.Build();
 webApplication.UseHttpsRedirection();

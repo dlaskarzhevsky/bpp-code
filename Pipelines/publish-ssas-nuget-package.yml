@@ -43,8 +43,10 @@ steps:
     #     versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
     #     outputDir: '$(System.DefaultWorkingDirectory)\..\n'
 
+    # -IncludeReferencedProjects
+
 - script: >
-    nuget pack $(ssas_project_path) -Version $(SSAS_NUGET_PACKAGE_VERSION) -OutputDirectory $(Pipeline.Workspace)\n -IncludeReferencedProjects
+    nuget pack $(ssas_project_path) -Version $(SSAS_NUGET_PACKAGE_VERSION) -OutputDirectory $(Pipeline.Workspace)\n
 
   displayName: "nuget pack"
 

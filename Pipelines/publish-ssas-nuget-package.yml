@@ -42,7 +42,7 @@ steps:
   displayName: 'dotnet pack'
   inputs:
     command: 'pack'
-    packagesToPack: $(ssas_project_path)
+    packagesToPack: $(ssas_solution_path)
     versioningScheme: byEnvVar
     versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
     outputDir: '$(Pipeline.Workspace)\n'

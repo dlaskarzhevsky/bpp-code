@@ -34,19 +34,20 @@ steps:
     arguments: '--configuration $(build_config)'
     #arguments: '--configuration $(build_config) --output $(Build.ArtifactStagingDirectory)'
 
-    # - task: DotNetCoreCLI@2
-    #   displayName: 'dotnet pack'
-    #   inputs:
-    #     command: 'pack'
-    #     packagesToPack: $(ssas_solution_path)
-    #     versioningScheme: byEnvVar
-    #     versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
-    #     outputDir: '$(System.DefaultWorkingDirectory)\..\n'
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet pack'
+  inputs:
+    command: 'pack'
+    packagesToPack: $(ssas_project_path)
+    versioningScheme: byEnvVar
+    versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
+    outputDir: '$(Pipeline.Workspace)\n'
+    # -IncludeReferencedProjects
 
-- script: >
-    nuget pack $(ssas_project_path) -Version $(SSAS_NUGET_PACKAGE_VERSION) -OutputDirectory $(Pipeline.Workspace)\n -IncludeReferencedProjects
+    # - script: >
+    #     nuget pack $(ssas_project_path) -Version $(SSAS_NUGET_PACKAGE_VERSION) -OutputDirectory $(Pipeline.Workspace)\n
 
-  displayName: "nuget pack"
+    #  displayName: "nuget pack"
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet push'

@@ -39,7 +39,7 @@ steps:
 #     includesymbols: true
 
 - script: |
-    dotnet pack $(ssas_project_path) --output $(SSAS_NUGET_PACKAGE_VERSION) --include-symbols -p:SymbolPackageFormat=snupkg -p:PackageVersion=1.0.10    
+    dotnet pack $(ssas_project_path) --output $(Pipeline.Workspace)\n --include-symbols -p:SymbolPackageFormat=snupkg -p:PackageVersion=$(SSAS_NUGET_PACKAGE_VERSION)
 
 - script: |
     cd $(Pipeline.Workspace)\n   

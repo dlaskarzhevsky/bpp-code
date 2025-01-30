@@ -36,7 +36,7 @@ steps:
     versioningScheme: byEnvVar
     versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
     outputDir: '$(Pipeline.Workspace)\n'
-    includesymbols: true
+    # includesymbols: true
 
 - script: |
     cd $(Pipeline.Workspace)\n   

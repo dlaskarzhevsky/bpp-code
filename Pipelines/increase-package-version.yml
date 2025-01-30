@@ -1,0 +1,35 @@
+trigger: none
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+- group: sky-soft-application-server-dev
+
+- task: NodeTool@0
+  inputs:
+    versionSpec: '20.x'
+  displayName: 'install node.js'
+
+- script: |
+    cd ./pipelines/scripts
+    npm install
+  displayName: 'npm install'
+
+- script: node ./increase-version-number.js
+  displayName: 'increase package version'
+
+- script: |
+    echo macs_guests: $(nuget_package_version)
+  displayName: 'display nuget_package_version variable'
+
+# - task: MorenoBruschi.manage-variable-group-task.custom-build-release-task.ManageVariableGroupTask@0
+#   displayName: 'update macs_guests variable in variable group'
+#   inputs:
+#     pat: $(mvgt_pat)
+#     project: $(mvgt_asm_project_id)
+#     vgname: $(mvgt_variable_group)
+#     orgname: $(mvgt_organization)
+#     op: Update
+#     varops: |
+#       = macs_guests => $(macs_guests)

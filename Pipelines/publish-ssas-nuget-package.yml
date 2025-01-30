@@ -34,10 +34,6 @@ steps:
     arguments: '--configuration $(build_config)'
     #arguments: '--configuration $(build_config) --output $(Build.ArtifactStagingDirectory)'
 
-- script: |
-    echo $(SSAS_NUGET_PACKAGE_VERSION)
-  displayName: "Debug: show environment variable"
-
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
   inputs:
@@ -61,8 +57,6 @@ steps:
     feedPublish: $(ssas_nuget_feed_name)
 
 - script: |
-    cd $(Pipeline.Workspace)
-    dir
     cd $(Pipeline.Workspace)\n   
     dir
-  displayName: "Debug: show folders content"
+  displayName: "Debug: Show n folder"

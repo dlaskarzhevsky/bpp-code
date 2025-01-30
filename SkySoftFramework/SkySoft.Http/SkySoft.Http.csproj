@@ -8,6 +8,8 @@
     <OutputType>Library</OutputType>
     <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
     <StaticWebAssetsEnabled>false</StaticWebAssetsEnabled>
+    <DebugType>None</DebugType>
+    <DebugSymbols>False</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

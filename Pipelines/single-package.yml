@@ -28,15 +28,18 @@ steps:
     projects: $(ssas_project_path)
     arguments: '--configuration $(build_config) --no-restore'
 
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet pack'
-  inputs:
-    command: 'pack'
-    packagesToPack: $(ssas_project_path)
-    versioningScheme: byEnvVar
-    versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
-    outputDir: '$(Pipeline.Workspace)\n'
-    includesymbols: true
+# - task: DotNetCoreCLI@2
+#   displayName: 'dotnet pack'
+#   inputs:
+#     command: 'pack'
+#     packagesToPack: $(ssas_project_path)
+#     versioningScheme: byEnvVar
+#     versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
+#     outputDir: '$(Pipeline.Workspace)\n'
+#     includesymbols: true
+
+- script: |
+    dotnet pack $(ssas_project_path) --output $(SSAS_NUGET_PACKAGE_VERSION) --include-symbols -p:SymbolPackageFormat=snupkg -p:PackageVersion=1.0.10    
 
 - script: |
     cd $(Pipeline.Workspace)\n   

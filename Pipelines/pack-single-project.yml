@@ -9,8 +9,8 @@ variables:
 steps:
 - script: |
     echo build_config:                      $(build_config)
-    echo ssas_nuget_feed_name:              $(nuget_feed_name)
-    echo ssas_nuget_package_version:        $(nuget_package_version)
+    echo nuget_feed_name:                   $(nuget_feed_name)
+    echo nuget_package_version:             $(nuget_package_version)
     echo project_path:                      $(project_path)
   displayName: Display pipeline variables
 
@@ -33,7 +33,7 @@ steps:
     command: 'pack'
     packagesToPack: $(project_path)
     versioningScheme: byEnvVar
-    versionEnvVar: SSAS_NUGET_PACKAGE_VERSION
+    versionEnvVar: NUGET_PACKAGE_VERSION
     outputDir: '$(Pipeline.Workspace)\n'
 
 - script: |
@@ -46,4 +46,4 @@ steps:
   inputs:
     command: 'push'
     searchPatternPush: '$(Pipeline.Workspace)\n\*.nupkg'
-    feedPublish: $(ssas_nuget_feed_name)
+    feedPublish: $(nuget_feed_name)

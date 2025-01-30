@@ -6,7 +6,7 @@ pool:
 variables:
 - group: sky-soft-application-server-dev
 - name: ssas_project_path
-  value: .\SkySoftFramework\SkySoft.ApplicationServer.Assembly\SkySoft.ApplicationServer.Assembly.csproj
+  value: .\SkySoftFramework\SkySoft.Http\SkySoft.Http.csproj
 
 steps:
 - script: |

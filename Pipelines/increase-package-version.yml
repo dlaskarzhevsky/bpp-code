@@ -17,12 +17,13 @@ steps:
     npm install
   displayName: 'npm install'
 
-- script: node ./increase-version-number.js
+- script: node ./pipelines/scripts/increase-version-number.js
   displayName: 'increase package version'
 
 - script: |
-    echo macs_guests: $(nuget_package_version)
+    echo nuget_package_version: $(nuget_package_version)
   displayName: 'display nuget_package_version variable'
+
 # - task: MorenoBruschi.manage-variable-group-task.custom-build-release-task.ManageVariableGroupTask@0
 #   displayName: 'update macs_guests variable in variable group'
 #   inputs:

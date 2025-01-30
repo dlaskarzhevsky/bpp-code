@@ -6,6 +6,7 @@ pool:
 variables:
 - group: sky-soft-application-server-dev
 
+steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '20.x'
@@ -22,7 +23,6 @@ variables:
 - script: |
     echo macs_guests: $(nuget_package_version)
   displayName: 'display nuget_package_version variable'
-
 # - task: MorenoBruschi.manage-variable-group-task.custom-build-release-task.ManageVariableGroupTask@0
 #   displayName: 'update macs_guests variable in variable group'
 #   inputs:

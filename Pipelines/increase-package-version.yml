@@ -22,15 +22,15 @@ steps:
 
 - script: |
     echo nuget_package_version: $(nuget_package_version)
-  displayName: 'display nuget_package_version variable'
+  displayName: 'display version variable'
 
-# - task: MorenoBruschi.manage-variable-group-task.custom-build-release-task.ManageVariableGroupTask@0
-#   displayName: 'update macs_guests variable in variable group'
-#   inputs:
-#     pat: $(mvgt_pat)
-#     project: $(mvgt_asm_project_id)
-#     vgname: $(mvgt_variable_group)
-#     orgname: $(mvgt_organization)
-#     op: Update
-#     varops: |
-#       = macs_guests => $(macs_guests)
+- task: MorenoBruschi.manage-variable-group-task.custom-build-release-task.ManageVariableGroupTask@0
+  displayName: 'update variable in variable group'
+  inputs:
+    pat: $(mvgt_pat)
+    project: $(mvgt_bpp_project_id)
+    vgname: $(mvgt_variable_group)
+    orgname: $(mvgt_organization)
+    op: Update
+    varops: |
+      = nuget_package_version => $(nuget_package_version)

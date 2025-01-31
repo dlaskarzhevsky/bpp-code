@@ -7,7 +7,7 @@ variables:
 - group: sky-soft-application-server-dev
 
 steps:
-- powershell: .\pipelines/scripts/powershell/Increase_Version_Number.ps1
+- powershell: ./pipelines/scripts/powershell/Increase_Version_Number.ps1
   displayName: 'increase package version'
 
 - script: |

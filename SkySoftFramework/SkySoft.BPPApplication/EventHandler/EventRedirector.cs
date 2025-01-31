@@ -22,7 +22,7 @@ namespace SkySoft.BPPApplication
             if (requestHandler != null)
             {
                 requestHandler.ApplicationConfiguration = operatingSystem.ApplicationConfiguration;
-                requestHandler.MemoryCache = operatingSystem.MemoryCache;
+                requestHandler.ApplicationCache = operatingSystem.ApplicationCache;
                 requestHandler.OperatingSystem = operatingSystem;
                 try
                 {

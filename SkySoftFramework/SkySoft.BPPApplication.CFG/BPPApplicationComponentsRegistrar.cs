@@ -14,6 +14,7 @@ namespace SkySoft.BPPApplication.CFG
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
+            webApplicationBuilder.Services.AddSingleton<IApplicationCache, SkySoft.BPPApplication.ApplicationCache>();
             webApplicationBuilder.Services.AddTransient<IOS, SkySoft.BPPApplication.OS>();
         }
         #endregion

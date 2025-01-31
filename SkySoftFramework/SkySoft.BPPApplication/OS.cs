@@ -29,6 +29,8 @@ namespace SkySoft.BPPApplication
             ApplicationConfiguration = applicationConfiguration;
             ApplicationCache = applicationCache;
             Logger = logger;
+            Logger.ApplicationLayerName = GetValueFromApplicationConfiguration<string>("Host:ApplicationLayerName");
+            Logger.ApplicationLayerUrl = GetValueFromApplicationConfiguration<string>("Host:Endpoints:Http:Url");
             RequestHandlers = requestHandlers;
             Drivers = drivers;
             EventRedirector = new EventRedirector();
@@ -127,44 +129,13 @@ namespace SkySoft.BPPApplication
         }
 
         /// <summary>
-        /// Logs exception
-        /// IOS interface implementation
-        /// </summary>
-        /// <param name="exception">Exception for logging</param>
-        public void LogException(Exception exception)
-        {
-            Logger.Log(exception);
-        }
-
-        /// <summary>
-        /// Logs message
-        /// IOS interface implementation
-        /// </summary>
-        /// <param name="message">Message for logging</param>
-        /// <param name="messageType">Message type</param>
-        /// <returns>Logged message</returns>
-        public string LogMessage(string message, MessageType messageType)
-        {
-            string messageMetadata = string.Empty;
-            if (!message.StartsWith("Logged on", StringComparison.InvariantCultureIgnoreCase))
-            {
-                messageMetadata = $"Logged on {DateTime.Now.ToString("s").Replace("T", " ")} at {GetValueFromApplicationConfiguration<string>("Host:ApplicationLayerName")} ({GetValueFromApplicationConfiguration<string>("Host:Endpoints:Http:Url")})" + Environment.NewLine;
-            }
-
-            string compiledMessage = messageMetadata + message;
-            Logger.Log(messageType, compiledMessage);
-
-            return compiledMessage;
-        }
-
-        /// <summary>
         /// Logs messages
         /// IOS interface implementation
         /// </summary>
         /// <param name="dataContainer">Data container</param>
         public void LogMessages(IDataContainer dataContainer)
         {
-            SkySoft.BPPApplication.LogMessages.Execute(dataContainer, Logger);
+            SkySoft.BPPApplication.LogMessages.Execute(dataContainer, this);
         }
 
         /// <summary>

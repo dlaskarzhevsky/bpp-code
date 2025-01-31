@@ -13,13 +13,35 @@ namespace SkySoft.ILogging
         /// </summary>
         /// <param name="messageType">Message type</param>
         /// <param name="message">Message for logging</param>
-        void Log(MessageType messageType, string message);
+        /// <param name="applicationLayerName">Application layer name</param>
+        /// <param name="applicationLayerUrl">Application layer URL</param>
+        void Log(MessageType messageType, string message, string? applicationLayerName, string? applicationLayerUrl);
 
         /// <summary>
         /// Loggs exception
         /// </summary>
         /// <param name="exception">Exception for logging</param>
-        void Log(Exception exception);
+        /// <param name="applicationLayerName">Application layer name</param>
+        /// <param name="applicationLayerUrl">Application layer URL</param>
+        void Log(Exception exception, string? applicationLayerName, string? applicationLayerUrl);
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets application layer name
+        /// </summary>
+        string? ApplicationLayerName
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets application layer URL
+        /// </summary>
+        string? ApplicationLayerUrl
+        {
+            get; set;
+        }
         #endregion
     }
 }

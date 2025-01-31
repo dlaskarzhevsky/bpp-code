@@ -9,6 +9,22 @@ namespace SkySoft.ICommunication
     {
         #region Properties
         /// <summary>
+        /// Gets or sets application layer name
+        /// </summary>
+        string? ApplicationLayerName
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets application layer URL
+        /// </summary>
+        string? ApplicationLayerUrl
+        {
+            get; set;
+        }
+
+        /// <summary>
         /// Gets or sets exception
         /// </summary>
         Exception? Exception

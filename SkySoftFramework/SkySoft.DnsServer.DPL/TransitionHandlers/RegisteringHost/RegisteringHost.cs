@@ -1,4 +1,6 @@
 ﻿
+using SkySoft.DnsClientServerComponents;
+
 namespace SkySoft.DnsServer.DPL
 {
     /// <summary>
@@ -28,6 +30,7 @@ namespace SkySoft.DnsServer.DPL
         /// <returns>Data container</returns>
         protected override async Task HandleRequestAsync()
         {
+            ReadHostDnsRecordDataFromApplicationConfiguration();
             GetDnsRecordFromRequest();
             GetListOfDnsRecordsFromCache();
             FindCachedDnsRecordByApplicationLayerName();
@@ -55,6 +58,7 @@ namespace SkySoft.DnsServer.DPL
             CachedDnsRecordDTO = null;
             DnsRecordDTOFromRequest = null;
             ListOfCachedDnsRecords = default!;
+            HostDnsRecordDTO = null;
             base.ReleaseResources();
         }
         #endregion

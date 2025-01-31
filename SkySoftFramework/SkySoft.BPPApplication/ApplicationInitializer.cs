@@ -24,7 +24,7 @@ namespace SkySoft.BPPApplication
             {
                 ConfigureRequestForApplicationInitialization();
                 await SendRequestForApplicationInitializationToOperatingSystem();
-                LogMessages.Execute(DataContainer, operatingSystem.Logger);
+                LogMessages.Execute(DataContainer, operatingSystem);
                 if (OperatingSystemInitializedApplication)
                 {
                     SetApplicationStateToInitial();

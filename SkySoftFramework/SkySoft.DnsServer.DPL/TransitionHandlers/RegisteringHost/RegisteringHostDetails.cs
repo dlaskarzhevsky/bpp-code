@@ -1,4 +1,7 @@
-﻿using SkySoft.DnsClientServerComponents;
+﻿using System;
+
+using SkySoft.BPPApplication;
+using SkySoft.DnsClientServerComponents;
 using SkySoft.DnsRecord.DTO;
 
 namespace SkySoft.DnsServer.DPL
@@ -54,7 +57,25 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void LogRegistrationResult()
         {
-            LogDnsRecordRegistrationResult.Execute(DnsRecordDTOFromRequest!, DataContainer);
+            string? hostUrl = null;
+            if (HostDnsRecordDTO!.UseHttps)
+            {
+                hostUrl = HostDnsRecordDTO.HttpsUrl;
+            }
+            else
+            {
+                hostUrl = HostDnsRecordDTO.HttpUrl;
+            }
+
+            LogDnsRecordRegistrationResult.Execute(DnsRecordDTOFromRequest!, DataContainer, HostDnsRecordDTO!.ApplicationLayerName, hostUrl);
+        }
+
+        /// <summary>
+        /// Reads host DNS record data from application configuration
+        /// </summary>
+        void ReadHostDnsRecordDataFromApplicationConfiguration()
+        {
+            HostDnsRecordDTO = SkySoft.DnsClientServerComponents.ReadHostDnsRecordDataFromApplicationConfiguration.Execute(((OS)OperatingSystem).ApplicationConfiguration);
         }
 
         /// <summary>
@@ -72,14 +93,6 @@ namespace SkySoft.DnsServer.DPL
         {
             CopyDnsRecordData.Execute(DnsRecordDTOFromRequest!, CachedDnsRecordDTO!, false);
             CachedDnsRecordUpdated = true;
-        }
-
-        /// <summary>
-        /// Verifies that path to DNS records file contains directory name
-        /// </summary>
-        void VerifyThatPathToDnsRecordsFileContainsDirectoryName()
-        {
-            PathToDnsRecordsFile = SkySoft.DnsClientServerComponents.VerifyThatPathToDnsRecordsFileContainsDirectoryName.Execute(PathToDnsRecordsFile);
         }
         #endregion
 
@@ -101,6 +114,17 @@ namespace SkySoft.DnsServer.DPL
         }
 
         /// <summary>
+        /// Gets flag indicating whether cached DNS record found
+        /// </summary>
+        bool CachedDnsRecordFound
+        {
+            get
+            {
+                return CachedDnsRecordDTO != null;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets flag indicating whether cached DNS record updated
         /// </summary>
         bool CachedDnsRecordUpdated
@@ -117,14 +141,11 @@ namespace SkySoft.DnsServer.DPL
         }
 
         /// <summary>
-        /// Gets flag indicating whether cached DNS record found
+        /// Gets or sets host DNS record
         /// </summary>
-        bool CachedDnsRecordFound
+        DnsRecordDTO? HostDnsRecordDTO
         {
-            get
-            {
-                return CachedDnsRecordDTO != null;
-            }
+            get; set;
         }
 
         /// <summary>

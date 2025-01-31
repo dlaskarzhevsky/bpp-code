@@ -60,7 +60,7 @@ namespace SkySoft.DnsClientServerComponents
             {
                 if (LogValidationResult)
                 {
-                    LogMessageMessage($"{MessageHeader}DNS data does not have required ApplicationLayerName entry", MessageType.Error);
+                    LogMessage($"{MessageHeader}DNS data does not have required ApplicationLayerName entry", MessageType.Error);
                 }
 
                 DnsRecordDataValid = false;
@@ -76,7 +76,7 @@ namespace SkySoft.DnsClientServerComponents
             {
                 if (LogValidationResult)
                 {
-                    LogMessageMessage($"{MessageHeader}DNS data file does not have required HTTPS URL entry for " + DnsRecordDTO.ApplicationLayerName, MessageType.Warning);
+                    LogMessage($"{MessageHeader}DNS data file does not have required HTTPS URL entry for " + DnsRecordDTO.ApplicationLayerName, MessageType.Warning);
                 }
 
                 DnsRecordDataValid = false;
@@ -92,7 +92,7 @@ namespace SkySoft.DnsClientServerComponents
             {
                 if (LogValidationResult)
                 {
-                    LogMessageMessage($"{MessageHeader}DNS data file does not have required HTTP URL entry for " + DnsRecordDTO.ApplicationLayerName, MessageType.Warning);
+                    LogMessage($"{MessageHeader}DNS data file does not have required HTTP URL entry for " + DnsRecordDTO.ApplicationLayerName, MessageType.Warning);
                 }
 
                 DnsRecordDataValid = false;

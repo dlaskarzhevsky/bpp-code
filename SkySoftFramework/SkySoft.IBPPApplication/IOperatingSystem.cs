@@ -62,20 +62,6 @@ namespace SkySoft.IBPPApplication
         Task<IDataContainer> InitializeApplication(IDataContainer dataContainer);
 
         /// <summary>
-        /// Logs exception
-        /// </summary>
-        /// <param name="exception">Exception for logging</param>
-        void LogException(Exception exception);
-
-        /// <summary>
-        /// Logs message
-        /// </summary>
-        /// <param name="message">Message for logging</param>
-        /// <param name="messageType">Message type</param>
-        /// <returns>Logged message</returns>
-        string LogMessage(string message, MessageType messageType);
-
-        /// <summary>
         /// Logs messages
         /// </summary>
         /// <param name="dataContainer">Data container</param>

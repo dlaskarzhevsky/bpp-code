@@ -15,7 +15,9 @@ namespace SkySoft.Communication
         /// <param name="dataContainer">Data container</param>
         /// <param name="message">Message text</param>
         /// <param name="messageType">Message type</param>
-        public static void AddMessage(IDataContainer dataContainer, string? message, MessageType messageType)
+        /// <param name="applicationLayerName">Application layer name</param>
+        /// <param name="applicationLayerUrl">Application layer URL</param>
+        public static void AddMessage(IDataContainer dataContainer, string? message, MessageType messageType, string? applicationLayerName, string? applicationLayerUrl)
         {
             if (string.IsNullOrEmpty(message))
             {
@@ -24,6 +26,8 @@ namespace SkySoft.Communication
 
             IDataCollection<ExceptionDTO>? exceptionDataCollection = dataContainer.GetDataColletion<ExceptionDTO>(SkySoft.Contracts.DataCollectionTypes.EXCEPTIONS);
             IExceptionDTO exceptionDTO = dataContainer.GetNewDTO<ExceptionDTO>(exceptionDataCollection!);
+            exceptionDTO.ApplicationLayerName = applicationLayerName;
+            exceptionDTO.ApplicationLayerUrl = applicationLayerUrl;
             exceptionDTO.Message = message;
             exceptionDTO.MessageType = messageType;
         }

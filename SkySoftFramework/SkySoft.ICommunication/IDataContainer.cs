@@ -107,7 +107,9 @@ namespace SkySoft.ICommunication
         /// </summary>
         /// <param name="message">Message text</param>
         /// <param name="messageType">Message type</param>
-        void SetMessage(string message, MessageType messageType);
+        /// <param name="applicationLayerName">Application layer name</param>
+        /// <param name="applicationLayerUrl">Application layer URL</param>
+        void SetMessage(string message, MessageType messageType, string? applicationLayerName, string? applicationLayerUrl);
         #endregion
 
         #region Properties

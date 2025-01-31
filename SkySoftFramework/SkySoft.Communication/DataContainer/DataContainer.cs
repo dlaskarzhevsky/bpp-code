@@ -338,9 +338,11 @@ namespace SkySoft.Communication
         /// </summary>
         /// <param name="message">Message text</param>
         /// <param name="messageType">Message type</param>
-        public void SetMessage(string message, MessageType messageType)
+        /// <param name="applicationLayerName">Application layer name</param>
+        /// <param name="applicationLayerUrl">Application layer URL</param>
+        public void SetMessage(string message, MessageType messageType, string? applicationLayerName, string? applicationLayerUrl)
         {
-            ExceptionDataCollection.AddMessage(this, message, messageType);
+            ExceptionDataCollection.AddMessage(this, message, messageType, applicationLayerName, applicationLayerUrl);
         }
         #endregion
 

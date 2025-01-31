@@ -10,6 +10,24 @@ namespace SkySoft.Communication
     {
         #region Public Properties
         /// <summary>
+        /// Gets or sets application layer name
+        /// IExceptionDTO interface implementation
+        /// </summary>
+        public string? ApplicationLayerName
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets application layer URL
+        /// IExceptionDTO interface implementation
+        /// </summary>
+        public string? ApplicationLayerUrl
+        {
+            get; set;
+        }
+
+        /// <summary>
         /// Gets or sets exception
         /// IExceptionDTO interface implementation
         /// </summary>

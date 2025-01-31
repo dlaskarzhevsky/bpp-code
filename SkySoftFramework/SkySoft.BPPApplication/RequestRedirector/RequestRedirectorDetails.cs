@@ -58,7 +58,7 @@ namespace SkySoft.BPPApplication
         /// </summary>
         void LogApplicationLayerNameNotFoundError()
         {
-            DataContainer!.SetMessage("appsettings.json file does not have ApplicationLayerName setting", MessageType.Error);
+            DataContainer!.SetMessage("appsettings.json file does not have ApplicationLayerName setting", MessageType.Error, OperatingSystem!.Logger.ApplicationLayerName, OperatingSystem.Logger.ApplicationLayerUrl);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace SkySoft.BPPApplication
         /// </summary>
         void LogRequestHandlerNotFoundError()
         {
-            DataContainer!.SetMessage($"The {RequestHandlerTypeFullName} request handler is not registered inside APIHostInitializer file", MessageType.Error);
+            DataContainer!.SetMessage($"The {RequestHandlerTypeFullName} request handler is not registered inside APIHostInitializer file", MessageType.Error, OperatingSystem!.Logger.ApplicationLayerName, OperatingSystem.Logger.ApplicationLayerUrl);
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace SkySoft.BPPApplication
             if (transceiverDriver == null)
             {
                 string errorMessage = "Driver is not registered:" + SkySoft.Contracts.ControllerTypes.TRANSCEIVER;
-                DataContainer!.SetMessage(errorMessage, MessageType.Error);
+                DataContainer!.SetMessage(errorMessage, MessageType.Error, OperatingSystem!.Logger.ApplicationLayerName, OperatingSystem.Logger.ApplicationLayerUrl);
             }
 
             RequestMetadataDTO? requestMetadataDTO = DataContainer!.GetLastDTOFromDataCollection<RequestMetadataDTO>(SkySoft.Contracts.DataCollectionTypes.REQUEST_METADATA);
@@ -130,7 +130,7 @@ namespace SkySoft.BPPApplication
                 requestMetadataDTO!.StateName == transceiverDriver!.StateName &&
                 requestMetadataDTO!.TransitionName == transceiverDriver!.TransitionName)
             {
-                DataContainer.SetMessage($"Cannot redirect request to {RequestHandlerTypeFullName} request handler", MessageType.Error);
+                DataContainer.SetMessage($"Cannot redirect request to {RequestHandlerTypeFullName} request handler", MessageType.Error, OperatingSystem!.Logger.ApplicationLayerName, OperatingSystem.Logger.ApplicationLayerUrl);
             }
             else
             {

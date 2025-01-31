@@ -56,7 +56,7 @@ namespace SkySoft.Http.DRV
                 {
                     IDataCollection<RequestMetadataDTO>? requestMetadataDataCollection = DataContainer.GetDataColletion<RequestMetadataDTO>(SkySoft.Contracts.DataCollectionTypes.REQUEST_METADATA);
                     IRequestMetadataDTO requestMetadataDTO = requestMetadataDataCollection![requestMetadataDataCollection.Count - 2];
-                    DataContainer.SetMessage("DNS client does not have DNS record of application layer " + requestMetadataDTO.ApplicationLayerFullName, MessageType.Critical);
+                    DataContainer.SetMessage("DNS client does not have DNS record of application layer " + requestMetadataDTO.ApplicationLayerFullName, MessageType.Critical, OperatingSystem!.Logger.ApplicationLayerName, OperatingSystem.Logger.ApplicationLayerUrl);
                 }
             }
         }

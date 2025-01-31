@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 using SkySoft.Communication;
@@ -18,14 +17,14 @@ namespace SkySoft.BPPApplication
         /// Default constructor
         /// </summary>
         /// <param name="applicationConfiguration">Application configuration</param>
-        /// <param name="emoryCache">Memory cache</param>
+        /// <param name="applicationCache">Application cache</param>
         /// <param name="requestHandlers">Request handlers</param>
         /// <param name="logger">Logger instance</param>
         /// <param name="drivers">Set of drivers</param>
-        public OS(IConfiguration applicationConfiguration, IMemoryCache memoryCache, ILogger<OS> logger, IEnumerable<IRequestHandler> requestHandlers, IEnumerable<IDriver> drivers)
+        public OS(IConfiguration applicationConfiguration, IApplicationCache applicationCache, ILogger<OS> logger, IEnumerable<IRequestHandler> requestHandlers, IEnumerable<IDriver> drivers)
         {
             ApplicationConfiguration = applicationConfiguration;
-            MemoryCache = memoryCache;
+            ApplicationCache = applicationCache;
             Logger = logger;
             RequestHandlers = requestHandlers;
             Drivers = drivers;
@@ -43,7 +42,12 @@ namespace SkySoft.BPPApplication
         /// <param name="value">Value for caching</param>
         public void CacheValue<T>(string key, T value)
         {
-            MemoryCache.Set(key, value);
+            if (value == null)
+            {
+                return;
+            }
+
+            ApplicationCache.Add(key, value);
         }
 
         /// <summary>
@@ -100,8 +104,12 @@ namespace SkySoft.BPPApplication
         /// <returns>Value fom cache</returns>
         public T? GetValueFomCache<T>(string key)
         {
-            MemoryCache.TryGetValue<T?>(key, out T? value);
-            return value;
+            if (ApplicationCache.ContainsKey(key))
+            {
+                return (T)ApplicationCache[key];
+            }
+
+            return default!;
         }
 
         /// <summary>
@@ -208,9 +216,9 @@ namespace SkySoft.BPPApplication
         }
 
         /// <summary>
-        /// Gets or sets memory cache
+        /// Gets or sets application cache
         /// </summary>
-        public IMemoryCache MemoryCache
+        public IApplicationCache ApplicationCache
         {
             get; set;
         }

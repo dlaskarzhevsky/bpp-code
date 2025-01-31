@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-
+﻿using SkySoft.Contracts;
 using SkySoft.ICommunication;
+using SkySoft.ILogging;
 
 namespace SkySoft.IBPPApplication
 {
@@ -71,9 +71,15 @@ namespace SkySoft.IBPPApplication
         /// Logs message
         /// </summary>
         /// <param name="message">Message for logging</param>
-        /// <param name="logLevel">Log level</param>
+        /// <param name="messageType">Message type</param>
         /// <returns>Logged message</returns>
-        string LogMessage(string message, LogLevel logLevel);
+        string LogMessage(string message, MessageType messageType);
+
+        /// <summary>
+        /// Logs messages
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        void LogMessages(IDataContainer dataContainer);
 
         /// <summary>
         /// Raises event
@@ -95,6 +101,16 @@ namespace SkySoft.IBPPApplication
         /// <param name="dataContainer">Data container</param>
         /// <returns>Data container</returns>
         Task<IDataContainer> RedirectRequestToRequestHandler(IDataContainer dataContainer);
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets logger
+        /// </summary>
+        ILogger Logger
+        {
+            get;
+        }
         #endregion
     }
 }

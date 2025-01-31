@@ -1,4 +1,5 @@
-﻿using SkySoft.DnsRecord.DTO;
+﻿using SkySoft.Contracts;
+using SkySoft.DnsRecord.DTO;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
 

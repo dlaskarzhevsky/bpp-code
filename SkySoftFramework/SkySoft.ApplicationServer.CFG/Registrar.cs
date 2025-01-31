@@ -17,6 +17,7 @@
             SkySoft.Http.CFG.Registrar.Register(webApplicationBuilder);
             SkySoft.DnsClient.DPLCFG.Registrar.Register(webApplicationBuilder);
             SkySoft.DnsClientApp.DPLCFG.Registrar.Register(webApplicationBuilder);
+            SkySoft.Logging.CFG.Registrar.Register(webApplicationBuilder);
 
             SkySoft.APIHost.DPLCFG.ApplicationInitializerRegistrar.Register(webApplicationBuilder);
         }

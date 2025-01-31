@@ -1,4 +1,5 @@
 ﻿using SkySoft.Communication;
+using SkySoft.Contracts;
 using SkySoft.DnsClientServerComponents;
 using SkySoft.DnsRecord.DTI;
 using SkySoft.DnsRecord.DTO;

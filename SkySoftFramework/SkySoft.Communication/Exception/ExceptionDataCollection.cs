@@ -1,4 +1,5 @@
-﻿using SkySoft.ICommunication;
+﻿using SkySoft.Contracts;
+using SkySoft.ICommunication;
 
 namespace SkySoft.Communication
 {

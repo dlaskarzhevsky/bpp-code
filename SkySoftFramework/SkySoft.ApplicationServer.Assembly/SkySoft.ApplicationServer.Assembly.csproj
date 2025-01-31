@@ -33,6 +33,9 @@
     <ProjectReference Include="..\SkySoft.Http\SkySoft.Http.csproj" />
     <ProjectReference Include="..\SkySoft.IBPPApplication\SkySoft.IBPPApplication.csproj" />
     <ProjectReference Include="..\SkySoft.ICommunication\SkySoft.ICommunication.csproj" />
+    <ProjectReference Include="..\SkySoft.ILogging\SkySoft.ILogging.csproj" />
+    <ProjectReference Include="..\SkySoft.Logging.CFG\SkySoft.Logging.CFG.csproj" />
+    <ProjectReference Include="..\SkySoft.LoggingToConsole\SkySoft.LoggingToConsole.csproj" />
   </ItemGroup>
 
 </Project>

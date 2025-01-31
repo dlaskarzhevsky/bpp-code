@@ -1,6 +1,6 @@
 ﻿using SkySoft.Communication;
-using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
+using SkySoft.ILogging;
 
 namespace SkySoft.BPPApplication
 {
@@ -14,8 +14,8 @@ namespace SkySoft.BPPApplication
         /// Executes activity
         /// </summary>
         /// <param name="dataContainer">Data container</param>
-        /// <param name="operatingSystem">Operating system</param>
-        public static void Execute(IDataContainer dataContainer, IOS operatingSystem)
+        /// <param name="logger">Logger instance</param>
+        public static void Execute(IDataContainer dataContainer, ILogger logger)
         {
             IDataCollection<ExceptionDTO>? exceptionDataCollection = dataContainer.GetDataColletion<ExceptionDTO>(SkySoft.Contracts.DataCollectionTypes.EXCEPTIONS);
             if (exceptionDataCollection != null)
@@ -27,12 +27,12 @@ namespace SkySoft.BPPApplication
                     {
                         if (!string.IsNullOrEmpty(exceptionDTO.Message))
                         {
-                            operatingSystem.LogMessage(exceptionDTO.Message, MessageTypeToLogLevelMapper.Map(exceptionDTO.MessageType));
+                            logger.Log(exceptionDTO.MessageType, exceptionDTO.Message);
                         }
                     }
                     else
                     {
-                        operatingSystem.LogException(exceptionDTO.Exception);
+                        logger.Log(exceptionDTO.Exception);
                     }
                 }
             }

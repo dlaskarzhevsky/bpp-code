@@ -1,4 +1,6 @@
-﻿namespace SkySoft.ICommunication
+﻿using SkySoft.Contracts;
+
+namespace SkySoft.ICommunication
 {
     /// <summary>
     /// Defines data container functionality

@@ -1,4 +1,4 @@
-﻿namespace SkySoft.ICommunication
+﻿namespace SkySoft.Contracts
 {
     /// <summary>
     /// Defines message type options

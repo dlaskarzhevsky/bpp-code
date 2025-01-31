@@ -1,9 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+﻿using System;
+
+using Microsoft.Extensions.Configuration;
 
 using SkySoft.Communication;
+using SkySoft.Contracts;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
+using SkySoft.ILogging;
 
 namespace SkySoft.BPPApplication
 {
@@ -21,7 +24,7 @@ namespace SkySoft.BPPApplication
         /// <param name="requestHandlers">Request handlers</param>
         /// <param name="logger">Logger instance</param>
         /// <param name="drivers">Set of drivers</param>
-        public OS(IConfiguration applicationConfiguration, IApplicationCache applicationCache, ILogger<OS> logger, IEnumerable<IRequestHandler> requestHandlers, IEnumerable<IDriver> drivers)
+        public OS(IConfiguration applicationConfiguration, IApplicationCache applicationCache, ILogger logger, IEnumerable<IRequestHandler> requestHandlers, IEnumerable<IDriver> drivers)
         {
             ApplicationConfiguration = applicationConfiguration;
             ApplicationCache = applicationCache;
@@ -130,8 +133,7 @@ namespace SkySoft.BPPApplication
         /// <param name="exception">Exception for logging</param>
         public void LogException(Exception exception)
         {
-            LogMessage(exception.Message, LogLevel.Critical);
-            Logger.LogCritical(exception, null);
+            Logger.Log(exception);
         }
 
         /// <summary>
@@ -139,9 +141,9 @@ namespace SkySoft.BPPApplication
         /// IOS interface implementation
         /// </summary>
         /// <param name="message">Message for logging</param>
-        /// <param name="logLevel">Log level</param>
+        /// <param name="messageType">Message type</param>
         /// <returns>Logged message</returns>
-        public string LogMessage(string message, LogLevel logLevel)
+        public string LogMessage(string message, MessageType messageType)
         {
             string messageMetadata = string.Empty;
             if (!message.StartsWith("Logged on", StringComparison.InvariantCultureIgnoreCase))
@@ -150,9 +152,19 @@ namespace SkySoft.BPPApplication
             }
 
             string compiledMessage = messageMetadata + message;
-            Logger.Log(logLevel, compiledMessage);
+            Logger.Log(messageType, compiledMessage);
 
             return compiledMessage;
+        }
+
+        /// <summary>
+        /// Logs messages
+        /// IOS interface implementation
+        /// </summary>
+        /// <param name="dataContainer">Data container</param>
+        public void LogMessages(IDataContainer dataContainer)
+        {
+            SkySoft.BPPApplication.LogMessages.Execute(dataContainer, Logger);
         }
 
         /// <summary>
@@ -209,10 +221,11 @@ namespace SkySoft.BPPApplication
 
         /// <summary>
         /// Gets or sets logger
+        /// IOS interface implementation
         /// </summary>
-        public ILogger<OS> Logger
+        public ILogger Logger
         {
-            get; set;
+            get; private set;
         }
 
         /// <summary>

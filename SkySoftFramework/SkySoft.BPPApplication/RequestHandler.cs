@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
+using SkySoft.Contracts;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
 

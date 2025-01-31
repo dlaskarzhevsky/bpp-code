@@ -21,6 +21,7 @@
     <ProjectReference Include="..\SkySoft.DnsServer.DPLCFG\SkySoft.DnsServer.DPLCFG.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServerApp.DPLCFG\SkySoft.DnsServerApp.DPLCFG.csproj" />
     <ProjectReference Include="..\SkySoft.Http.CFG\SkySoft.Http.CFG.csproj" />
+    <ProjectReference Include="..\SkySoft.Logging.CFG\SkySoft.Logging.CFG.csproj" />
   </ItemGroup>
 
   <ItemGroup>

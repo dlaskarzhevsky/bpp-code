@@ -1,4 +1,5 @@
-﻿using SkySoft.IBPPApplication;
+﻿using SkySoft.Contracts;
+using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
 
 namespace SkySoft.BPPApplication
@@ -23,7 +24,7 @@ namespace SkySoft.BPPApplication
             {
                 ConfigureRequestForApplicationInitialization();
                 await SendRequestForApplicationInitializationToOperatingSystem();
-                LogMessages.Execute(DataContainer, operatingSystem);
+                LogMessages.Execute(DataContainer, operatingSystem.Logger);
                 if (OperatingSystemInitializedApplication)
                 {
                     SetApplicationStateToInitial();

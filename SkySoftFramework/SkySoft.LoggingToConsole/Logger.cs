@@ -60,6 +60,7 @@ namespace SkySoft.LoggingToConsole
 
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine(message);
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -87,6 +88,7 @@ namespace SkySoft.LoggingToConsole
 
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write(exception);
+            Console.WriteLine();
         }
         #endregion
 

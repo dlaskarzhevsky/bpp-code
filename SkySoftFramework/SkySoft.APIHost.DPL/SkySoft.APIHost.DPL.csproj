@@ -3,10 +3,10 @@
   <PropertyGroup>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
-    <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>true</IsPackable>
+    <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+    <Nullable>enable</Nullable>
     <OutputType>Library</OutputType>
     <StaticWebAssetsEnabled>false</StaticWebAssetsEnabled>
     <TargetFramework>net9.0</TargetFramework>

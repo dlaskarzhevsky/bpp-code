@@ -8,8 +8,6 @@ variables:
   - group: sky-soft-application-server-dev
 - ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
   - group: sky-soft-application-server-prod
-- ${{ if eq(variables['Build.SourceBranchName'], 'nuget-dev') }}:
-  - group: sky-soft-application-server-dev
 
 steps:
 - script: |
@@ -58,10 +56,10 @@ steps:
 
 - script: |
     echo nuget_package_version: $(nuget_package_version)
-  displayName: 'display version variable'
+  displayName: 'display package version'
 
 - task: MorenoBruschi.manage-variable-group-task.custom-build-release-task.ManageVariableGroupTask@0
-  displayName: 'update version variable'
+  displayName: 'update package version'
   inputs:
     pat: $(mvgt_pat)
     project: $(mvgt_bpp_project_id)

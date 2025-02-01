@@ -19,28 +19,10 @@ namespace SkySoft.DnsRecord.DTO
         }
 
         /// <summary>
-        /// Gets or set HTTP uniform resource locator
+        /// Gets or set uniform resource locator
         /// IDnsRecordDTO interface implementation
         /// </summary>
-        public string? HttpUrl
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or set HTTPS uniform resource locator
-        /// IDnsRecordDTO interface implementation
-        /// </summary>
-        public string? HttpsUrl
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets flag indicating whether HTTPS needs to be used
-        /// IDnsRecordDTO interface implementation
-        /// </summary>
-        public bool UseHttps
+        public string? Url
         {
             get; set;
         }

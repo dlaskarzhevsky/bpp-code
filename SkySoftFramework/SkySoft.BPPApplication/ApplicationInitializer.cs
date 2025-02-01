@@ -96,7 +96,8 @@ namespace SkySoft.BPPApplication
         /// </summary>
         void GetApplicationStateFromCache()
         {
-            ApplicationState = OperatingSystem.GetValueFomCache<string?>("ApplicationState");
+            string applicationStateKey = $"{DomainName}_{UseCaseName}_{ApplicationLayerName}_ApplicationState";
+            ApplicationState = OperatingSystem.GetValueFomCache<string?>(applicationStateKey);
         }
 
         /// <summary>
@@ -113,7 +114,7 @@ namespace SkySoft.BPPApplication
         /// </summary>
         async Task SendRequestForApplicationInitializationToOperatingSystem()
         {
-            DataContainer = await OperatingSystem.InitializeApplication(DataContainer);
+            DataContainer = await OperatingSystem.RedirectRequestToRequestHandler(DataContainer);
         }
 
         /// <summary>
@@ -122,7 +123,8 @@ namespace SkySoft.BPPApplication
         void SetApplicationStateToInitial()
         {
             ApplicationState = SkySoft.Contracts.StateTypes.INITIAL;
-            OperatingSystem.CacheValue<string>("ApplicationState", ApplicationState);
+            string applicationStateKey = $"{DomainName}_{UseCaseName}_{ApplicationLayerName}_ApplicationState";
+            OperatingSystem.CacheValue<string>(applicationStateKey, ApplicationState);
         }
         #endregion
 

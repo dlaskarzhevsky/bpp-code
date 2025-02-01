@@ -1,6 +1,6 @@
 ﻿using SkySoft.IBPPApplication;
 
-namespace SkySoft.APIHost.DPLCFG
+namespace SkySoft.APIHostApp.CFG
 {
     /// <summary>
     /// Provides application initializer registrar functionality
@@ -15,7 +15,7 @@ namespace SkySoft.APIHost.DPLCFG
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
             // Data processing logic
-            webApplicationBuilder.Services.AddTransient<IApplicationInitializer, SkySoft.APIHost.INI.ApplicationInitializer>();
+            webApplicationBuilder.Services.AddTransient<IApplicationInitializer, SkySoft.APIHostApp.INI.ApplicationInitializer>();
         }
         #endregion
     }

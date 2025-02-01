@@ -21,19 +21,22 @@ namespace SkySoft.BPPApplication
         /// </summary>
         /// <param name="applicationConfiguration">Application configuration</param>
         /// <param name="applicationCache">Application cache</param>
-        /// <param name="requestHandlers">Request handlers</param>
         /// <param name="logger">Logger instance</param>
+        /// <param name="applicationInitializers">Request handlers</param>
+        /// <param name="requestHandlers">Request handlers</param>
         /// <param name="drivers">Set of drivers</param>
-        public OS(IConfiguration applicationConfiguration, IApplicationCache applicationCache, ILogger logger, IEnumerable<IRequestHandler> requestHandlers, IEnumerable<IDriver> drivers)
+        public OS(IConfiguration applicationConfiguration, IApplicationCache applicationCache, ILogger logger, IEnumerable<IApplicationInitializer> applicationInitializers, IEnumerable<IRequestHandler> requestHandlers, IEnumerable<IDriver> drivers)
         {
             ApplicationConfiguration = applicationConfiguration;
             ApplicationCache = applicationCache;
             Logger = logger;
             Logger.ApplicationLayerName = GetValueFromApplicationConfiguration<string>("Host:ApplicationLayerName");
             Logger.ApplicationLayerUrl = GetValueFromApplicationConfiguration<string>("Host:Endpoints:Http:Url");
+            ApplicationInitializers = applicationInitializers;
             RequestHandlers = requestHandlers;
             Drivers = drivers;
             EventRedirector = new EventRedirector();
+            ApplicationsInitialized = InitializeApplications().Result;
         }
         #endregion
 
@@ -118,17 +121,6 @@ namespace SkySoft.BPPApplication
         }
 
         /// <summary>
-        /// Initializes application
-        /// IOS interface implementation
-        /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <returns>Data container</returns>
-        public async Task<IDataContainer> InitializeApplication(IDataContainer dataContainer)
-        {
-            return await RedirectRequestToRequestHandler(dataContainer);
-        }
-
-        /// <summary>
         /// Logs messages
         /// IOS interface implementation
         /// </summary>
@@ -183,6 +175,22 @@ namespace SkySoft.BPPApplication
         }
 
         /// <summary>
+        /// Gets or sets application initializers
+        /// </summary>
+        public IEnumerable<IApplicationInitializer> ApplicationInitializers
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets flag indicating whether applications initialized
+        /// </summary>
+        public bool ApplicationsInitialized
+        {
+            get; private set;
+        }
+
+        /// <summary>
         /// Gets or sets drivers
         /// </summary>
         public IEnumerable<IDriver> Drivers
@@ -213,6 +221,25 @@ namespace SkySoft.BPPApplication
         public IEnumerable<IRequestHandler> RequestHandlers
         {
             get; set;
+        }
+        #endregion
+
+        #region Private Method
+        /// <summary>
+        /// Initializes applications
+        /// </summary>
+        /// <returns>Flag indicating whether applications initialized</returns>
+        async Task<bool> InitializeApplications()
+        {
+            bool applicationsInitialized = true;
+            List<IApplicationInitializer> listOfApplicationInitializers = ApplicationInitializers.ToList();
+            for (int i = 0; i < listOfApplicationInitializers.Count; i++)
+            {
+                IApplicationInitializer applicationInitializer = listOfApplicationInitializers[i];
+                applicationsInitialized = applicationsInitialized && await applicationInitializer.InitializeApplication(this);
+            }
+
+            return applicationsInitialized;
         }
         #endregion
 

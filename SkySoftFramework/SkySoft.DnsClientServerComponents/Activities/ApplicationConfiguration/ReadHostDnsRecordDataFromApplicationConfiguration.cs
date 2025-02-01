@@ -19,11 +19,7 @@ namespace SkySoft.DnsClientServerComponents
         public static DnsRecordDTO Execute(IConfiguration applicationConfiguration)
         {
             DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDataTransferObject<DnsRecordDTO>();
-
-            dnsRecordDTO.ApplicationLayerName = applicationConfiguration!.GetValue<string>("Host:ApplicationLayerName");
-            dnsRecordDTO.HttpsUrl = applicationConfiguration!.GetValue<string>("Host:Endpoints:Https:Url");
-            dnsRecordDTO.HttpUrl = applicationConfiguration!.GetValue<string>("Host:Endpoints:Http:Url");
-            dnsRecordDTO.UseHttps = applicationConfiguration.GetValue<bool>("UseHttps");
+            dnsRecordDTO.Url = applicationConfiguration!.GetValue<string>("Host:Endpoints:Http:Url");
 
             return dnsRecordDTO;
         }

@@ -107,14 +107,7 @@ namespace SkySoft.Http.DRV
         /// </summary>
         void CalculateDnsServerUrl()
         {
-            if (DnsServerDnsRecord!.UseHttps)
-            {
-                RemoteServerUrl = DnsServerDnsRecord.HttpsUrl;
-            }
-            else
-            {
-                RemoteServerUrl = DnsServerDnsRecord.HttpUrl;
-            }
+            RemoteServerUrl = DnsServerDnsRecord!.Url;
         }
 
         /// <summary>
@@ -122,14 +115,7 @@ namespace SkySoft.Http.DRV
         /// </summary>
         void CalculateRemoteServerUrl()
         {
-            if (RemoteServerDnsRecord!.UseHttps)
-            {
-                RemoteServerUrl = RemoteServerDnsRecord.HttpsUrl;
-            }
-            else
-            {
-                RemoteServerUrl = RemoteServerDnsRecord.HttpUrl;
-            }
+            RemoteServerUrl = RemoteServerDnsRecord!.Url;
         }
 
         /// <summary>

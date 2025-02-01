@@ -1,4 +1,4 @@
-﻿namespace SkySoft.APIHost.INI
+﻿namespace SkySoft.DnsServerApp.INI
 {
     /// <summary>
     /// Provides application initializer functionality
@@ -12,11 +12,11 @@
         public ApplicationInitializer()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            UseCaseName = SkySoft.APIHost.CON.UseCaseContract.API_HOST;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
-            TransitionName = SkySoft.APIHost.CON.TransitionTypes.LOADING_USE_CASE;
+            UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.BL;
+            TransitionName = SkySoft.DnsServer.CON.TransitionTypes.INITIALIZING_APPLICATION;
 
-            TargetStateName = SkySoft.APIHost.CON.StateTypes.INITIAL;
+            TargetStateName = SkySoft.DnsServer.CON.StateTypes.INITIAL;
         }
         #endregion
     }

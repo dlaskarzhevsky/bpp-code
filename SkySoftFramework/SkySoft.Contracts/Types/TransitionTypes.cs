@@ -21,9 +21,14 @@
         public const string EDITING = "Editing";
 
         /// <summary>
-        /// Getting remote server data
+        /// Getting remote server data transition
         /// </summary>
         public const string GETTING_REMOTE_SERVER_DATA = "GettingRemoteServerData";
+
+        /// <summary>
+        /// Initializing application transition
+        /// </summary>
+        public const string INITIALIZING_APPLICATION = "InitializingApplication";
 
         /// <summary>
         /// Loading use case transition

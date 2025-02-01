@@ -36,8 +36,7 @@ namespace SkySoft.DnsClientServerComponents
             ValidateHostApplicationLayerName();
             if (DnsRecordDataValid)
             {
-                ValidateHttpsUrl();
-                ValidateHttpUrl();
+                ValidateUrl();
             }
         }
 
@@ -68,31 +67,15 @@ namespace SkySoft.DnsClientServerComponents
         }
 
         /// <summary>
-        /// Validates HTTPS URL
+        /// Validates URL
         /// </summary>
-        void ValidateHttpsUrl()
+        void ValidateUrl()
         {
-            if (string.IsNullOrEmpty(DnsRecordDTO.HttpsUrl) && DnsRecordDTO.UseHttps == true)
+            if (string.IsNullOrEmpty(DnsRecordDTO.Url))
             {
                 if (LogValidationResult)
                 {
-                    LogMessage($"{MessageHeader}DNS data file does not have required HTTPS URL entry for " + DnsRecordDTO.ApplicationLayerName, MessageType.Warning);
-                }
-
-                DnsRecordDataValid = false;
-            }
-        }
-
-        /// <summary>
-        /// Validates HTTP URL
-        /// </summary>
-        void ValidateHttpUrl()
-        {
-            if (string.IsNullOrEmpty(DnsRecordDTO.HttpUrl) && DnsRecordDTO.UseHttps == false)
-            {
-                if (LogValidationResult)
-                {
-                    LogMessage($"{MessageHeader}DNS data file does not have required HTTP URL entry for " + DnsRecordDTO.ApplicationLayerName, MessageType.Warning);
+                    LogMessage($"{MessageHeader}DNS data file does not have required URL entry for " + DnsRecordDTO.ApplicationLayerName, MessageType.Warning);
                 }
 
                 DnsRecordDataValid = false;

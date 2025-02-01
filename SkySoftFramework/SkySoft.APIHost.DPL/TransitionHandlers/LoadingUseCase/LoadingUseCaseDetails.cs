@@ -1,4 +1,5 @@
-﻿using SkySoft.DnsClientServerComponents;
+﻿using SkySoft.Contracts;
+using SkySoft.DnsClientServerComponents;
 using SkySoft.DnsRecord.DTO;
 
 namespace SkySoft.APIHost.DPL
@@ -47,11 +48,12 @@ namespace SkySoft.APIHost.DPL
         /// </summary>
         void ValidateHostData()
         {
-            DnsRecordValidator dnsRecordValidator = new DnsRecordValidator(DnsRecordWithApplicationConfigurationData!, this, true, "Reading application host configuration from appsettings.json file." + Environment.NewLine);
-            dnsRecordValidator.OperatingSystem = OperatingSystem;
-            dnsRecordValidator.ProcessRequest(DataContainer);
-            dnsRecordValidator.ReleaseResources();
-            HostDataValid = dnsRecordValidator.DnsRecordDataValid;
+            string? urlValidationResult = ValidateUrlOfDnsRecord.Execute(DnsRecordWithApplicationConfigurationData!, "Reading application host configuration from appsettings.json file." + Environment.NewLine);
+            if (string.IsNullOrEmpty(urlValidationResult))
+            {
+                DataContainer.SetMessage(urlValidationResult!, MessageType.Error, OperatingSystem!.Logger.ApplicationLayerName, OperatingSystem.Logger.ApplicationLayerUrl);
+                HostDataValid = false;
+            }
         }
         #endregion
 

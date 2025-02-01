@@ -57,17 +57,7 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void LogRegistrationResult()
         {
-            string? hostUrl = null;
-            if (HostDnsRecordDTO!.UseHttps)
-            {
-                hostUrl = HostDnsRecordDTO.HttpsUrl;
-            }
-            else
-            {
-                hostUrl = HostDnsRecordDTO.HttpUrl;
-            }
-
-            LogDnsRecordRegistrationResult.Execute(DnsRecordDTOFromRequest!, DataContainer, HostDnsRecordDTO!.ApplicationLayerName, hostUrl);
+            LogDnsRecordRegistrationResult.Execute(DnsRecordDTOFromRequest!, DataContainer, HostDnsRecordDTO!.ApplicationLayerName, HostDnsRecordDTO.Url);
         }
 
         /// <summary>

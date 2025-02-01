@@ -24,19 +24,9 @@ namespace SkySoft.DnsClientServerComponents
                 }
             }
 
-            if (targetDTO.HttpsUrl != sourceDTO.HttpsUrl)
+            if (targetDTO.Url != sourceDTO.Url)
             {
-                targetDTO.HttpsUrl = sourceDTO.HttpsUrl;
-            }
-
-            if (targetDTO.HttpUrl != sourceDTO.HttpUrl)
-            {
-                targetDTO.HttpUrl = sourceDTO.HttpUrl;
-            }
-
-            if (targetDTO.UseHttps != sourceDTO.UseHttps)
-            {
-                targetDTO.UseHttps = sourceDTO.UseHttps;
+                targetDTO.Url = sourceDTO.Url;
             }
 
             if (targetDTO.DateOfCreation == null)

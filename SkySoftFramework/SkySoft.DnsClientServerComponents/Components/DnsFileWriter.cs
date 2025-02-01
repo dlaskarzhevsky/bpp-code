@@ -98,8 +98,7 @@ namespace SkySoft.DnsClientServerComponents
         {
             CachedDnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>();
             CachedDnsRecordDTO.ApplicationLayerName = DnsRecordDTO!.ApplicationLayerName;
-            CachedDnsRecordDTO.HttpsUrl = DnsRecordDTO.HttpsUrl;
-            CachedDnsRecordDTO.HttpUrl = DnsRecordDTO.HttpUrl;
+            CachedDnsRecordDTO.Url = DnsRecordDTO.Url;
         }
 
         /// <summary>
@@ -149,21 +148,9 @@ namespace SkySoft.DnsClientServerComponents
         /// </summary>
         void UpdateDnsRecordData()
         {
-            if (CachedDnsRecordDTO!.HttpsUrl != DnsRecordDTO!.HttpsUrl)
+            if (CachedDnsRecordDTO!.Url != DnsRecordDTO!.Url)
             {
-                CachedDnsRecordDTO.HttpsUrl = DnsRecordDTO.HttpsUrl;
-                CachedDnsRecordUpdated = true;
-            }
-
-            if (CachedDnsRecordDTO!.HttpUrl != DnsRecordDTO!.HttpUrl)
-            {
-                CachedDnsRecordDTO.HttpUrl = DnsRecordDTO.HttpUrl;
-                CachedDnsRecordUpdated = true;
-            }
-
-            if (CachedDnsRecordDTO.UseHttps != DnsRecordDTO.UseHttps)
-            {
-                CachedDnsRecordDTO.UseHttps = DnsRecordDTO.UseHttps;
+                CachedDnsRecordDTO.Url = DnsRecordDTO.Url;
                 CachedDnsRecordUpdated = true;
             }
         }

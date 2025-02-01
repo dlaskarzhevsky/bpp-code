@@ -22,17 +22,7 @@ namespace SkySoft.DnsClientServerComponents
                 dnsRecorsAreIdentical = false;
             }
 
-            if (targetDTO.HttpsUrl != sourceDTO.HttpsUrl)
-            {
-                dnsRecorsAreIdentical = false;
-            }
-
-            if (targetDTO.HttpUrl != sourceDTO.HttpUrl)
-            {
-                dnsRecorsAreIdentical = false;
-            }
-
-            if (targetDTO.UseHttps != sourceDTO.UseHttps)
+            if (targetDTO.Url != sourceDTO.Url)
             {
                 dnsRecorsAreIdentical = false;
             }

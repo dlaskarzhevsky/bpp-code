@@ -1,14 +1,22 @@
 WebApplicationBuilder webApplicationBuilder = WebApplication.CreateBuilder(args);
 
 SkySoft.BPPApplication.CFG.Registrar.Register(webApplicationBuilder);
-SkySoft.APIHost.DPLCFG.Registrar.Register(webApplicationBuilder);
 SkySoft.Http.CFG.Registrar.Register(webApplicationBuilder);
-SkySoft.DnsServer.DALCFG.Registrar.Register(webApplicationBuilder);
-SkySoft.DnsServer.DPLCFG.Registrar.Register(webApplicationBuilder);
-SkySoft.DnsServerApp.DPLCFG.Registrar.Register(webApplicationBuilder);
 SkySoft.Logging.CFG.Registrar.Register(webApplicationBuilder);
 
-SkySoft.APIHost.DPLCFG.ApplicationInitializerRegistrar.Register(webApplicationBuilder);
+SkySoft.APIHost.BLCFG.Registrar.Register(webApplicationBuilder);
+SkySoft.APIHost.DPLCFG.Registrar.Register(webApplicationBuilder);
+SkySoft.APIHost.DALCFG.Registrar.Register(webApplicationBuilder);
+SkySoft.APIHostApp.BLCFG.Registrar.Register(webApplicationBuilder);
+SkySoft.APIHostApp.DPLCFG.Registrar.Register(webApplicationBuilder);
+SkySoft.APIHostApp.CFG.Registrar.Register(webApplicationBuilder);
+
+SkySoft.DnsServer.BLCFG.Registrar.Register(webApplicationBuilder);
+SkySoft.DnsServer.DPLCFG.Registrar.Register(webApplicationBuilder);
+SkySoft.DnsServer.DALCFG.Registrar.Register(webApplicationBuilder);
+SkySoft.DnsServerApp.BLCFG.Registrar.Register(webApplicationBuilder);
+SkySoft.DnsServerApp.DPLCFG.Registrar.Register(webApplicationBuilder);
+SkySoft.DnsServerApp.CFG.Registrar.Register(webApplicationBuilder);
 
 webApplicationBuilder.Services.AddControllers();
 

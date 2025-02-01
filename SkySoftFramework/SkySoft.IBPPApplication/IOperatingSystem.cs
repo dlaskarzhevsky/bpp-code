@@ -55,13 +55,6 @@ namespace SkySoft.IBPPApplication
         T? GetValueFomCache<T>(string key);
 
         /// <summary>
-        /// Initializes application
-        /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <returns>Data container</returns>
-        Task<IDataContainer> InitializeApplication(IDataContainer dataContainer);
-
-        /// <summary>
         /// Logs messages
         /// </summary>
         /// <param name="dataContainer">Data container</param>
@@ -90,6 +83,14 @@ namespace SkySoft.IBPPApplication
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets flag indicating whether applications initialized
+        /// </summary>
+        bool ApplicationsInitialized
+        {
+            get;
+        }
+
         /// <summary>
         /// Gets or sets logger
         /// </summary>

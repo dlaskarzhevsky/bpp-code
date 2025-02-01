@@ -13,8 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SkySoft.APIHost.CON\SkySoft.APIHost.CON.csproj" />
-    <ProjectReference Include="..\SkySoft.APIHost.DPL\SkySoft.APIHost.DPL.csproj" />
+    <ProjectReference Include="..\SkySoft.APIHostApp.INI\SkySoft.APIHostApp.INI.csproj" />
   </ItemGroup>
 
 </Project>

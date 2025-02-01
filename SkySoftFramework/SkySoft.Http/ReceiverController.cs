@@ -13,12 +13,11 @@ namespace SkySoft.Http
         /// <summary>
         /// Default constructor
         /// </summary>
-        /// <param name="applicationInitializer">Application initializer</param>
         /// <param name="operatingSystem">Operating system</param>
-        public ReceiverController(IApplicationInitializer applicationInitializer, IOS operatingSystem)
+        public ReceiverController(IOS operatingSystem)
         {
             OperatingSystem = operatingSystem;
-            ApplicationInitialized = applicationInitializer.InitializeApplication(operatingSystem).Result;
+            ApplicationInitialized = OperatingSystem.ApplicationsInitialized;
         }
         #endregion
 

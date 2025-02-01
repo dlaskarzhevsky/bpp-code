@@ -14,11 +14,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SkySoft.APIHost.BLCFG\SkySoft.APIHost.BLCFG.csproj" />
+    <ProjectReference Include="..\SkySoft.APIHost.DALCFG\SkySoft.APIHost.DALCFG.csproj" />
     <ProjectReference Include="..\SkySoft.APIHost.DPLCFG\SkySoft.APIHost.DPLCFG.csproj" />
+    <ProjectReference Include="..\SkySoft.APIHostApp.BLCFG\SkySoft.APIHostApp.BLCFG.csproj" />
+    <ProjectReference Include="..\SkySoft.APIHostApp.CFG\SkySoft.APIHostApp.CFG.csproj" />
+    <ProjectReference Include="..\SkySoft.APIHostApp.DPLCFG\SkySoft.APIHostApp.DPLCFG.csproj" />
     <ProjectReference Include="..\SkySoft.ApplicationServer.Runtime\SkySoft.ApplicationServer.Runtime.csproj" />
     <ProjectReference Include="..\SkySoft.BPPApplication.CFG\SkySoft.BPPApplication.CFG.csproj" />
+    <ProjectReference Include="..\SkySoft.DnsServer.BLCFG\SkySoft.DnsServer.BLCFG.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.DALCFG\SkySoft.DnsServer.DALCFG.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.DPLCFG\SkySoft.DnsServer.DPLCFG.csproj" />
+    <ProjectReference Include="..\SkySoft.DnsServerApp.BLCFG\SkySoft.DnsServerApp.BLCFG.csproj" />
+    <ProjectReference Include="..\SkySoft.DnsServerApp.CFG\SkySoft.DnsServerApp.CFG.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServerApp.DPLCFG\SkySoft.DnsServerApp.DPLCFG.csproj" />
     <ProjectReference Include="..\SkySoft.Http.CFG\SkySoft.Http.CFG.csproj" />
     <ProjectReference Include="..\SkySoft.Logging.CFG\SkySoft.Logging.CFG.csproj" />

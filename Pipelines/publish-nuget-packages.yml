@@ -8,6 +8,8 @@ variables:
   - group: sky-soft-application-server-dev
 - ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
   - group: sky-soft-application-server-prod
+- ${{ if eq(variables['Build.SourceBranchName'], 'nuget-dev') }}:
+  - group: sky-soft-application-server-dev
 
 steps:
 - script: |

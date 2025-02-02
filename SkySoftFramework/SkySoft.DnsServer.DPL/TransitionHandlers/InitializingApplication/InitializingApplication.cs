@@ -1,20 +1,20 @@
 ﻿namespace SkySoft.DnsServer.DPL
 {
     /// <summary>
-    /// LoadingUseCase transition request handler
+    /// InitializingApplication transition request handler
     /// </summary>
-    public partial class LoadingUseCase : SkySoft.BPPApplication.RequestHandler
+    public partial class InitializingApplication : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public LoadingUseCase()
+        public InitializingApplication()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
-            TransitionName = SkySoft.DnsServer.CON.TransitionTypes.LOADING_USE_CASE;
+            TransitionName = SkySoft.DnsServer.CON.TransitionTypes.INITIALIZING_APPLICATION;
         }
         #endregion
 
@@ -24,21 +24,7 @@
         /// </summary>
         protected override async Task HandleRequestAsync()
         {
-            GetListOfDnsRecordsFromCache();
-            if (CacheHasNoDnsRecords)
-            {
-                await LoadDnsRecordsFromStorage();
-                CacheListOfDnsRecords();
-            }
-        }
-
-        /// <summary>
-        /// Releases resources
-        /// </summary>
-        public override void ReleaseResources()
-        {
-            ListOfDnsRecords = null;
-            base.ReleaseResources();
+            await RedirectRequestToNextApplicationLayer();
         }
         #endregion
     }

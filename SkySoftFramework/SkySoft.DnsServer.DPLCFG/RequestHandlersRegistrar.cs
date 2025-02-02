@@ -15,7 +15,7 @@ namespace SkySoft.DnsServer.DPLCFG
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
             // Data processing logic
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServer.DPL.LoadingUseCase>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServer.DPL.InitializingApplication>();
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServer.DPL.RegisteringHost>();
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServer.DPL.Searching>();
         }

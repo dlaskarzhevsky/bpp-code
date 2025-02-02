@@ -10,6 +10,25 @@ namespace SkySoft.APIHost.DAL
     {
         #region Private Methods
         /// <summary>
+        /// Adds DNS record to file
+        /// </summary>
+        void AddDnsRecordToFile()
+        {
+            if (HostDnsRecordDTO != null)
+            {
+                SkySoft.DnsClientServerComponents.AddDnsRecordToFile.Execute(HostDnsRecordDTO, DataContainer);
+            }
+        }
+
+        /// <summary>
+        /// Copies application layer full name into loaded host DNS record
+        /// </summary>
+        void CopyApplicationLayerFullNameIntoLoadedHostDnsRecord()
+        {
+            HostDnsRecordDTO!.ApplicationLayerFullName = DnsRecordFromRequest!.ApplicationLayerFullName;
+        }
+
+        /// <summary>
         /// Copies DNS data into DNS record from request
         /// </summary>
         void CopyDnsDataIntoDnsRecordFromRequest()

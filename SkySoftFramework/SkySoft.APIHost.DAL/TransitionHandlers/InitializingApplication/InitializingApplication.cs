@@ -33,6 +33,8 @@
             else
             {
                 LoadHostDnsRecordFromApplicationConfiguration();
+                CopyApplicationLayerFullNameIntoLoadedHostDnsRecord();
+                AddDnsRecordToFile();
             }
 
             CopyDnsDataIntoDnsRecordFromRequest();

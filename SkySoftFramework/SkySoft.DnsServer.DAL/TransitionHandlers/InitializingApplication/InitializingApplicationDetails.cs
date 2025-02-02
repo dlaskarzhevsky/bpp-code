@@ -4,25 +4,17 @@ using SkySoft.DnsRecord.DTO;
 namespace SkySoft.DnsServer.DAL
 {
     /// <summary>
-    /// LoadingDnsRecordsFromFile transition request handler
+    /// InitializingApplication transition request handler
     /// </summary>
-    public partial class LoadingUseCase
+    public partial class InitializingApplication
     {
         #region Private Methods
         /// <summary>
-        /// Saves list of DNS records into file
+        /// Caches DNS records
         /// </summary>
-        void SaveListOfDnsRecordsIntoFile()
+        void CacheDnsRecords()
         {
-            SkySoft.DnsClientServerComponents.SaveListOfDnsRecordsIntoFile.Execute(ListOfDnsRecords!, PathToDnsRecordsFile);
-        }
-
-        /// <summary>
-        /// Gets list of DNS records from data container
-        /// </summary>
-        void GetListOfDnsRecordsFromDataContainer()
-        {
-            ListOfDnsRecords = DataContainer.GetDataColletion<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS) as List<DnsRecordDTO>;
+            SetListOfDnsRecordsIntoCache.Execute(ListOfDnsRecords!, OperatingSystem);
         }
 
         /// <summary>

@@ -1,20 +1,20 @@
 ﻿namespace SkySoft.DnsServer.DAL
 {
     /// <summary>
-    /// LoadingUseCase transition request handler
+    /// InitializingApplication transition request handler
     /// </summary>
-    public partial class LoadingUseCase : SkySoft.BPPApplication.RequestHandler
+    public partial class InitializingApplication : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public LoadingUseCase()
+        public InitializingApplication()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
-            TransitionName = SkySoft.DnsServer.CON.TransitionTypes.LOADING_USE_CASE;
+            TransitionName = SkySoft.DnsServer.CON.TransitionTypes.INITIALIZING_APPLICATION;
         }
         #endregion
 
@@ -25,10 +25,9 @@
         protected override void HandleRequest()
         {
             LoadDnsRecordsFromFile();
-            if (!DnsRecordsLoadedFromFile)
+            if (DnsRecordsLoadedFromFile)
             {
-                GetListOfDnsRecordsFromDataContainer();
-                SaveListOfDnsRecordsIntoFile();
+                CacheDnsRecords();
             }
         }
 

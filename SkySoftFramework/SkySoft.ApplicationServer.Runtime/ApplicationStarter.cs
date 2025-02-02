@@ -17,7 +17,7 @@ namespace SkySoft.ApplicationServer.Runtime
             IReceiverController receiverController = webApplication.Services.GetRequiredService<IReceiverController>();
             if (receiverController.ApplicationInitialized)
             {
-                webApplication.Run();
+                webApplication.Run(receiverController.HostUrl);
             }
             else
             {

@@ -19,7 +19,7 @@ namespace SkySoft.DnsClientServerComponents
         /// <param name="applicationLayerUrl">Application layer URL</param>
         public static void Execute(DnsRecordDTO dnsRecord, IDataContainer dataContainer, string? applicationLayerName, string? applicationLayerUrl)
         {
-            dataContainer.SetMessage($"Application layer {dnsRecord!.ApplicationLayerName} ({dnsRecord.Url}) was registered with DNS server successfully", MessageType.Information, applicationLayerName, applicationLayerUrl);
+            dataContainer.SetMessage($"Application layer {dnsRecord!.ApplicationLayerFullName} ({dnsRecord.Url}) was registered with DNS server successfully", MessageType.Information, applicationLayerName, applicationLayerUrl);
         }
         #endregion
     }

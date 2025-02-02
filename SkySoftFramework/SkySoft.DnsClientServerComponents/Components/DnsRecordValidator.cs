@@ -55,7 +55,7 @@ namespace SkySoft.DnsClientServerComponents
         /// </summary>
         void ValidateHostApplicationLayerName()
         {
-            if (string.IsNullOrEmpty(DnsRecordDTO.ApplicationLayerName))
+            if (string.IsNullOrEmpty(DnsRecordDTO.ApplicationLayerFullName))
             {
                 if (LogValidationResult)
                 {
@@ -75,7 +75,7 @@ namespace SkySoft.DnsClientServerComponents
             {
                 if (LogValidationResult)
                 {
-                    LogMessage($"{MessageHeader}DNS data file does not have required URL entry for " + DnsRecordDTO.ApplicationLayerName, MessageType.Warning);
+                    LogMessage($"{MessageHeader}DNS data file does not have required URL entry for " + DnsRecordDTO.ApplicationLayerFullName, MessageType.Warning);
                 }
 
                 DnsRecordDataValid = false;

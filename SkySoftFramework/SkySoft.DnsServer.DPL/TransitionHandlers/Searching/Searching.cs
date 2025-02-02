@@ -23,8 +23,6 @@
         /// <summary>
         /// Handles request
         /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <returns>Data container</returns>
         protected override void HandleRequest()
         {
             GetListOfDnsRecordsFromCache();

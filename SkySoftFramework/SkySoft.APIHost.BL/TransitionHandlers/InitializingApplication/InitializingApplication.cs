@@ -1,20 +1,20 @@
-﻿namespace SkySoft.APIHost.DPL
+﻿namespace SkySoft.APIHost.BL
 {
     /// <summary>
     /// LoadingUseCase transition request handler
     /// </summary>
-    public partial class LoadingUseCase : SkySoft.BPPApplication.RequestHandler
+    public partial class InitializingApplication : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public LoadingUseCase()
+        public InitializingApplication()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             UseCaseName = SkySoft.APIHost.CON.UseCaseContract.API_HOST;
-            TransitionName = SkySoft.APIHost.CON.TransitionTypes.LOADING_USE_CASE;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.BL;
+            TransitionName = SkySoft.APIHost.CON.TransitionTypes.INITIALIZING_APPLICATION;
         }
         #endregion
 
@@ -22,17 +22,19 @@
         /// <summary>
         /// Handles request aynchronously
         /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <returns>Data container</returns>
         protected override async Task HandleRequestAsync()
         {
-            LoadHostDataFromApplicationConfiguration();
+            if (ApplicationInitialized)
+            {
+                return;
+            }
+
+            AddDnsRecordWithHostApplicationLayerFullNameToRequest();
+            await GetHostDnsRecordByApplicationLayerFullName();
             ValidateHostData();
             if (HostDataValid)
             {
-                AddHostDataToDataContainer();
-                await RaiseHostInitializingEvent();
-                RemoveHostDataFromDataContainer();
+                SwitchApplicationIntoInitialState();
             }
         }
         #endregion

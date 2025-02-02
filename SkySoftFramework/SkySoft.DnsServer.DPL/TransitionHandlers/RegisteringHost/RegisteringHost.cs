@@ -26,8 +26,6 @@ namespace SkySoft.DnsServer.DPL
         /// <summary>
         /// Handles request aynchronously
         /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <returns>Data container</returns>
         protected override async Task HandleRequestAsync()
         {
             ReadHostDnsRecordDataFromApplicationConfiguration();

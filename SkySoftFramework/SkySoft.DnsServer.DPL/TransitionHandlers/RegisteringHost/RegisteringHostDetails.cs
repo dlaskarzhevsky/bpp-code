@@ -31,8 +31,8 @@ namespace SkySoft.DnsServer.DPL
         {
             if (DnsRecordDTOFromRequest != null)
             {
-                string applicationLayerName = DnsRecordDTOFromRequest.ApplicationLayerName!.ToLowerInvariant();
-                CachedDnsRecordDTO = FindDnsRecordInListByApplicationLayerName.Execute(ListOfCachedDnsRecords, applicationLayerName);
+                string applicationLayerName = DnsRecordDTOFromRequest.ApplicationLayerFullName!.ToLowerInvariant();
+                CachedDnsRecordDTO = FindDnsRecordInListByApplicationLayerFullName.Execute(ListOfCachedDnsRecords, applicationLayerName);
             }
         }
 
@@ -57,7 +57,7 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void LogRegistrationResult()
         {
-            LogDnsRecordRegistrationResult.Execute(DnsRecordDTOFromRequest!, DataContainer, HostDnsRecordDTO!.ApplicationLayerName, HostDnsRecordDTO.Url);
+            LogDnsRecordRegistrationResult.Execute(DnsRecordDTOFromRequest!, DataContainer, HostDnsRecordDTO!.ApplicationLayerFullName, HostDnsRecordDTO.Url);
         }
 
         /// <summary>

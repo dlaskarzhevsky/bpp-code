@@ -18,6 +18,7 @@ namespace SkySoft.Http
         {
             OperatingSystem = operatingSystem;
             ApplicationInitialized = OperatingSystem.ApplicationsInitialized;
+            HostUrl = OperatingSystem.HostUrl;
         }
         #endregion
 
@@ -72,6 +73,15 @@ namespace SkySoft.Http
         public bool ApplicationInitialized
         {
             get;
+        }
+
+        /// <summary>
+        /// Gets host URL
+        /// IReceiverController interface implementation
+        /// </summary>
+        public string? HostUrl
+        {
+            get; private set;
         }
         #endregion
 

@@ -82,7 +82,7 @@ namespace SkySoft.DnsClientServerComponents
         /// <returns>Cached DNS record if found, otherwise null</returns>
         static DnsRecordDTO? FindCachedDnsRecordByApplicationLayerName(List<DnsRecordDTO> listOfCachedDnsRecords, string applicationLayerName)
         {
-            return FindDnsRecordInListByApplicationLayerName.Execute(listOfCachedDnsRecords, applicationLayerName);
+            return FindDnsRecordInListByApplicationLayerFullName.Execute(listOfCachedDnsRecords, applicationLayerName);
         }
 
         /// <summary>

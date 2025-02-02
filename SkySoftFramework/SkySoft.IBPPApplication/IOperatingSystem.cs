@@ -92,6 +92,14 @@ namespace SkySoft.IBPPApplication
         }
 
         /// <summary>
+        /// Gets host URL
+        /// </summary>
+        string? HostUrl
+        {
+            get; set;
+        }
+
+        /// <summary>
         /// Gets or sets logger
         /// </summary>
         ILogger Logger

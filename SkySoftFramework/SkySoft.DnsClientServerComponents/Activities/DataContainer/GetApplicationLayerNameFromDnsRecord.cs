@@ -15,7 +15,7 @@ namespace SkySoft.DnsClientServerComponents
         /// <returns>Application layer name from DNS record if exists, otherwise null</returns>
         public static string? Execute(DnsRecordDTO dnsRecordDTO)
         {
-            return dnsRecordDTO.ApplicationLayerName;
+            return dnsRecordDTO.ApplicationLayerFullName;
         }
         #endregion
     }

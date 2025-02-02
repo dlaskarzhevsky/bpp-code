@@ -3,9 +3,9 @@
 namespace SkySoft.DnsClientServerComponents
 {
     /// <summary>
-    /// Finds DNS record in list by application layer name
+    /// Finds DNS record in list by application layer full name
     /// </summary>
-    public static class FindDnsRecordInListByApplicationLayerName
+    public static class FindDnsRecordInListByApplicationLayerFullName
     {
         #region Public Methods
         /// <summary>
@@ -19,7 +19,7 @@ namespace SkySoft.DnsClientServerComponents
             DnsRecordDTO? foundDnsRecordDTO = null;
             foreach (DnsRecordDTO dnsRecordDTO in ListOfDnsRecords)
             {
-                if (string.Equals(dnsRecordDTO.ApplicationLayerName!, applicationLayerName, StringComparison.InvariantCultureIgnoreCase))
+                if (string.Equals(dnsRecordDTO.ApplicationLayerFullName!, applicationLayerName, StringComparison.InvariantCultureIgnoreCase))
                 {
                     foundDnsRecordDTO = dnsRecordDTO;
                     break;

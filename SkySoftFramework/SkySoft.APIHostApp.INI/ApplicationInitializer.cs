@@ -1,4 +1,6 @@
-﻿namespace SkySoft.APIHostApp.INI
+﻿using SkySoft.DnsRecord.DTO;
+
+namespace SkySoft.APIHostApp.INI
 {
     /// <summary>
     /// Provides application initializer functionality
@@ -17,6 +19,28 @@
             TransitionName = SkySoft.APIHost.CON.TransitionTypes.INITIALIZING_APPLICATION;
 
             TargetStateName = SkySoft.APIHost.CON.StateTypes.INITIAL;
+        }
+        #endregion
+
+        #region Overridden Methods
+        /// <summary>
+        /// Configures operating system
+        /// </summary>
+        protected override void ConfigureOperatingSystem()
+        {
+            DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
+            if (dnsRecordDTO != null)
+            {
+                OperatingSystem.HostUrl = dnsRecordDTO.Url;
+            }
+        }
+
+        /// <summary>
+        /// Finalizes application initializer
+        /// </summary>
+        protected override void FinalizeApplicationInitializer()
+        {
+            ApplicationState = DataContainer.StateName;
         }
         #endregion
     }

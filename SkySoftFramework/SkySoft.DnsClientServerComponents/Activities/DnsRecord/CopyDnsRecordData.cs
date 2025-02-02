@@ -18,9 +18,9 @@ namespace SkySoft.DnsClientServerComponents
         {
             if (copyApplicationLayerName)
             {
-                if (targetDTO.ApplicationLayerName != sourceDTO.ApplicationLayerName)
+                if (targetDTO.ApplicationLayerFullName != sourceDTO.ApplicationLayerFullName)
                 {
-                    targetDTO.ApplicationLayerName = sourceDTO.ApplicationLayerName;
+                    targetDTO.ApplicationLayerFullName = sourceDTO.ApplicationLayerFullName;
                 }
             }
 

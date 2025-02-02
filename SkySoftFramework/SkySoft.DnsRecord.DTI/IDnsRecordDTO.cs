@@ -9,9 +9,9 @@ namespace SkySoft.DnsRecord.DTI
     {
         #region Properties
         /// <summary>
-        /// Gets or sets application layer name
+        /// Gets or sets application layer full name
         /// </summary>
-        string? ApplicationLayerName
+        string? ApplicationLayerFullName
         {
             get; set;
         }

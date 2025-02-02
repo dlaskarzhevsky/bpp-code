@@ -50,12 +50,12 @@ namespace SkySoft.BPPApplication
         /// <param name="value">Value for caching</param>
         public void CacheValue<T>(string key, T value)
         {
-            if (value == null)
+            if (string.IsNullOrEmpty(key) || value == null)
             {
                 return;
             }
 
-            ApplicationCache.Add(key, value);
+            ApplicationCache[key] = value;
         }
 
         /// <summary>
@@ -211,6 +211,15 @@ namespace SkySoft.BPPApplication
         /// Gets or sets application cache
         /// </summary>
         public IApplicationCache ApplicationCache
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets host URL
+        /// IOS interface implementation
+        /// </summary>
+        public string? HostUrl
         {
             get; set;
         }

@@ -1,5 +1,4 @@
-﻿using SkySoft.Contracts;
-using SkySoft.IBPPApplication;
+﻿using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
 
 namespace SkySoft.BPPApplication
@@ -19,20 +18,46 @@ namespace SkySoft.BPPApplication
         public virtual async Task<bool> InitializeApplication(IOS operatingSystem)
         {
             OperatingSystem = operatingSystem;
-            GetApplicationStateFromCache();
-            if (!ApplicationInItitialState)
+            ConfigureRequestForApplicationInitialization();
+            await SendRequestForApplicationInitializationToOperatingSystem();
+            ConfigureOperatingSystem();
+            LogMessages.Execute(DataContainer, operatingSystem);
+            if (OperatingSystemInitializedApplication)
             {
-                ConfigureRequestForApplicationInitialization();
-                await SendRequestForApplicationInitializationToOperatingSystem();
-                LogMessages.Execute(DataContainer, operatingSystem);
-                if (OperatingSystemInitializedApplication)
-                {
-                    SetApplicationStateToInitial();
-                }
+                FinalizeApplicationInitializer();
             }
 
             ReleaseResources();
-            return ApplicationInItitialState;
+            return ApplicationInInitialState;
+        }
+        #endregion
+
+        #region Public Properties
+        /// <summary>
+        /// Gets flag indicating whether application in initial state
+        /// </summary>
+        public bool ApplicationInInitialState
+        {
+            get
+            {
+                return ApplicationState == TargetStateName;
+            }
+        }
+        #endregion
+
+        #region Protected Methods
+        /// <summary>
+        /// Configures operating system
+        /// </summary>
+        protected virtual void ConfigureOperatingSystem()
+        {
+        }
+
+        /// <summary>
+        /// Finalizes application initializer
+        /// </summary>
+        protected virtual void FinalizeApplicationInitializer()
+        {
         }
         #endregion
 
@@ -46,12 +71,58 @@ namespace SkySoft.BPPApplication
         } = default!;
 
         /// <summary>
+        /// Gets application layer name
+        /// </summary>
+        protected string ApplicationLayerFullName
+        {
+            get
+            {
+                return $"{DomainName}_{UseCaseName}_{ApplicationLayerName}";
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets application state
+        /// </summary>
+        protected string? ApplicationState
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets data container
+        /// </summary>
+        protected IDataContainer DataContainer
+        {
+            get; set;
+        } = default!;
+
+        /// <summary>
         /// Gets or sets domain name
         /// </summary>
         protected string DomainName
         {
             get; set;
         } = default!;
+
+        /// <summary>
+        /// Gets or sets operating system
+        /// </summary>
+        protected IOS OperatingSystem
+        {
+            get; set;
+        } = default!;
+
+        /// <summary>
+        /// Gets flag indicating whether operating system initialized application
+        /// </summary>
+        protected bool OperatingSystemInitializedApplication
+        {
+            get
+            {
+                return DataContainer.StateName == TargetStateName;
+            }
+        }
 
         /// <summary>
         /// Gets or sets target state name
@@ -92,15 +163,6 @@ namespace SkySoft.BPPApplication
         }
 
         /// <summary>
-        /// Gets application state from cache
-        /// </summary>
-        void GetApplicationStateFromCache()
-        {
-            string applicationStateKey = $"{DomainName}_{UseCaseName}_{ApplicationLayerName}_ApplicationState";
-            ApplicationState = OperatingSystem.GetValueFomCache<string?>(applicationStateKey);
-        }
-
-        /// <summary>
         /// Releases resources
         /// </summary>
         void ReleaseResources()
@@ -115,64 +177,6 @@ namespace SkySoft.BPPApplication
         async Task SendRequestForApplicationInitializationToOperatingSystem()
         {
             DataContainer = await OperatingSystem.RedirectRequestToRequestHandler(DataContainer);
-        }
-
-        /// <summary>
-        /// Sets application state to initial
-        /// </summary>
-        void SetApplicationStateToInitial()
-        {
-            ApplicationState = SkySoft.Contracts.StateTypes.INITIAL;
-            string applicationStateKey = $"{DomainName}_{UseCaseName}_{ApplicationLayerName}_ApplicationState";
-            OperatingSystem.CacheValue<string>(applicationStateKey, ApplicationState);
-        }
-        #endregion
-
-        #region Private Properties
-        /// <summary>
-        /// Gets flag indicating whether application not initialized
-        /// </summary>
-        bool ApplicationInItitialState
-        {
-            get
-            {
-                return ApplicationState == SkySoft.Contracts.StateTypes.INITIAL;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets application state
-        /// </summary>
-        string? ApplicationState
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets data container
-        /// </summary>
-        IDataContainer DataContainer
-        {
-            get; set;
-        } = default!;
-
-        /// <summary>
-        /// Gets or sets operating system
-        /// </summary>
-        IOS OperatingSystem
-        {
-            get; set;
-        } = default!;
-
-        /// <summary>
-        /// Gets flag indicating whether operating system initialized application
-        /// </summary>
-        bool OperatingSystemInitializedApplication
-        {
-            get
-            {
-                return DataContainer.Exception == null && string.IsNullOrEmpty(DataContainer.Message) || !string.IsNullOrEmpty(DataContainer.Message) && DataContainer.MessageType != MessageType.Critical && DataContainer.MessageType != MessageType.Error;
-            }
         }
         #endregion
     }

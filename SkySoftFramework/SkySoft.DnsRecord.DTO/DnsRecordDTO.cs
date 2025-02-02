@@ -10,10 +10,10 @@ namespace SkySoft.DnsRecord.DTO
     {
         #region Properties
         /// <summary>
-        /// Gets or sets application layer name
+        /// Gets or sets application layer full name
         /// IDnsRecordDTO interface implementation
         /// </summary>
-        public string? ApplicationLayerName
+        public string? ApplicationLayerFullName
         {
             get; set;
         }

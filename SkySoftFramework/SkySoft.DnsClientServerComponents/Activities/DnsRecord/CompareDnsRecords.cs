@@ -17,7 +17,7 @@ namespace SkySoft.DnsClientServerComponents
         public static bool Execute(DnsRecordDTO sourceDTO, DnsRecordDTO targetDTO)
         {
             bool dnsRecorsAreIdentical = true;
-            if (targetDTO.ApplicationLayerName != sourceDTO.ApplicationLayerName)
+            if (targetDTO.ApplicationLayerFullName != sourceDTO.ApplicationLayerFullName)
             {
                 dnsRecorsAreIdentical = false;
             }

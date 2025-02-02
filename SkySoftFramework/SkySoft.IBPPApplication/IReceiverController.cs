@@ -13,6 +13,14 @@
         {
             get;
         }
+
+        /// <summary>
+        /// Gets host URL
+        /// </summary>
+        string? HostUrl
+        {
+            get;
+        }
         #endregion
     }
 }

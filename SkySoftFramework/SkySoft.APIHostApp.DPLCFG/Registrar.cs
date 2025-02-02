@@ -12,6 +12,7 @@
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
+            EventHandlersRegistrar.Register(webApplicationBuilder);
         }
         #endregion
     }

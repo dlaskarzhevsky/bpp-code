@@ -97,7 +97,7 @@ namespace SkySoft.DnsClientServerComponents
         void CreateNewDnsRecord()
         {
             CachedDnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>();
-            CachedDnsRecordDTO.ApplicationLayerName = DnsRecordDTO!.ApplicationLayerName;
+            CachedDnsRecordDTO.ApplicationLayerFullName = DnsRecordDTO!.ApplicationLayerFullName;
             CachedDnsRecordDTO.Url = DnsRecordDTO.Url;
         }
 
@@ -114,10 +114,10 @@ namespace SkySoft.DnsClientServerComponents
         /// </summary>
         void FindCachedDnsRecordByApplicationLayerName()
         {
-            string applicationLayerName = DnsRecordDTO!.ApplicationLayerName!;
+            string applicationLayerName = DnsRecordDTO!.ApplicationLayerFullName!;
             foreach (DnsRecordDTO dnsRecordDTO in ListOfCachedDnsRecords!)
             {
-                if (string.Equals(dnsRecordDTO.ApplicationLayerName!, applicationLayerName, StringComparison.InvariantCultureIgnoreCase))
+                if (string.Equals(dnsRecordDTO.ApplicationLayerFullName!, applicationLayerName, StringComparison.InvariantCultureIgnoreCase))
                 {
                     CachedDnsRecordDTO = dnsRecordDTO;
                     return;

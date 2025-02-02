@@ -22,7 +22,7 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void FindDataOfDnsRecordFromRequestByApplicationLayerName()
         {
-            FoundCachedDnsRecordDTO = FindDnsRecordInListByApplicationLayerName.Execute(ListOfDnsRecords!, DnsRecordFromRequest!.ApplicationLayerName!);
+            FoundCachedDnsRecordDTO = FindDnsRecordInListByApplicationLayerFullName.Execute(ListOfDnsRecords!, DnsRecordFromRequest!.ApplicationLayerFullName!);
         }
 
         /// <summary>

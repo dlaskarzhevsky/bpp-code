@@ -29,8 +29,6 @@ namespace SkySoft.Http.DRV
         /// <summary>
         /// Handles request aynchronously
         /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <returns>Data container</returns>
         protected override async Task HandleRequestAsync()
         {
             await GetRemoteServerDnsRecordFromDnsClient();
@@ -79,7 +77,7 @@ namespace SkySoft.Http.DRV
         void AddDnsRecordWithApplicationLayerFullNameOfDnsServerToDataContainer()
         {
             IDnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
-            dnsRecordDTO.ApplicationLayerName = OperatingSystem.GetValueFromApplicationConfiguration<string>("DnsServer:ApplicationLayerName");
+            dnsRecordDTO.ApplicationLayerFullName = OperatingSystem.GetValueFromApplicationConfiguration<string>("DnsServer:ApplicationLayerName");
         }
 
         /// <summary>
@@ -91,7 +89,7 @@ namespace SkySoft.Http.DRV
             IRequestMetadataDTO requestMetadataDTO = requestMetadataDataCollection![requestMetadataDataCollection.Count - 2];
             string applicationLayerFullNameOfRequest = $"{requestMetadataDTO.DomainName}_{requestMetadataDTO.UseCaseName}_{requestMetadataDTO.ApplicationLayerName}";
             IDnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
-            dnsRecordDTO.ApplicationLayerName = applicationLayerFullNameOfRequest;
+            dnsRecordDTO.ApplicationLayerFullName = applicationLayerFullNameOfRequest;
         }
 
         /// <summary>

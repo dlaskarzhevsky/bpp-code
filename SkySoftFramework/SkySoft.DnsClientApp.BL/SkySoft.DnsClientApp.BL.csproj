@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>embedded</DebugType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SkySoft.BPPApplication\SkySoft.BPPApplication.csproj" />
+    <ProjectReference Include="..\SkySoft.DnsClient.CON\SkySoft.DnsClient.CON.csproj" />
+  </ItemGroup>
+
+</Project>

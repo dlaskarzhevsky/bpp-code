@@ -45,7 +45,7 @@ namespace SkySoft.APIHost.BL
             string? urlValidationResult = ValidateUrlOfDnsRecord.Execute(DnsRecord!);
             if (!string.IsNullOrEmpty(urlValidationResult))
             {
-                DataContainer.SetMessage(urlValidationResult!, MessageType.Error, OperatingSystem!.Logger.ApplicationLayerName, OperatingSystem.Logger.ApplicationLayerUrl);
+                DataContainer.SetMessage(urlValidationResult!, MessageType.Error, OperatingSystem!.Logger.ApplicationLayerFullName, OperatingSystem.Logger.ApplicationLayerUrl);
                 HostDataValid = false;
             }
         }

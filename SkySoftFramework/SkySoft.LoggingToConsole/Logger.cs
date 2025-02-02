@@ -15,9 +15,9 @@ namespace SkySoft.LoggingToConsole
         /// </summary>
         /// <param name="messageType">Message type</param>
         /// <param name="message">Message for logging</param>
-        /// <param name="applicationLayerName">Application layer name</param>
+        /// <param name="applicationLayerFullName">Application layer full name</param>
         /// <param name="applicationLayerUrl">Application layer URL</param>
-        public void Log(MessageType messageType, string message, string? applicationLayerName, string? applicationLayerUrl)
+        public void Log(MessageType messageType, string message, string? applicationLayerFullName, string? applicationLayerUrl)
         {
             switch (messageType)
             {
@@ -44,9 +44,9 @@ namespace SkySoft.LoggingToConsole
                     break;
             }
 
-            if (string.IsNullOrEmpty(applicationLayerName))
+            if (string.IsNullOrEmpty(applicationLayerFullName))
             {
-                applicationLayerName = ApplicationLayerName;
+                applicationLayerFullName = ApplicationLayerFullName;
             }
 
             if (string.IsNullOrEmpty(ApplicationLayerUrl))
@@ -55,7 +55,7 @@ namespace SkySoft.LoggingToConsole
             }
 
             string messageHeader = Enum.GetName(messageType.GetType(), messageType) + ": ";
-            messageHeader = messageHeader + MessageFormatter.FormatMessage(messageHeader, applicationLayerName, applicationLayerUrl);
+            messageHeader = messageHeader + MessageFormatter.FormatMessage(messageHeader, applicationLayerFullName, applicationLayerUrl);
             Console.WriteLine(messageHeader);
 
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -67,13 +67,13 @@ namespace SkySoft.LoggingToConsole
         /// Loggs exception
         /// </summary>
         /// <param name="exception">Exception for logging</param>
-        /// <param name="applicationLayerName">Application layer name</param>
+        /// <param name="applicationLayerFullName">Application layer full name</param>
         /// <param name="applicationLayerUrl">Application layer URL</param>
-        public void Log(Exception exception, string? applicationLayerName, string? applicationLayerUrl)
+        public void Log(Exception exception, string? applicationLayerFullName, string? applicationLayerUrl)
         {
-            if (string.IsNullOrEmpty(applicationLayerName))
+            if (string.IsNullOrEmpty(applicationLayerFullName))
             {
-                applicationLayerName = ApplicationLayerName;
+                applicationLayerFullName = ApplicationLayerFullName;
             }
 
             if (string.IsNullOrEmpty(ApplicationLayerUrl))
@@ -83,7 +83,7 @@ namespace SkySoft.LoggingToConsole
 
             Console.ForegroundColor = ConsoleColor.Red;
             string messageHeader = "Critical: ";
-            messageHeader = messageHeader + MessageFormatter.FormatMessage(messageHeader, applicationLayerName, applicationLayerUrl);
+            messageHeader = messageHeader + MessageFormatter.FormatMessage(messageHeader, applicationLayerFullName, applicationLayerUrl);
             Console.WriteLine(messageHeader);
 
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -94,10 +94,10 @@ namespace SkySoft.LoggingToConsole
 
         #region Properties
         /// <summary>
-        /// Gets or sets application layer name
+        /// Gets or sets application layer full name
         /// ILogger interface implementation
         /// </summary>
-        public string? ApplicationLayerName
+        public string? ApplicationLayerFullName
         {
             get; set;
         }

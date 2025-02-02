@@ -195,7 +195,7 @@ namespace SkySoft.BPPApplication
         /// <param name="messageType">Message type</param>
         protected virtual void LogMessage(string message, MessageType messageType)
         {
-            DataContainer.SetMessage(message, messageType, OperatingSystem!.Logger.ApplicationLayerName, OperatingSystem.Logger.ApplicationLayerUrl);
+            DataContainer.SetMessage(message, messageType, OperatingSystem!.Logger.ApplicationLayerFullName, OperatingSystem.Logger.ApplicationLayerUrl);
         }
 
         /// <summary>

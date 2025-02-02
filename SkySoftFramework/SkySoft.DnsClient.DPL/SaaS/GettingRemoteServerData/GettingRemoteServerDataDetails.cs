@@ -6,37 +6,8 @@ namespace SkySoft.DnsClient.DPL
     /// <summary>
     /// GettingRemoteServerData transition request handler
     /// </summary>
-    public class GettingRemoteServerData : SkySoft.BPPApplication.RequestHandler
+    public partial class GettingRemoteServerData
     {
-        #region Constructors
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public GettingRemoteServerData()
-        {
-            DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            UseCaseName = SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL_SAAS;
-            TransitionName = SkySoft.Contracts.TransitionTypes.GETTING_REMOTE_SERVER_DATA;
-        }
-        #endregion
-
-        #region Overridden Methods
-        /// <summary>
-        /// Handles request
-        /// </summary>
-        protected override void HandleRequest()
-        {
-            GetDnsRecordFromRequest();
-            GetListOfDnsRecordsFromCache();
-            FindCachedDnsRecordByApplicationLayerName();
-            if (CachedDnsRecordFound)
-            {
-                UpdateDnsRecordFromRequestByDataFromCachedDnsRecord();
-            }
-        }
-        #endregion
-
         #region Private Methods
         /// <summary>
         /// Finds cached DNS record by application layer name
@@ -45,8 +16,8 @@ namespace SkySoft.DnsClient.DPL
         {
             if (DnsRecordDTOFromRequest != null)
             {
-                string applicationLayerName = DnsRecordDTOFromRequest.ApplicationLayerName!.ToLowerInvariant();
-                CachedDnsRecordDTO = FindDnsRecordInListByApplicationLayerName.Execute(ListOfCachedDnsRecords, applicationLayerName);
+                string applicationLayerName = DnsRecordDTOFromRequest.ApplicationLayerFullName!.ToLowerInvariant();
+                CachedDnsRecordDTO = FindDnsRecordInListByApplicationLayerFullName.Execute(ListOfCachedDnsRecords, applicationLayerName);
             }
         }
 

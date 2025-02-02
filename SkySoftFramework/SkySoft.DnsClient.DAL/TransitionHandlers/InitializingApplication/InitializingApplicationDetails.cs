@@ -3,71 +3,13 @@
 using SkySoft.DnsClientServerComponents;
 using SkySoft.DnsRecord.DTO;
 
-namespace SkySoft.DnsClient.DPL
+namespace SkySoft.DnsClient.DAL
 {
     /// <summary>
-    /// LoadingUseCase transition request handler
+    /// InitializingApplication transition request handler
     /// </summary>
-    public class LoadingUseCase : SkySoft.BPPApplication.RequestHandler
+    public partial class InitializingApplication
     {
-        #region Constructors
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public LoadingUseCase()
-        {
-            DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            UseCaseName = SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
-            TransitionName = SkySoft.DnsClient.CON.TransitionTypes.LOADING_USE_CASE;
-        }
-        #endregion
-
-        #region Overridden Methods
-        /// <summary>
-        /// Handles request aynchronously
-        /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <returns>Data container</returns>
-        protected override async Task HandleRequestAsync()
-        {
-            LoadDnsRecordsFromFileIntoMemoryCache();
-            AddHostDnsRecordToMemoryCache();
-            AddHostDnsRecordToFile();
-            ClearTemporaryData();
-
-            LoadDnsClientDataFromConfigurationFile();
-            ValidateDnsClientData();
-            if (DnsClientDataValid)
-            {
-                AddDnsClientDataToDataContainer();
-                AddDnsClientDnsRecordToMemoryCache();
-                AddDnsClientDnsRecordToFile();
-                RemoveDnsClientDataFromDataContainer();
-
-                await RaiseDnsClientRegistrationWithDnsServerRequestEvent();
-
-                if (RegistrationWithDnsServerWasSuccessful)
-                {
-                    await RaiseDnsClientInitializedEvent();
-                }
-
-                RemoveDnsDataFromDataContainer();
-            }
-        }
-
-        /// <summary>
-        /// Releases resources
-        /// </summary>
-        public override void ReleaseResources()
-        {
-            ConfigurationDnsRecord = default!;
-            DnsRecordDTO = null;
-            ListOfDnsRecords = null;
-            base.ReleaseResources();
-        }
-        #endregion
-
         #region Private Methods
         /// <summary>
         /// Adds DNS client data to data container
@@ -128,10 +70,7 @@ namespace SkySoft.DnsClient.DPL
         void LoadDnsClientDataFromConfigurationFile()
         {
             ConfigurationDnsRecord = DataContainer.GetNewDTO<DnsRecordDTO>();
-            ConfigurationDnsRecord.ApplicationLayerName = ApplicationConfiguration!.GetValue<string>("DnsServer:ApplicationLayerName");
-            ConfigurationDnsRecord.HttpsUrl = ApplicationConfiguration!.GetValue<string>("DnsServer:Endpoints:Https:Url");
-            ConfigurationDnsRecord.HttpUrl = ApplicationConfiguration!.GetValue<string>("DnsServer:Endpoints:Http:Url");
-            ConfigurationDnsRecord.UseHttps = ApplicationConfiguration.GetValue<bool>("UseHttps");
+            ConfigurationDnsRecord.Url = ApplicationConfiguration!.GetValue<string>("DnsServerUrl");
         }
 
         /// <summary>

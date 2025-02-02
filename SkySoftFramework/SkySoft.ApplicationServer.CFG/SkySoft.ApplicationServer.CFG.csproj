@@ -10,7 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SkySoft.APIHost.BLCFG\SkySoft.APIHost.BLCFG.csproj" />
+    <ProjectReference Include="..\SkySoft.APIHost.DALCFG\SkySoft.APIHost.DALCFG.csproj" />
     <ProjectReference Include="..\SkySoft.APIHost.DPLCFG\SkySoft.APIHost.DPLCFG.csproj" />
+    <ProjectReference Include="..\SkySoft.APIHostApp.BLCFG\SkySoft.APIHostApp.BLCFG.csproj" />
+    <ProjectReference Include="..\SkySoft.APIHostApp.DPLCFG\SkySoft.APIHostApp.DPLCFG.csproj" />
     <ProjectReference Include="..\SkySoft.BPPApplication.CFG\SkySoft.BPPApplication.CFG.csproj" />
     <ProjectReference Include="..\SkySoft.DnsClient.DPLCFG\SkySoft.DnsClient.DPLCFG.csproj" />
     <ProjectReference Include="..\SkySoft.DnsClientApp.DPLCFG\SkySoft.DnsClientApp.DPLCFG.csproj" />

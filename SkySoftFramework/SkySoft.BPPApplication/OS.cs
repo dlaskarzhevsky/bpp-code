@@ -1,9 +1,6 @@
-﻿using System;
-
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 
 using SkySoft.Communication;
-using SkySoft.Contracts;
 using SkySoft.IBPPApplication;
 using SkySoft.ICommunication;
 using SkySoft.ILogging;
@@ -30,8 +27,7 @@ namespace SkySoft.BPPApplication
             ApplicationConfiguration = applicationConfiguration;
             ApplicationCache = applicationCache;
             Logger = logger;
-            Logger.ApplicationLayerName = GetValueFromApplicationConfiguration<string>("Host:ApplicationLayerName");
-            Logger.ApplicationLayerUrl = GetValueFromApplicationConfiguration<string>("Host:Endpoints:Http:Url");
+            Logger.ApplicationLayerFullName = ApplicationLayerFullName;
             ApplicationInitializers = applicationInitializers;
             RequestHandlers = requestHandlers;
             Drivers = drivers;
@@ -180,6 +176,14 @@ namespace SkySoft.BPPApplication
         public IEnumerable<IApplicationInitializer> ApplicationInitializers
         {
             get; set;
+        }
+
+        /// <summary>
+        /// Gets application layer full name
+        /// </summary>
+        public string? ApplicationLayerFullName
+        {
+            get; private set;
         }
 
         /// <summary>

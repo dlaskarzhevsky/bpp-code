@@ -1,6 +1,6 @@
 ﻿using SkySoft.IBPPApplication;
 
-namespace SkySoft.DnsClient.DPLCFG
+namespace SkySoft.DnsClient.DALCFG
 {
     /// <summary>
     /// Provides request handlers registrar functionality
@@ -14,7 +14,7 @@ namespace SkySoft.DnsClient.DPLCFG
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DPL.InitializingApplication>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DAL.InitializingApplication>();
         }
         #endregion
     }

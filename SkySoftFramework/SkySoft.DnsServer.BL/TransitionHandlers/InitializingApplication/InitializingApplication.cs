@@ -29,8 +29,13 @@
                 return;
             }
 
-            await LoadDnsRecordsFromStorageIntoCache();
-            SwitchApplicationIntoInitialState();
+            AddDnsRecordWithHostApplicationLayerFullNameToRequest();
+            await RedirectRequestToNextApplicationLayer();
+            ValidateResponse();
+            if (ResponseValid)
+            {
+                SwitchApplicationIntoInitialState();
+            }
         }
         #endregion
     }

@@ -27,7 +27,6 @@ namespace SkySoft.BPPApplication
             ApplicationConfiguration = applicationConfiguration;
             ApplicationCache = applicationCache;
             Logger = logger;
-            Logger.ApplicationLayerFullName = ApplicationLayerFullName;
             ApplicationInitializers = applicationInitializers;
             RequestHandlers = requestHandlers;
             Drivers = drivers;
@@ -179,14 +178,6 @@ namespace SkySoft.BPPApplication
         }
 
         /// <summary>
-        /// Gets application layer full name
-        /// </summary>
-        public string? ApplicationLayerFullName
-        {
-            get; private set;
-        }
-
-        /// <summary>
         /// Gets flag indicating whether applications initialized
         /// </summary>
         public bool ApplicationsInitialized
@@ -215,15 +206,6 @@ namespace SkySoft.BPPApplication
         /// Gets or sets application cache
         /// </summary>
         public IApplicationCache ApplicationCache
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets host URL
-        /// IOS interface implementation
-        /// </summary>
-        public string? HostUrl
         {
             get; set;
         }

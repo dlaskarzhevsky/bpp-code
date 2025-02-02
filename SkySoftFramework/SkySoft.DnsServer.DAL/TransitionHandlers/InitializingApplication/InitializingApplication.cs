@@ -24,11 +24,23 @@
         /// </summary>
         protected override void HandleRequest()
         {
+            GetDnsRecordFromRequest();
             LoadDnsRecordsFromFile();
             if (DnsRecordsLoadedFromFile)
             {
-                CacheDnsRecords();
+                FindHostDnsRecordByApplicationLayerFullName();
             }
+            else
+            {
+                LoadHostDnsRecordFromApplicationConfiguration();
+                CopyApplicationLayerFullNameIntoLoadedHostDnsRecord();
+                AddDnsRecordToFile();
+                CreateEmptyListOfDnsRecords();
+                AddDnsRecordToListOfDnsRecords();
+            }
+
+            CopyDnsDataIntoDnsRecordFromRequest();
+            CacheListOfDnsRecords();
         }
 
         /// <summary>
@@ -36,6 +48,8 @@
         /// </summary>
         public override void ReleaseResources()
         {
+            DnsRecordFromRequest = null;
+            HostDnsRecordDTO = null;
             ListOfDnsRecords = null;
             base.ReleaseResources();
         }

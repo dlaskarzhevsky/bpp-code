@@ -1,4 +1,6 @@
-﻿namespace SkySoft.DnsServerApp.INI
+﻿using SkySoft.DnsRecord.DTO;
+
+namespace SkySoft.DnsServerApp.INI
 {
     /// <summary>
     /// Provides application initializer functionality
@@ -22,11 +24,31 @@
 
         #region Overridden Methods
         /// <summary>
+        /// Configures operating system
+        /// </summary>
+        protected override void FinalizeOperatingSystemConfiguration()
+        {
+            DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
+            if (dnsRecordDTO != null)
+            {
+                OperatingSystem.Logger.ApplicationLayerUrl = dnsRecordDTO.Url;
+            }
+        }
+
+        /// <summary>
         /// Finalizes application initializer
         /// </summary>
         protected override void FinalizeApplicationInitializer()
         {
             ApplicationState = DataContainer.StateName;
+        }
+
+        /// <summary>
+        /// Preconfigures operating system
+        /// </summary>
+        protected override void PreconfigureOperatingSystem()
+        {
+            OperatingSystem.Logger.ApplicationLayerFullName = DataContainer.ApplicationLayerFullName;
         }
         #endregion
     }

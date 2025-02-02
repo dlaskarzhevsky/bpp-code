@@ -18,7 +18,7 @@ namespace SkySoft.Http
         {
             OperatingSystem = operatingSystem;
             ApplicationInitialized = OperatingSystem.ApplicationsInitialized;
-            HostUrl = OperatingSystem.HostUrl;
+            HostUrl = OperatingSystem.Logger.ApplicationLayerUrl;
         }
         #endregion
 

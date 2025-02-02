@@ -14,7 +14,7 @@
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
-            EventName = SkySoft.APIHost.CON.EventTypes.REDIRECT_REQUEST_TO_NEXT_APPLICATION_LAYER_EVENT;
+            EventName = SkySoft.DnsServer.CON.EventTypes.REDIRECT_REQUEST_TO_NEXT_APPLICATION_LAYER_EVENT;
         }
         #endregion
 

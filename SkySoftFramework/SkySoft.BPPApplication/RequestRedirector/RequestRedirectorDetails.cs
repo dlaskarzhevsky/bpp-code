@@ -50,7 +50,7 @@ namespace SkySoft.BPPApplication
         /// </summary>
         void GetApplicationLayerNameOfHostFromApplicationConfigurationSettings()
         {
-            ApplicationLayerFullNameOfHost = OperatingSystem!.ApplicationLayerFullName;
+            ApplicationLayerFullNameOfHost = OperatingSystem!.Logger.ApplicationLayerFullName;
         }
 
         /// <summary>

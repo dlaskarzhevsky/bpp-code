@@ -65,7 +65,7 @@ namespace SkySoft.DnsServer.DPL
         /// </summary>
         void ReadHostDnsRecordDataFromApplicationConfiguration()
         {
-            HostDnsRecordDTO = SkySoft.DnsClientServerComponents.ReadHostDnsRecordDataFromApplicationConfiguration.Execute(((OS)OperatingSystem).ApplicationConfiguration);
+            HostDnsRecordDTO = SkySoft.DnsClientServerComponents.ReadDnsServerDataFromApplicationConfiguration.Execute(((OS)OperatingSystem).ApplicationConfiguration);
         }
 
         /// <summary>

@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SkySoft.BPPApplication\SkySoft.BPPApplication.csproj" />
+    <ProjectReference Include="..\SkySoft.DnsRecord.DTO\SkySoft.DnsRecord.DTO.csproj" />
     <ProjectReference Include="..\SkySoft.DnsServer.CON\SkySoft.DnsServer.CON.csproj" />
   </ItemGroup>
 

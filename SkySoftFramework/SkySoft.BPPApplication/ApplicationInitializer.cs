@@ -19,8 +19,9 @@ namespace SkySoft.BPPApplication
         {
             OperatingSystem = operatingSystem;
             ConfigureRequestForApplicationInitialization();
+            PreconfigureOperatingSystem();
             await SendRequestForApplicationInitializationToOperatingSystem();
-            ConfigureOperatingSystem();
+            FinalizeOperatingSystemConfiguration();
             LogMessages.Execute(DataContainer, operatingSystem);
             if (OperatingSystemInitializedApplication)
             {
@@ -47,9 +48,9 @@ namespace SkySoft.BPPApplication
 
         #region Protected Methods
         /// <summary>
-        /// Configures operating system
+        /// Finalizes operating system configuration
         /// </summary>
-        protected virtual void ConfigureOperatingSystem()
+        protected virtual void FinalizeOperatingSystemConfiguration()
         {
         }
 
@@ -57,6 +58,13 @@ namespace SkySoft.BPPApplication
         /// Finalizes application initializer
         /// </summary>
         protected virtual void FinalizeApplicationInitializer()
+        {
+        }
+
+        /// <summary>
+        /// Preconfigures operating system
+        /// </summary>
+        protected virtual void PreconfigureOperatingSystem()
         {
         }
         #endregion

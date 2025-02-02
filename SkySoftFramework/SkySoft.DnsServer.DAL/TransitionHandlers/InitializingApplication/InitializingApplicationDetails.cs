@@ -10,13 +10,74 @@ namespace SkySoft.DnsServer.DAL
     {
         #region Private Methods
         /// <summary>
-        /// Caches DNS records
+        /// Adds DNS record to file
         /// </summary>
-        void CacheDnsRecords()
+        void AddDnsRecordToFile()
+        {
+            if (HostDnsRecordDTO != null)
+            {
+                SkySoft.DnsClientServerComponents.AddDnsRecordToFile.Execute(HostDnsRecordDTO, DataContainer);
+            }
+        }
+
+        /// <summary>
+        /// Adds DNS record to list of DNS records
+        /// </summary>
+        void AddDnsRecordToListOfDnsRecords()
+        {
+            DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>();
+            CopyDnsRecordData.Execute(HostDnsRecordDTO!, dnsRecordDTO, true);
+            ListOfDnsRecords!.Add(dnsRecordDTO);
+        }
+
+        /// <summary>
+        /// Caches list of DNS records
+        /// </summary>
+        void CacheListOfDnsRecords()
         {
             SetListOfDnsRecordsIntoCache.Execute(ListOfDnsRecords!, OperatingSystem);
         }
 
+        /// <summary>
+        /// Copies application layer full name into loaded host DNS record
+        /// </summary>
+        void CopyApplicationLayerFullNameIntoLoadedHostDnsRecord()
+        {
+            HostDnsRecordDTO!.ApplicationLayerFullName = DnsRecordFromRequest!.ApplicationLayerFullName;
+        }
+
+        /// <summary>
+        /// Copies DNS data into DNS record from request
+        /// </summary>
+        void CopyDnsDataIntoDnsRecordFromRequest()
+        {
+            CopyDnsRecordData.Execute(HostDnsRecordDTO!, DnsRecordFromRequest!, false);
+        }
+
+        /// <summary>
+        /// Creates empty list of DNS records
+        /// </summary>
+        void CreateEmptyListOfDnsRecords()
+        {
+            ListOfDnsRecords = new List<DnsRecordDTO>();
+        }
+
+        /// <summary>
+        /// Finds host DNS record by application layer full name
+        /// </summary>
+        void FindHostDnsRecordByApplicationLayerFullName()
+        {
+            HostDnsRecordDTO = FindDnsRecordInListByApplicationLayerFullName.Execute(ListOfDnsRecords!, DnsRecordFromRequest!.ApplicationLayerFullName!);
+        }
+
+        /// <summary>
+        /// Gets DNS record from request
+        /// </summary>
+        void GetDnsRecordFromRequest()
+        {
+            DnsRecordFromRequest = GetLastDnsRecordFromDataContainer.Execute(DataContainer);
+        }
+        
         /// <summary>
         /// Load DNS records from file
         /// </summary>
@@ -24,9 +85,25 @@ namespace SkySoft.DnsServer.DAL
         {
             ListOfDnsRecords = ReadListOfDnsRecordsFromFile.Execute(PathToDnsRecordsFile);
         }
+
+        /// <summary>
+        /// Load host DNS record from application configuration
+        /// </summary>
+        void LoadHostDnsRecordFromApplicationConfiguration()
+        {
+            HostDnsRecordDTO = ReadDnsServerDataFromApplicationConfiguration.Execute(ApplicationConfiguration);
+        }
         #endregion
 
         #region Private Properties
+        /// <summary>
+        /// Gets or sets DNS record from request
+        /// </summary>
+        DnsRecordDTO? DnsRecordFromRequest
+        {
+            get; set;
+        }
+
         /// <summary>
         /// Gets flag indicating whether DNS records loaded from file
         /// </summary>
@@ -38,6 +115,14 @@ namespace SkySoft.DnsServer.DAL
             }
         }
 
+        /// <summary>
+        /// Gets or sets host DNS Record
+        /// </summary>
+        DnsRecordDTO? HostDnsRecordDTO
+        {
+            get; set;
+        }
+        
         /// <summary>
         /// Gets or sets list of DNS records
         /// </summary>

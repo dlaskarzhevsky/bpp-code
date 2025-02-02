@@ -6,9 +6,9 @@ using SkySoft.DnsRecord.DTO;
 namespace SkySoft.DnsClientServerComponents
 {
     /// <summary>
-    /// Reads host DNS record data from application configuration
+    /// Reads DNS server data from application configuration
     /// </summary>
-    public static class ReadHostDnsRecordDataFromApplicationConfiguration
+    public static class ReadDnsServerDataFromApplicationConfiguration
     {
         #region Public Methods
         /// <summary>

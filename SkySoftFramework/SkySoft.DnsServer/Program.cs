@@ -4,13 +4,6 @@ SkySoft.BPPApplication.CFG.Registrar.Register(webApplicationBuilder);
 SkySoft.Http.CFG.Registrar.Register(webApplicationBuilder);
 SkySoft.Logging.CFG.Registrar.Register(webApplicationBuilder);
 
-SkySoft.APIHost.BLCFG.Registrar.Register(webApplicationBuilder);
-SkySoft.APIHost.DPLCFG.Registrar.Register(webApplicationBuilder);
-SkySoft.APIHost.DALCFG.Registrar.Register(webApplicationBuilder);
-SkySoft.APIHostApp.BLCFG.Registrar.Register(webApplicationBuilder);
-SkySoft.APIHostApp.DPLCFG.Registrar.Register(webApplicationBuilder);
-SkySoft.APIHostApp.CFG.Registrar.Register(webApplicationBuilder);
-
 SkySoft.DnsServer.BLCFG.Registrar.Register(webApplicationBuilder);
 SkySoft.DnsServer.DPLCFG.Registrar.Register(webApplicationBuilder);
 SkySoft.DnsServer.DALCFG.Registrar.Register(webApplicationBuilder);

@@ -1,20 +1,20 @@
 ﻿namespace SkySoft.DnsClientApp.DPL
 {
     /// <summary>
-    /// RegisteringDnsClientWithDnsServer event handler
+    /// SavingRemoteServerData event handler
     /// </summary>
-    public class RegisterDnsClientWithDnsServer : SkySoft.BPPApplication.EventHandler
+    public class SkySoft_Controller_NFA_SavingRemoteServerData : SkySoft.BPPApplication.EventHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public RegisterDnsClientWithDnsServer()
+        public SkySoft_Controller_NFA_SavingRemoteServerData()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            UseCaseName = SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
-            EventName = SkySoft.DnsClient.CON.EventTypes.REGISTER_DNS_CLIENT_WITH_DNS_SERVER_EVENT;
+            UseCaseName = SkySoft.Contracts.UseCaseTypes.CONTROLLER;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.NFA;
+            TransitionName = SkySoft.Contracts.TransitionTypes.SAVING_REMOTE_SERVER_DATA;
         }
         #endregion
 
@@ -28,10 +28,11 @@
         {
             DataContainer.AddRequestMetadata(
                 SkySoft.Contracts.DomainNames.SKYSOFT,
-                SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER,
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
-                SkySoft.DnsClient.CON.StateTypes.INITIAL,
-                SkySoft.DnsClient.CON.TransitionTypes.REGISTERING_HOST);
+                SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT,
+                SkySoft.Contracts.ApplicationLayerNames.DPL_SAAS,
+                "",
+                SkySoft.Contracts.TransitionTypes.SAVING_REMOTE_SERVER_DATA);
+
             DataContainer = await RedirectRequestToRequestHandler(DataContainer);
             DataContainer.RemoveCurrentRequestMetadta();
         }

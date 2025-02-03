@@ -26,12 +26,12 @@ namespace SkySoft.DnsClientApp.INI
         /// <summary>
         /// Configures operating system
         /// </summary>
-        protected override void ConfigureOperatingSystem()
+        protected override void FinalizeOperatingSystemConfiguration()
         {
             DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
             if (dnsRecordDTO != null)
             {
-                OperatingSystem.HostUrl = dnsRecordDTO.Url;
+                OperatingSystem.Logger.ApplicationLayerUrl = dnsRecordDTO.Url;
             }
         }
 
@@ -41,6 +41,14 @@ namespace SkySoft.DnsClientApp.INI
         protected override void FinalizeApplicationInitializer()
         {
             ApplicationState = DataContainer.StateName;
+        }
+
+        /// <summary>
+        /// Preconfigures operating system
+        /// </summary>
+        protected override void PreconfigureOperatingSystem()
+        {
+            OperatingSystem.Logger.ApplicationLayerFullName = DataContainer.ApplicationLayerFullName;
         }
         #endregion
     }

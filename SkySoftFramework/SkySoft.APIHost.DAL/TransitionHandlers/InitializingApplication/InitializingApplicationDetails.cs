@@ -65,7 +65,7 @@ namespace SkySoft.APIHost.DAL
         /// </summary>
         void LoadHostDnsRecordFromApplicationConfiguration()
         {
-            HostDnsRecordDTO = ReadHostDnsRecordDataFromApplicationConfiguration.Execute(ApplicationConfiguration);
+            HostDnsRecordDTO = ReadDnsServerDataFromApplicationConfiguration.Execute(ApplicationConfiguration);
         }
         #endregion
 

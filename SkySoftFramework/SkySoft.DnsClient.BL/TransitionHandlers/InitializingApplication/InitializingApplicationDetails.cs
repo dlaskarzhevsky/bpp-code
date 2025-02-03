@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-
-using SkySoft.DnsClientServerComponents;
-using SkySoft.DnsRecord.DTO;
+﻿using SkySoft.DnsRecord.DTO;
 
 namespace SkySoft.DnsClient.BL
 {
@@ -12,176 +9,63 @@ namespace SkySoft.DnsClient.BL
     {
         #region Private Methods
         /// <summary>
-        /// Adds DNS client data to data container
+        /// Adds DNS record with host application layer full name to request
         /// </summary>
-        void AddDnsClientDataToDataContainer()
+        void AddDnsRecordWithHostApplicationLayerFullNameToRequest()
         {
-            AddDnsRecordToDataContainer.Execute(ConfigurationDnsRecord!, DataContainer);
+            DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS);
+            dnsRecordDTO.ApplicationLayerFullName = DataContainer.ApplicationLayerFullName;
         }
 
         /// <summary>
-        /// Adds DNS client DNS record to file
+        /// Redirects request to the next application layer
         /// </summary>
-        void AddDnsClientDnsRecordToFile()
+        async Task RedirectRequestToNextApplicationLayer()
         {
-            AddDnsRecordToFile.Execute(DnsRecordDTO, DataContainer);
+            await RaiseEvent(SkySoft.DnsClient.CON.EventTypes.REDIRECT_REQUEST_TO_NEXT_APPLICATION_LAYER_EVENT);
         }
 
         /// <summary>
-        /// Adds DNS client DNS record to memory cache
+        /// Switches application into initial state
         /// </summary>
-        void AddDnsClientDnsRecordToMemoryCache()
+        void SwitchApplicationIntoInitialState()
         {
-            DnsRecordDTO = GetLastDnsRecordFromDataContainer.Execute(DataContainer);
-            DnsRecordDTO newDnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>();
-            AddDnsRecordToCache.Execute(DnsRecordDTO, newDnsRecordDTO, OperatingSystem);
+            DataContainer.StateName = SkySoft.Contracts.StateTypes.INITIAL;
+            OperatingSystem.CacheValue<string>($"{DataContainer.ApplicationLayerFullName}_ApplicationState", DataContainer.StateName);
         }
 
         /// <summary>
-        /// Adds host DNS record to file
+        /// Validates response
         /// </summary>
-        void AddHostDnsRecordToFile()
+        void ValidateResponse()
         {
-            AddDnsRecordToFile.Execute(DnsRecordDTO, DataContainer);
-        }
-
-        /// <summary>
-        /// Adds host DNS record to memory cache
-        /// </summary>
-        void AddHostDnsRecordToMemoryCache()
-        {
-            DnsRecordDTO = GetLastDnsRecordFromDataContainer.Execute(DataContainer);
-            DnsRecordDTO newDnsRecordDTO  = DataContainer.GetNewDTO<DnsRecordDTO>();
-            AddDnsRecordToCache.Execute(DnsRecordDTO, newDnsRecordDTO, OperatingSystem);
-        }
-
-        /// <summary>
-        /// Clears temporary data
-        /// </summary>
-        void ClearTemporaryData()
-        {
-            DnsRecordDTO = null;
-            ListOfDnsRecords = null;
-        }
-
-        /// <summary>
-        /// Load DNS client data from configuration file
-        /// </summary>
-        void LoadDnsClientDataFromConfigurationFile()
-        {
-            ConfigurationDnsRecord = DataContainer.GetNewDTO<DnsRecordDTO>();
-            ConfigurationDnsRecord.Url = ApplicationConfiguration!.GetValue<string>("DnsServerUrl");
-        }
-
-        /// <summary>
-        /// Loads DNS records from file into memory cache
-        /// </summary>
-        void LoadDnsRecordsFromFileIntoMemoryCache()
-        {
-            ListOfDnsRecords = ReadListOfDnsRecordsFromFile.Execute(PathToDnsRecordsFile);
-            if (ListOfDnsRecords == null)
+            DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
+            string? errorMessage = SkySoft.DnsClientServerComponents.ValidateUrlOfDnsRecord.Execute(dnsRecordDTO!);
+            if (string.IsNullOrEmpty(errorMessage))
             {
-                ListOfDnsRecords = new List<DnsRecordDTO>();
+                ResponseValid = true;
             }
-
-            SetListOfDnsRecordsIntoCache.Execute(ListOfDnsRecords, OperatingSystem);
-        }
-
-        /// <summary>
-        /// Raises DnsClientInitialized event
-        /// </summary>
-        async Task RaiseDnsClientInitializedEvent()
-        {
-            await RaiseEvent(SkySoft.DnsClient.CON.EventTypes.DNS_CLIENT_INITIALIZED_EVENT);
-        }
-
-        /// <summary>
-        /// Requests DnsClientRegistrationWithDnsServerRequest event
-        /// </summary>
-        async Task RaiseDnsClientRegistrationWithDnsServerRequestEvent()
-        {
-            await RaiseEvent(SkySoft.DnsClient.CON.EventTypes.REGISTER_DNS_CLIENT_WITH_DNS_SERVER_EVENT);
-        }
-
-        /// <summary>
-        /// Removes DNS client data from data container
-        /// </summary>
-        void RemoveDnsClientDataFromDataContainer()
-        {
-            DataContainer.GetLastDTOByRemovingItFromDataCollection<DnsRecordDTO>(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS);
-        }
-
-        /// <summary>
-        /// Removes DNS data from data container
-        /// </summary>
-        void RemoveDnsDataFromDataContainer()
-        {
-            DataContainer.RemoveDataCollection(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS);
-        }
-
-        /// <summary>
-        /// Validates DNS client data
-        /// </summary>
-        void ValidateDnsClientData()
-        {
-            DnsRecordValidator dnsRecordValidator = new DnsRecordValidator(ConfigurationDnsRecord!, this, true, "Reading DNS client configuration from appsettings.json file." + Environment.NewLine);
-            dnsRecordValidator.OperatingSystem = OperatingSystem;
-            dnsRecordValidator.ProcessRequest(DataContainer);
-            dnsRecordValidator.ReleaseResources();
-            DnsClientDataValid = dnsRecordValidator.DnsRecordDataValid;
         }
         #endregion
 
         #region Private Properties
         /// <summary>
-        /// Gets or sets configuration DNS record
+        /// Gets flag indicating whether application initialized
         /// </summary>
-        DnsRecordDTO? ConfigurationDnsRecord
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets flag indicating whether DNS client data are valid
-        /// </summary>
-        bool DnsClientDataValid
-        {
-            get; set;
-        } = true;
-
-        /// <summary>
-        /// Gets or sets DNS record
-        /// </summary>
-        DnsRecordDTO? DnsRecordDTO
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets list of DNS records
-        /// </summary>
-        List<DnsRecordDTO>? ListOfDnsRecords
-        {
-            get; set;
-        } = default!;
-
-        /// <summary>
-        /// Gets or sets path to DNS records file
-        /// </summary>
-        string PathToDnsRecordsFile
-        {
-            get; set;
-        } = SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS + ".json";
-
-        /// <summary>
-        /// Gets flag indicating whether registration with DNS server was successful
-        /// </summary>
-        bool RegistrationWithDnsServerWasSuccessful
+        bool ApplicationInitialized
         {
             get
             {
-                return DataContainer.Exception == null && string.IsNullOrEmpty(DataContainer.Message);
+                return OperatingSystem.GetValueFomCache<string>($"{DataContainer.ApplicationLayerFullName}_ApplicationState") == SkySoft.Contracts.StateTypes.INITIAL;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets flag indicating whether response is valid
+        /// </summary>
+        bool ResponseValid
+        {
+            get; set;
         }
         #endregion
     }

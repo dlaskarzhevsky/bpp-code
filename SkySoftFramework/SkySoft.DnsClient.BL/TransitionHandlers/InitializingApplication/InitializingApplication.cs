@@ -22,44 +22,20 @@
         /// <summary>
         /// Handles request aynchronously
         /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <returns>Data container</returns>
         protected override async Task HandleRequestAsync()
         {
-            LoadDnsRecordsFromFileIntoMemoryCache();
-            AddHostDnsRecordToMemoryCache();
-            AddHostDnsRecordToFile();
-            ClearTemporaryData();
-
-            LoadDnsClientDataFromConfigurationFile();
-            ValidateDnsClientData();
-            if (DnsClientDataValid)
+            if (ApplicationInitialized)
             {
-                AddDnsClientDataToDataContainer();
-                AddDnsClientDnsRecordToMemoryCache();
-                AddDnsClientDnsRecordToFile();
-                RemoveDnsClientDataFromDataContainer();
-
-                await RaiseDnsClientRegistrationWithDnsServerRequestEvent();
-
-                if (RegistrationWithDnsServerWasSuccessful)
-                {
-                    await RaiseDnsClientInitializedEvent();
-                }
-
-                RemoveDnsDataFromDataContainer();
+                return;
             }
-        }
 
-        /// <summary>
-        /// Releases resources
-        /// </summary>
-        public override void ReleaseResources()
-        {
-            ConfigurationDnsRecord = default!;
-            DnsRecordDTO = null;
-            ListOfDnsRecords = null;
-            base.ReleaseResources();
+            AddDnsRecordWithHostApplicationLayerFullNameToRequest();
+            await RedirectRequestToNextApplicationLayer();
+            ValidateResponse();
+            if (ResponseValid)
+            {
+                SwitchApplicationIntoInitialState();
+            }
         }
         #endregion
     }

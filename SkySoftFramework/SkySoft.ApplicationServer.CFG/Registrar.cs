@@ -16,15 +16,13 @@
             SkySoft.Http.CFG.Registrar.Register(webApplicationBuilder);
             SkySoft.Logging.CFG.Registrar.Register(webApplicationBuilder);
 
-            SkySoft.APIHost.BLCFG.Registrar.Register(webApplicationBuilder);
-            SkySoft.APIHost.DPLCFG.Registrar.Register(webApplicationBuilder);
-            SkySoft.APIHost.DALCFG.Registrar.Register(webApplicationBuilder);
-            SkySoft.APIHostApp.BLCFG.Registrar.Register(webApplicationBuilder);
-            SkySoft.APIHostApp.DPLCFG.Registrar.Register(webApplicationBuilder);
-
+            SkySoft.DnsClient.BLCFG.Registrar.Register(webApplicationBuilder);
             SkySoft.DnsClient.DPLCFG.Registrar.Register(webApplicationBuilder);
-            SkySoft.DnsClientApp.DPLCFG.Registrar.Register(webApplicationBuilder);
+            SkySoft.DnsClient.DALCFG.Registrar.Register(webApplicationBuilder);
 
+            SkySoft.DnsClientApp.BLCFG.Registrar.Register(webApplicationBuilder);
+            SkySoft.DnsClientApp.DPLCFG.Registrar.Register(webApplicationBuilder);
+            SkySoft.DnsClientApp.CFG.Registrar.Register(webApplicationBuilder);
         }
         #endregion
     }

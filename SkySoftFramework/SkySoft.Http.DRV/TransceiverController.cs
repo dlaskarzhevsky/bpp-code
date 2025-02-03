@@ -77,7 +77,7 @@ namespace SkySoft.Http.DRV
         void AddDnsRecordWithApplicationLayerFullNameOfDnsServerToDataContainer()
         {
             IDnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
-            dnsRecordDTO.ApplicationLayerFullName = OperatingSystem.GetValueFromApplicationConfiguration<string>("DnsServer:ApplicationLayerName");
+            dnsRecordDTO.ApplicationLayerFullName = OperatingSystem.Logger.ApplicationLayerFullName;
         }
 
         /// <summary>
@@ -87,9 +87,8 @@ namespace SkySoft.Http.DRV
         {
             IDataCollection<RequestMetadataDTO>? requestMetadataDataCollection = DataContainer.GetDataColletion<RequestMetadataDTO>(SkySoft.Contracts.DataCollectionTypes.REQUEST_METADATA);
             IRequestMetadataDTO requestMetadataDTO = requestMetadataDataCollection![requestMetadataDataCollection.Count - 2];
-            string applicationLayerFullNameOfRequest = $"{requestMetadataDTO.DomainName}_{requestMetadataDTO.UseCaseName}_{requestMetadataDTO.ApplicationLayerName}";
             IDnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
-            dnsRecordDTO.ApplicationLayerFullName = applicationLayerFullNameOfRequest;
+            dnsRecordDTO.ApplicationLayerFullName = requestMetadataDTO.ApplicationLayerFullName;
         }
 
         /// <summary>

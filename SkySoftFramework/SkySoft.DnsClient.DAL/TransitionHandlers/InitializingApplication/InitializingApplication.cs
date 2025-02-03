@@ -13,33 +13,31 @@
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             UseCaseName = SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.BL;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
             TransitionName = SkySoft.DnsClient.CON.TransitionTypes.INITIALIZING_APPLICATION;
         }
         #endregion
 
         #region Overridden Methods
         /// <summary>
-        /// Handles request aynchronously
+        /// Handles request
         /// </summary>
-        /// <param name="dataContainer">Data container</param>
-        /// <returns>Data container</returns>
-        protected override async Task HandleRequestAsync()
+        protected override void HandleRequest()
         {
-            LoadDnsRecordsFromFileIntoMemoryCache();
-            AddHostDnsRecordToMemoryCache();
-            AddHostDnsRecordToFile();
-            ClearTemporaryData();
+            GetDnsServerRecordFromRequest();
+            GetDnsClientRecordFromRequest();
 
-            LoadDnsClientDataFromConfigurationFile();
-            ValidateDnsClientData();
-            if (DnsClientDataValid)
+            LoadListOfDnsRecordsFromFileIntoMemoryCache();
+            AddDnsClientDnsRecordToMemoryCache();
+            AddDnsClientDnsRecordToFile();
+
+            LoadDnsServerDataFromConfigurationFile();
+            ValidateDnsServerRecord();
+            if (DnsServerRecordValid)
             {
-                AddDnsClientDataToDataContainer();
-                AddDnsClientDnsRecordToMemoryCache();
-                AddDnsClientDnsRecordToFile();
-                RemoveDnsClientDataFromDataContainer();
-
+                AddDnsServerDnsRecordToMemoryCache();
+                AddDnsServerDnsRecordToFile();
+/*
                 await RaiseDnsClientRegistrationWithDnsServerRequestEvent();
 
                 if (RegistrationWithDnsServerWasSuccessful)
@@ -48,6 +46,7 @@
                 }
 
                 RemoveDnsDataFromDataContainer();
+*/
             }
         }
 
@@ -56,8 +55,9 @@
         /// </summary>
         public override void ReleaseResources()
         {
-            ConfigurationDnsRecord = default!;
-            DnsRecordDTO = null;
+            ConfigurationDnsRecord = null;
+            DnsClientRecordFromRequest = null;
+            DnsServerRecordFromRequest = null;
             ListOfDnsRecords = null;
             base.ReleaseResources();
         }

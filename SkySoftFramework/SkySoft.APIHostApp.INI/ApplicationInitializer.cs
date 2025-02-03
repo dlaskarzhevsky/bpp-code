@@ -26,12 +26,12 @@ namespace SkySoft.APIHostApp.INI
         /// <summary>
         /// Configures operating system
         /// </summary>
-        protected override void ConfigureOperatingSystem()
+        protected override void FinalizeOperatingSystemConfiguration()
         {
             DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
             if (dnsRecordDTO != null)
             {
-                OperatingSystem.HostUrl = dnsRecordDTO.Url;
+                OperatingSystem.Logger.ApplicationLayerUrl = dnsRecordDTO.Url;
             }
         }
 

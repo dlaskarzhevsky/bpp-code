@@ -14,6 +14,7 @@ namespace SkySoft.DnsClient.DALCFG
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DAL.GettingRemoteServerData>();
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DAL.InitializingApplication>();
         }
         #endregion

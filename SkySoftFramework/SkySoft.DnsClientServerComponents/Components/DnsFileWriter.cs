@@ -25,10 +25,7 @@ namespace SkySoft.DnsClientServerComponents
                 if (CachedDnsRecordFound)
                 {
                     UpdateDnsRecordData();
-                    if (CachedDnsRecordUpdated)
-                    {
-                        SaveUpdatedData();
-                    }
+                    SaveUpdatedData();
                 }
                 else
                 {
@@ -151,8 +148,9 @@ namespace SkySoft.DnsClientServerComponents
             if (CachedDnsRecordDTO!.Url != DnsRecordDTO!.Url)
             {
                 CachedDnsRecordDTO.Url = DnsRecordDTO.Url;
-                CachedDnsRecordUpdated = true;
             }
+
+            CachedDnsRecordDTO.DateOfModification = DnsRecordDTO.DateOfModification;
         }
 
         /// <summary>
@@ -194,14 +192,6 @@ namespace SkySoft.DnsClientServerComponents
             {
                 return CachedDnsRecordDTO != null;
             }
-        }
-
-        /// <summary>
-        /// Gets or sets flag indicating whether cached DNS record updated
-        /// </summary>
-        bool CachedDnsRecordUpdated
-        {
-            get; set;
         }
 
         /// <summary>

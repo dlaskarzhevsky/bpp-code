@@ -1,15 +1,16 @@
-﻿namespace SkySoft.DnsClient.DPL
+﻿
+namespace SkySoft.DnsClient.DPL
 {
     /// <summary>
-    /// GettingRemoteServerData transition request handler
+    /// SaaSGettingRemoteServerData transition request handler
     /// </summary>
-    public partial class GettingRemoteServerData : SkySoft.BPPApplication.RequestHandler
+    public partial class SaaSGettingRemoteServerData : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public GettingRemoteServerData()
+        public SaaSGettingRemoteServerData()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             UseCaseName = SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT;
@@ -22,15 +23,12 @@
         /// <summary>
         /// Handles request
         /// </summary>
-        protected override void HandleRequest()
+        protected override async Task HandleRequestAsync()
         {
-            GetDnsRecordFromRequest();
-            GetListOfDnsRecordsFromCache();
-            FindCachedDnsRecordByApplicationLayerName();
-            if (CachedDnsRecordFound)
-            {
-                UpdateDnsRecordFromRequestByDataFromCachedDnsRecord();
-            }
+//            DataContainer.RemoveCurrentRequestMetadta();
+            DataContainer.AddRequestMetadata(null, null, SkySoft.Contracts.ApplicationLayerNames.DPL, null, null);
+            DataContainer = await RedirectRequestToRequestHandler(DataContainer);
+            DataContainer.RemoveCurrentRequestMetadta();
         }
         #endregion
     }

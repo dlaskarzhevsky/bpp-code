@@ -1,4 +1,4 @@
-﻿namespace SkySoft.DnsServer.DPL
+﻿namespace SkySoft.DnsServer.BL
 {
     /// <summary>
     /// RegisteringHost transition request handler
@@ -13,13 +13,13 @@
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.BL;
             StateName = SkySoft.DnsServer.CON.StateTypes.INITIAL;
             TransitionName = SkySoft.DnsServer.CON.TransitionTypes.REGISTERING_HOST;
         }
         #endregion
 
-        #region Public Methods
+        #region Overridden Methods
         /// <summary>
         /// Handles request aynchronously
         /// </summary>

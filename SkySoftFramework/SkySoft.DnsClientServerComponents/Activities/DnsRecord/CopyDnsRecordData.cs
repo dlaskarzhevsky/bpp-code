@@ -3,13 +3,13 @@
 namespace SkySoft.DnsClientServerComponents
 {
     /// <summary>
-    /// Provides CopyDnsRecordData activity functionality
+    /// Copies DNS record data
     /// </summary>
     public static class CopyDnsRecordData
     {
         #region Public Methods
         /// <summary>
-        /// Copies DNS record data from source data transfer object to target data transfer object
+        /// Executes activity
         /// </summary>
         /// <param name="sourceDTO">Source data transfer object</param>
         /// <param name="targetDTO">Target data transfer object</param>

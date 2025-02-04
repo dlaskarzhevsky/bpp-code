@@ -1,4 +1,4 @@
-﻿namespace SkySoft.DnsServer.DPL
+﻿namespace SkySoft.DnsServer.BL
 {
     /// <summary>
     /// RegisteringHost transition request handler

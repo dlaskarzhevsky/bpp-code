@@ -1,4 +1,5 @@
-﻿using SkySoft.DnsClientServerComponents;
+﻿using SkySoft.Communication;
+using SkySoft.DnsClientServerComponents;
 using SkySoft.DnsRecord.DTO;
 
 namespace SkySoft.DnsServer.DAL
@@ -10,33 +11,157 @@ namespace SkySoft.DnsServer.DAL
     {
         #region Private Methods
         /// <summary>
-        /// Gets last DNS record from data container
+        /// Adds cached client DNS record to file
         /// </summary>
-        void GetLastDnsRecordFromDataContainer()
+        void AddCachedClientDnsRecordToFile()
         {
-            DnsRecord = SkySoft.DnsClientServerComponents.GetLastDnsRecordFromDataContainer.Execute(DataContainer);
+            if (CachedClientDnsRecordDTO != null)
+            {
+                SkySoft.DnsClientServerComponents.AddDnsRecordToFile.Execute(CachedClientDnsRecordDTO, DataContainer);
+            }
         }
 
         /// <summary>
-        /// Adds DNS record to file
+        /// Generates URL for client DNS record
         /// </summary>
-        void AddDnsRecordToFile()
+        void GenerateUrlForClientDnsRecord()
         {
-            if (DnsRecord != null)
+            SkySoft.DnsClientServerComponents.GenerateUrlForDnsRecord.Execute(ClientDnsRecordDTOFromRequest!);
+        }
+
+        /// <summary>
+        /// Creates client DSN record for cache with data from request
+        /// </summary>
+        void CreateClientDnsRecordForCacheWithDataFromRequest()
+        {
+            CachedClientDnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>();
+            CopyDnsRecordData.Execute(ClientDnsRecordDTOFromRequest!, CachedClientDnsRecordDTO!, true);
+            ListOfCachedDnsRecords.Add(CachedClientDnsRecordDTO);
+
+            CachedClientDnsRecordCreated = true;
+        }
+
+        /// <summary>
+        /// Finds cached client DNS record by application full layer name
+        /// </summary>
+        void FindCachedClientDnsRecordByApplicationLayerFullName()
+        {
+            if (ClientDnsRecordDTOFromRequest != null)
             {
-                SkySoft.DnsClientServerComponents.AddDnsRecordToFile.Execute(DnsRecord, DataContainer);
+                string applicationLayerFullName = ClientDnsRecordDTOFromRequest.ApplicationLayerFullName!.ToLowerInvariant();
+                CachedClientDnsRecordDTO = FindDnsRecordInListByApplicationLayerFullName.Execute(ListOfCachedDnsRecords, applicationLayerFullName);
             }
+        }
+
+        /// <summary>
+        /// Gets client DNS record from request
+        /// </summary>
+        void GetDnsClientRecordFromRequest()
+        {
+            ClientDnsRecordDTOFromRequest = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
+        }
+
+        /// <summary>
+        /// Gets server DNS record from request
+        /// </summary>
+        void GetDnsServerRecordFromRequest()
+        {
+            ServerDnsRecordDTOFromRequest = DataContainer.GetLastDTOByRemovingItFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
+        }
+
+        /// <summary>
+        /// Gets list of DNS records from cache
+        /// </summary>
+        void GetListOfDnsRecordsFromCache()
+        {
+            ListOfCachedDnsRecords = SkySoft.DnsClientServerComponents.GetListOfDnsRecordsFromCache.Execute(OperatingSystem);
+        }
+
+        /// <summary>
+        /// Logs registration result
+        /// </summary>
+        void LogRegistrationResult()
+        {
+            LogDnsRecordRegistrationResult.Execute(ClientDnsRecordDTOFromRequest!, DataContainer, HostDnsRecordDTO!.ApplicationLayerFullName, HostDnsRecordDTO.Url);
+        }
+
+        /// <summary>
+        /// Saves updated data
+        /// </summary>
+        async Task SaveUpdatedData()
+        {
+            await RaiseEvent(SkySoft.Contracts.EventTypes.REDIRECT_REQUEST_TO_NEXT_APPLICATION_LAYER_EVENT, false);
+        }
+
+        /// <summary>
+        /// Updates cached client DNS record by data from request
+        /// </summary>
+        void UpdateCachedClientDnsRecordByDataFromRequest()
+        {
+            CopyDnsRecordData.Execute(ClientDnsRecordDTOFromRequest!, CachedClientDnsRecordDTO!, false);
+            CachedClientDnsRecordUpdated = true;
         }
         #endregion
 
         #region Private Properties
         /// <summary>
-        /// Gets or sets DNS record
+        /// Gets or sets flag indicating whether cached client DNS record created
         /// </summary>
-        DnsRecordDTO? DnsRecord
+        bool CachedClientDnsRecordCreated
         {
             get; set;
         }
+
+        /// <summary>
+        /// Gets or sets cached client DNS record
+        /// </summary>
+        DnsRecordDTO? CachedClientDnsRecordDTO
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets flag indicating whether cached client DNS record found
+        /// </summary>
+        bool CachedClientDnsRecordFound
+        {
+            get
+            {
+                return CachedClientDnsRecordDTO != null;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets flag indicating whether cached client DNS record updated
+        /// </summary>
+        bool CachedClientDnsRecordUpdated
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets client DNS record from request
+        /// </summary>
+        DnsRecordDTO? ClientDnsRecordDTOFromRequest
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets host DNS record
+        /// </summary>
+        DnsRecordDTO? HostDnsRecordDTO
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets list of cached DNS records
+        /// </summary>
+        List<DnsRecordDTO> ListOfCachedDnsRecords
+        {
+            get; set;
+        } = default!;
 
         /// <summary>
         /// Getsa or sets path to DNS records file
@@ -45,6 +170,68 @@ namespace SkySoft.DnsServer.DAL
         {
             get; set;
         } = SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS + ".json";
+
+        /// <summary>
+        /// Gets or sets server DNS record from request
+        /// </summary>
+        DnsRecordDTO? ServerDnsRecordDTOFromRequest
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets flag indicating whether URL needs to be generated for client DNS record
+        /// </summary>
+        bool UrlNeedsToBeGeneratedForClientDnsRecord
+        {
+            get
+            {
+                return string.IsNullOrEmpty(ClientDnsRecordDTOFromRequest!.Url);
+            }
+        }
         #endregion
+
+
+
+        /*
+                #region Private Methods
+                /// <summary>
+                /// Gets last DNS record from data container
+                /// </summary>
+                void GetLastDnsRecordFromDataContainer()
+                {
+                    DnsRecord = SkySoft.DnsClientServerComponents.GetLastDnsRecordFromDataContainer.Execute(DataContainer);
+                }
+
+                /// <summary>
+                /// Adds DNS record to file
+                /// </summary>
+                void AddDnsRecordToFile()
+                {
+                    if (DnsRecord != null)
+                    {
+                        SkySoft.DnsClientServerComponents.AddDnsRecordToFile.Execute(DnsRecord, DataContainer);
+                    }
+                }
+                #endregion
+
+                #region Private Properties
+                /// <summary>
+                /// Gets or sets DNS record
+                /// </summary>
+                DnsRecordDTO? DnsRecord
+                {
+                    get; set;
+                }
+
+                /// <summary>
+                /// Getsa or sets path to DNS records file
+                /// </summary>
+                string PathToDnsRecordsFile
+                {
+                    get; set;
+                } = SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS + ".json";
+                #endregion
+        */
     }
 }

@@ -21,12 +21,36 @@
 
         #region Public Methods
         /// <summary>
-        /// Handles request aynchronously
+        /// Handles request
         /// </summary>
         protected override void HandleRequest()
         {
-            GetLastDnsRecordFromDataContainer();
-            AddDnsRecordToFile();
+//            GetLastDnsRecordFromDataContainer();
+//            AddDnsRecordToFile();
+
+            GetDnsServerRecordFromRequest();
+            GetDnsClientRecordFromRequest();
+            if (UrlNeedsToBeGeneratedForClientDnsRecord)
+            {
+                GenerateUrlForClientDnsRecord();
+            }
+
+            GetListOfDnsRecordsFromCache();
+            FindCachedClientDnsRecordByApplicationLayerFullName();
+            if (CachedClientDnsRecordFound)
+            {
+                UpdateCachedClientDnsRecordByDataFromRequest();
+            }
+            else
+            {
+                CreateClientDnsRecordForCacheWithDataFromRequest();
+            }
+
+            if (CachedClientDnsRecordCreated || CachedClientDnsRecordUpdated)
+            {
+                AddCachedClientDnsRecordToFile();
+                LogRegistrationResult();
+            }
         }
 
         /// <summary>
@@ -34,7 +58,13 @@
         /// </summary>
         public override void ReleaseResources()
         {
-            DnsRecord = null;
+            CachedClientDnsRecordDTO = null;
+            ClientDnsRecordDTOFromRequest = null;
+            ListOfCachedDnsRecords = default!;
+            HostDnsRecordDTO = null;
+
+
+//            DnsRecord = null;
             base.ReleaseResources();
         }
         #endregion

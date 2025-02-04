@@ -187,13 +187,14 @@ namespace SkySoft.Http.DRV
         /// <returns>Task result</returns>
         async Task SendRequestToRemoteServer()
         {
-            RemoveLastDnsRecordFromDataContainer();
+            // TODO
+//            RemoveLastDnsRecordFromDataContainer();
             CalculateRemoteServerUrl();
-            CacheLastRequestMetadataByRemovingItFromDataContainer();
+//            CacheLastRequestMetadataByRemovingItFromDataContainer();
 
             await TransmitRequestToRemoteServer();
 
-            RestoreLastRequestMetadataFromCache();
+//            RestoreLastRequestMetadataFromCache();
         }
 
         /// <summary>

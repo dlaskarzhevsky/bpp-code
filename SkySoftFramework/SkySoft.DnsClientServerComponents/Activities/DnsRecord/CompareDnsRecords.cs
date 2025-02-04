@@ -9,7 +9,7 @@ namespace SkySoft.DnsClientServerComponents
     {
         #region Public Methods
         /// <summary>
-        /// Compares DNS records by ApplicationLayerName, HttpsUrl, HttpUrl, and UseHttps properties
+        /// Executes activity
         /// </summary>
         /// <param name="sourceDTO">Source data transfer object</param>
         /// <param name="targetDTO">Target data transfer object</param>

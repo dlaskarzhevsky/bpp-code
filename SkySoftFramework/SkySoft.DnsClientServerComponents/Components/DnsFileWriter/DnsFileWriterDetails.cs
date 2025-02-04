@@ -9,61 +9,8 @@ namespace SkySoft.DnsClientServerComponents
     /// <summary>
     /// Provides DNS file writer functionality
     /// </summary>
-    public class DnsFileWriter : SkySoft.BPPApplication.RequestHandler
+    public partial class DnsFileWriter
     {
-        #region Overridden Methods
-        /// <summary>
-        /// Handles request
-        /// </summary>
-        protected override void HandleRequest()
-        {
-            VerifyThatPathToDnsRecordsFileContainsDirectoryName();
-            if (DnsRecordsFileExists)
-            {
-                LoadDnsRecordsFromFile();
-                FindCachedDnsRecordByApplicationLayerName();
-                if (CachedDnsRecordFound)
-                {
-                    UpdateDnsRecordData();
-                    SaveUpdatedData();
-                }
-                else
-                {
-                    CreateNewDnsRecord();
-                    AddDnsRecordToListOfDnsRecords();
-                    SaveUpdatedData();
-                }
-            }
-            else
-            {
-                CreateEmptyListOfDnsRecords();
-                CreateNewDnsRecord();
-                AddDnsRecordToListOfDnsRecords();
-                SaveUpdatedData();
-            }
-        }
-
-        /// <summary>
-        /// Releases resources
-        /// </summary>
-        public override void ReleaseResources()
-        {
-            ListOfCachedDnsRecords = null;
-            base.ReleaseResources();
-        }
-
-        /// <summary>
-        /// Validates component
-        /// </summary>
-        protected override void ValidateComponent()
-        {
-            if (DnsRecordDTO == null)
-            {
-                ComponentIsValid = false;
-            }
-        }
-        #endregion
-
         #region Public Properties
         /// <summary>
         /// Gets or sets DNS record
@@ -85,7 +32,7 @@ namespace SkySoft.DnsClientServerComponents
                 return;
             }
 
-            ListOfCachedDnsRecords!.Add(CachedDnsRecordDTO!);
+            ListOfDnsRecordsFromFile!.Add(CachedDnsRecordDTO!);
         }
 
         /// <summary>
@@ -103,16 +50,16 @@ namespace SkySoft.DnsClientServerComponents
         /// </summary>
         void CreateEmptyListOfDnsRecords()
         {
-            ListOfCachedDnsRecords = new List<DnsRecordDTO>();
+            ListOfDnsRecordsFromFile = new List<DnsRecordDTO>();
         }
 
         /// <summary>
-        /// Finds cached DNS record by application layer name
+        /// Finds DNS record by application layer full name name in list of DNS records loaded from file
         /// </summary>
-        void FindCachedDnsRecordByApplicationLayerName()
+        void FindDnsRecordByApplicationLayerFullNameInListOfDnsRecordsLoadedFromFile()
         {
             string applicationLayerName = DnsRecordDTO!.ApplicationLayerFullName!;
-            foreach (DnsRecordDTO dnsRecordDTO in ListOfCachedDnsRecords!)
+            foreach (DnsRecordDTO dnsRecordDTO in ListOfDnsRecordsFromFile!)
             {
                 if (string.Equals(dnsRecordDTO.ApplicationLayerFullName!, applicationLayerName, StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -123,20 +70,20 @@ namespace SkySoft.DnsClientServerComponents
         }
 
         /// <summary>
-        /// Load DNS records from file
+        /// Load list of DNS records from file
         /// </summary>
-        void LoadDnsRecordsFromFile()
+        void LoadListOfDnsRecordsFromFile()
         {
             string json = File.ReadAllText(PathToDnsRecordsFile!);
-            ListOfCachedDnsRecords = JsonConvert.DeserializeObject<List<DnsRecordDTO>>(json);
+            ListOfDnsRecordsFromFile = JsonConvert.DeserializeObject<List<DnsRecordDTO>>(json);
         }
 
         /// <summary>
-        /// Saves updated data
+        /// Saves updated data into file
         /// </summary>
-        void SaveUpdatedData()
+        void SaveUpdatedDataIntoFile()
         {
-            string json = JsonConvert.SerializeObject(ListOfCachedDnsRecords);
+            string json = JsonConvert.SerializeObject(ListOfDnsRecordsFromFile);
             File.WriteAllText(PathToDnsRecordsFile, json);
         }
 
@@ -184,9 +131,9 @@ namespace SkySoft.DnsClientServerComponents
         }
 
         /// <summary>
-        /// Gets flag indicating whether cached DNS record found
+        /// Gets flag indicating whether DNS record found
         /// </summary>
-        bool CachedDnsRecordFound
+        bool DnsRecordFound
         {
             get
             {
@@ -206,9 +153,9 @@ namespace SkySoft.DnsClientServerComponents
         }
 
         /// <summary>
-        /// Gets or sets list of cached DNS records
+        /// Gets or sets list of DNS records from file
         /// </summary>
-        List<DnsRecordDTO>? ListOfCachedDnsRecords
+        List<DnsRecordDTO>? ListOfDnsRecordsFromFile
         {
             get; set;
         }

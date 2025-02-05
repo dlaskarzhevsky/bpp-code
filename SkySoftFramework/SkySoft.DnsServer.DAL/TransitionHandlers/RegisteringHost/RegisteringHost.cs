@@ -25,24 +25,22 @@
         /// </summary>
         protected override void HandleRequest()
         {
-//            GetLastDnsRecordFromDataContainer();
-//            AddDnsRecordToFile();
-
+            GetListOfDnsRecordsFromCache();
             GetDnsServerRecordFromRequest();
             GetDnsClientRecordFromRequest();
-            if (UrlNeedsToBeGeneratedForClientDnsRecord)
-            {
-                GenerateUrlForClientDnsRecord();
-            }
-
-            GetListOfDnsRecordsFromCache();
             FindCachedClientDnsRecordByApplicationLayerFullName();
             if (CachedClientDnsRecordFound)
             {
+                UpdateClientDnsRecordUrlByCachedData();
                 UpdateCachedClientDnsRecordByDataFromRequest();
             }
             else
             {
+                if (UrlNeedsToBeGeneratedForClientDnsRecord)
+                {
+                    GenerateUrlForClientDnsRecord();
+                }
+
                 CreateClientDnsRecordForCacheWithDataFromRequest();
             }
 
@@ -61,10 +59,7 @@
             CachedClientDnsRecordDTO = null;
             ClientDnsRecordDTOFromRequest = null;
             ListOfCachedDnsRecords = default!;
-            HostDnsRecordDTO = null;
 
-
-//            DnsRecord = null;
             base.ReleaseResources();
         }
         #endregion

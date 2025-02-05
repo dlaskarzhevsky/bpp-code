@@ -31,8 +31,9 @@
 
             AddDnsRecordWithHostApplicationLayerFullNameToRequest();
             await RedirectRequestToNextApplicationLayer();
-            ValidateResponse();
-            if (ResponseValid)
+            GetClientDnsRecord();
+            ValidateClientDnsRecord();
+            if (ClientDnsRecordValid)
             {
                 SwitchApplicationIntoInitialState();
             }

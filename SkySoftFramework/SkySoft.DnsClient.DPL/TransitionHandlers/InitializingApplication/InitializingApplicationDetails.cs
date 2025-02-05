@@ -15,9 +15,17 @@
         }
 
         /// <summary>
-        /// Load DNS records from storage
+        /// Redirect request to next application layer
         /// </summary>
         async Task RedirectRequestToNextApplicationLayer()
+        {
+            await RaiseEvent(SkySoft.Contracts.EventTypes.REDIRECT_REQUEST_TO_NEXT_APPLICATION_LAYER_EVENT, false);
+        }
+
+        /// <summary>
+        /// Updates DNS client data by registration result
+        /// </summary>
+        async Task UpdateDnsClientDataByRegistrationResult()
         {
             await RaiseEvent(SkySoft.Contracts.EventTypes.REDIRECT_REQUEST_TO_NEXT_APPLICATION_LAYER_EVENT, false);
         }

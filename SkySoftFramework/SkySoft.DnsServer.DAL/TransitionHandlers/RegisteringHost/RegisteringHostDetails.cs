@@ -1,5 +1,4 @@
-﻿using SkySoft.Communication;
-using SkySoft.DnsClientServerComponents;
+﻿using SkySoft.DnsClientServerComponents;
 using SkySoft.DnsRecord.DTO;
 
 namespace SkySoft.DnsServer.DAL
@@ -26,7 +25,7 @@ namespace SkySoft.DnsServer.DAL
         /// </summary>
         void GenerateUrlForClientDnsRecord()
         {
-            SkySoft.DnsClientServerComponents.GenerateUrlForDnsRecord.Execute(ClientDnsRecordDTOFromRequest!);
+            SkySoft.DnsClientServerComponents.GenerateUrlForDnsRecord.Execute(ListOfCachedDnsRecords, ClientDnsRecordDTOFromRequest!, ServerDnsRecordDTOFromRequest!.Url!);
         }
 
         /// <summary>
@@ -82,15 +81,7 @@ namespace SkySoft.DnsServer.DAL
         /// </summary>
         void LogRegistrationResult()
         {
-            LogDnsRecordRegistrationResult.Execute(ClientDnsRecordDTOFromRequest!, DataContainer, HostDnsRecordDTO!.ApplicationLayerFullName, HostDnsRecordDTO.Url);
-        }
-
-        /// <summary>
-        /// Saves updated data
-        /// </summary>
-        async Task SaveUpdatedData()
-        {
-            await RaiseEvent(SkySoft.Contracts.EventTypes.REDIRECT_REQUEST_TO_NEXT_APPLICATION_LAYER_EVENT, false);
+            LogDnsRecordRegistrationResult.Execute(ClientDnsRecordDTOFromRequest!, DataContainer, ServerDnsRecordDTOFromRequest!.ApplicationLayerFullName, ServerDnsRecordDTOFromRequest.Url);
         }
 
         /// <summary>
@@ -100,6 +91,14 @@ namespace SkySoft.DnsServer.DAL
         {
             CopyDnsRecordData.Execute(ClientDnsRecordDTOFromRequest!, CachedClientDnsRecordDTO!, false);
             CachedClientDnsRecordUpdated = true;
+        }
+
+        /// <summary>
+        /// Updates client DNS record URL by cached data
+        /// </summary>
+        void UpdateClientDnsRecordUrlByCachedData()
+        {
+            ClientDnsRecordDTOFromRequest!.Url = CachedClientDnsRecordDTO!.Url;
         }
         #endregion
 
@@ -148,14 +147,6 @@ namespace SkySoft.DnsServer.DAL
         }
 
         /// <summary>
-        /// Gets or sets host DNS record
-        /// </summary>
-        DnsRecordDTO? HostDnsRecordDTO
-        {
-            get; set;
-        }
-
-        /// <summary>
         /// Gets or sets list of cached DNS records
         /// </summary>
         List<DnsRecordDTO> ListOfCachedDnsRecords
@@ -186,52 +177,9 @@ namespace SkySoft.DnsServer.DAL
         {
             get
             {
-                return string.IsNullOrEmpty(ClientDnsRecordDTOFromRequest!.Url);
+                return string.IsNullOrEmpty(ClientDnsRecordDTOFromRequest!.Url) || ClientDnsRecordDTOFromRequest!.Url.IndexOf(':') < 0;
             }
         }
         #endregion
-
-
-
-        /*
-                #region Private Methods
-                /// <summary>
-                /// Gets last DNS record from data container
-                /// </summary>
-                void GetLastDnsRecordFromDataContainer()
-                {
-                    DnsRecord = SkySoft.DnsClientServerComponents.GetLastDnsRecordFromDataContainer.Execute(DataContainer);
-                }
-
-                /// <summary>
-                /// Adds DNS record to file
-                /// </summary>
-                void AddDnsRecordToFile()
-                {
-                    if (DnsRecord != null)
-                    {
-                        SkySoft.DnsClientServerComponents.AddDnsRecordToFile.Execute(DnsRecord, DataContainer);
-                    }
-                }
-                #endregion
-
-                #region Private Properties
-                /// <summary>
-                /// Gets or sets DNS record
-                /// </summary>
-                DnsRecordDTO? DnsRecord
-                {
-                    get; set;
-                }
-
-                /// <summary>
-                /// Getsa or sets path to DNS records file
-                /// </summary>
-                string PathToDnsRecordsFile
-                {
-                    get; set;
-                } = SkySoft.DnsServer.CON.DataCollectionTypes.DNS_RECORDS + ".json";
-                #endregion
-        */
     }
 }

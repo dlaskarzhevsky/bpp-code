@@ -49,7 +49,7 @@ namespace SkySoft.LoggingToConsole
                 applicationLayerFullName = ApplicationLayerFullName;
             }
 
-            if (string.IsNullOrEmpty(ApplicationLayerUrl))
+            if (string.IsNullOrEmpty(applicationLayerUrl))
             {
                 applicationLayerUrl = ApplicationLayerUrl;
             }

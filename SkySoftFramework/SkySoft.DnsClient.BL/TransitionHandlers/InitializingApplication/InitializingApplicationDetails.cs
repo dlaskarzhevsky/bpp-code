@@ -1,4 +1,5 @@
 ﻿using SkySoft.DnsRecord.DTO;
+using SkySoft.ICommunication;
 
 namespace SkySoft.DnsClient.BL
 {
@@ -15,6 +16,25 @@ namespace SkySoft.DnsClient.BL
         {
             DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS);
             dnsRecordDTO.ApplicationLayerFullName = DataContainer.ApplicationLayerFullName;
+        }
+
+        /// <summary>
+        /// Gets clientcDNS record
+        /// </summary>
+        void GetClientDnsRecord()
+        {
+            IDataCollection<DnsRecordDTO>? dnsRecords = DataContainer.GetDataColletion<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
+            if (dnsRecords != null)
+            {
+                for (int i = 0; i < dnsRecords.Count; i++)
+                {
+                    if (string.Equals(dnsRecords[i].ApplicationLayerFullName, OperatingSystem.Logger.ApplicationLayerFullName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        ClientDnsRecord = dnsRecords[i];
+                        break;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -35,15 +55,19 @@ namespace SkySoft.DnsClient.BL
         }
 
         /// <summary>
-        /// Validates response
+        /// Validates client DNS record
         /// </summary>
-        void ValidateResponse()
+        void ValidateClientDnsRecord()
         {
-            DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
-            string? errorMessage = SkySoft.DnsClientServerComponents.ValidateUrlOfDnsRecord.Execute(dnsRecordDTO!);
+            if (ClientDnsRecord == null)
+            {
+                return;
+            }
+
+            string? errorMessage = SkySoft.DnsClientServerComponents.ValidateUrlOfDnsRecord.Execute(ClientDnsRecord);
             if (string.IsNullOrEmpty(errorMessage))
             {
-                ResponseValid = true;
+                ClientDnsRecordValid = true;
             }
         }
         #endregion
@@ -61,9 +85,17 @@ namespace SkySoft.DnsClient.BL
         }
 
         /// <summary>
-        /// Gets or sets flag indicating whether response is valid
+        /// Gets or sets client DNS record
         /// </summary>
-        bool ResponseValid
+        DnsRecordDTO? ClientDnsRecord
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets flag indicating whether client DNS record is valid
+        /// </summary>
+        bool ClientDnsRecordValid
         {
             get; set;
         }

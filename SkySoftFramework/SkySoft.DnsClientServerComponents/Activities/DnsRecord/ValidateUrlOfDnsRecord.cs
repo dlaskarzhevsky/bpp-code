@@ -15,7 +15,7 @@ namespace SkySoft.DnsClientServerComponents
         /// <returns>Null if DNS records is valid, otherwise error message</returns>
         public static string? Execute(DnsRecordDTO dnsRecordDTO)
         {
-            if (string.IsNullOrEmpty(dnsRecordDTO.Url))
+            if (string.IsNullOrEmpty(dnsRecordDTO.Url) || !dnsRecordDTO.Url.Contains(':'))
             {
                 return $"DNS record does not have required URL entry for " + dnsRecordDTO.ApplicationLayerFullName;
             }

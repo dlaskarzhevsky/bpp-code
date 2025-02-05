@@ -24,29 +24,41 @@
         /// </summary>
         protected override void HandleRequest()
         {
-            GetDnsServerRecordFromRequest();
-            GetDnsClientRecordFromRequest();
-
-            LoadListOfDnsRecordsFromFileIntoMemoryCache();
-            AddDnsClientDnsRecordToMemoryCache();
-            AddDnsClientDnsRecordToFile();
-
-            LoadDnsServerDataFromConfigurationFile();
-            ValidateDnsServerRecord();
-            if (DnsServerRecordValid)
+            GetServerDnsRecordFromRequest();
+            GetClientDnsRecordFromRequest();
+            if (ClientDnsRecordContainsUrl)
             {
-                AddDnsServerDnsRecordToMemoryCache();
-                AddDnsServerDnsRecordToFile();
-/*
-                await RaiseDnsClientRegistrationWithDnsServerRequestEvent();
-
-                if (RegistrationWithDnsServerWasSuccessful)
+                GetListOfDnsRecordsFromCache();
+                FindCachedClientDnsRecordByApplicationLayerFullName();
+                if (CachedClientDnsRecordFound)
                 {
-                    await RaiseDnsClientInitializedEvent();
+                    UpdateCachedClientDnsRecordByDataFromRequest();
+                }
+                else
+                {
+                    CreateClientDnsRecordForCacheWithDataFromRequest();
                 }
 
-                RemoveDnsDataFromDataContainer();
-*/
+                if (CachedClientDnsRecordCreated || CachedClientDnsRecordUpdated)
+                {
+                    AddCachedClientDnsRecordToFile();
+                }
+            }
+            else
+            {
+                SetComputerNameAsClientDnsRecordUrl();
+
+                LoadListOfDnsRecordsFromFileIntoMemoryCache();
+                AddClientDnsRecordToMemoryCache();
+                AddClientDnsRecordToFile();
+
+                LoadServerDnsDataFromConfigurationFile();
+                ValidateServerDnsDataLoadedFromConfigurationFile();
+                if (ServerDnsDataLoadedFromConfigurationFileValid)
+                {
+                    AddServerDnsRecordToMemoryCache();
+                    AddServerDnsRecordToFile();
+                }
             }
         }
 
@@ -56,8 +68,8 @@
         public override void ReleaseResources()
         {
             ConfigurationDnsRecord = null;
-            DnsClientRecordFromRequest = null;
-            DnsServerRecordFromRequest = null;
+            ClientDnsRecordFromRequest = null;
+            ServerDnsRecordFromRequest = null;
             ListOfDnsRecords = null;
             base.ReleaseResources();
         }

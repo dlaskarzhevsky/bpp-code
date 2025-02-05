@@ -107,6 +107,14 @@ namespace SkySoft.Communication
             }
 
             ExceptionDTO exceptionDTO = exceptionDataCollection[exceptionDataCollection.Count - 1];
+            if (exceptionDTO.Exception == null)
+            {
+                if (exceptionDTO.MessageType == MessageType.Critical)
+                {
+                    exceptionDTO.Exception = new Exception(exceptionDTO.Message);
+                }
+            }
+
             return exceptionDTO.Exception;
         }
         #endregion

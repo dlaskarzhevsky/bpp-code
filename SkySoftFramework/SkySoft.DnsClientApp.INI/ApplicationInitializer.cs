@@ -1,4 +1,5 @@
 ﻿using SkySoft.DnsRecord.DTO;
+using SkySoft.ICommunication;
 
 namespace SkySoft.DnsClientApp.INI
 {
@@ -28,10 +29,10 @@ namespace SkySoft.DnsClientApp.INI
         /// </summary>
         protected override void FinalizeOperatingSystemConfiguration()
         {
-            DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
-            if (dnsRecordDTO != null)
+            DnsRecordDTO? clientDnsRecord = GetClientDnsRecord();
+            if (clientDnsRecord != null && !string.IsNullOrEmpty(clientDnsRecord.Url) && clientDnsRecord.Url.Contains(':'))
             {
-                OperatingSystem.Logger.ApplicationLayerUrl = dnsRecordDTO.Url;
+                OperatingSystem.Logger.ApplicationLayerUrl = clientDnsRecord.Url;
             }
         }
 
@@ -49,6 +50,31 @@ namespace SkySoft.DnsClientApp.INI
         protected override void PreconfigureOperatingSystem()
         {
             OperatingSystem.Logger.ApplicationLayerFullName = DataContainer.ApplicationLayerFullName;
+        }
+        #endregion
+
+        #region Private Methods
+        /// <summary>
+        /// Gets client DNS record
+        /// </summary>
+        /// <returns>Client DNS record</returns>
+        DnsRecordDTO? GetClientDnsRecord()
+        {
+            DnsRecordDTO? clientDnsRecord = null;
+            IDataCollection<DnsRecordDTO>? dnsRecords = DataContainer.GetDataColletion<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
+            if (dnsRecords != null)
+            {
+                for (int i = 0; i < dnsRecords.Count; i++)
+                {
+                    if (string.Equals(dnsRecords[i].ApplicationLayerFullName, OperatingSystem.Logger.ApplicationLayerFullName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        clientDnsRecord = dnsRecords[i];
+                        break;
+                    }
+                }
+            }
+
+            return clientDnsRecord;
         }
         #endregion
     }

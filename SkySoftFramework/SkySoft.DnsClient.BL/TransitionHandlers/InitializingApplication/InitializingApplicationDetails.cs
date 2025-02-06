@@ -15,7 +15,7 @@ namespace SkySoft.DnsClient.BL
         void AddDnsRecordWithHostApplicationLayerFullNameToRequest()
         {
             DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS);
-            dnsRecordDTO.ApplicationLayerFullName = DataContainer.ApplicationLayerFullName;
+            dnsRecordDTO.ApplicationLayerFullName = OperatingSystem.Logger.ApplicationLayerFullName;
         }
 
         /// <summary>

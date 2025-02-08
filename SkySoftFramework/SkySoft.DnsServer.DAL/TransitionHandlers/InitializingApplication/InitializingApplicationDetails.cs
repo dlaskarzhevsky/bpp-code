@@ -1,4 +1,5 @@
 ﻿using SkySoft.DnsClientServerComponents;
+using SkySoft.DnsRecord.DTI;
 using SkySoft.DnsRecord.DTO;
 
 namespace SkySoft.DnsServer.DAL

@@ -19,7 +19,11 @@ namespace SkySoft.DnsClientServerComponents
         public static DnsRecordDTO Execute(IConfiguration applicationConfiguration)
         {
             DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDataTransferObject<DnsRecordDTO>();
-            dnsRecordDTO.Url = applicationConfiguration!.GetValue<string>("DnsServerUrl");
+            dnsRecordDTO.Url = applicationConfiguration!.GetValue<string>("ASPNETCORE_URLS");
+            if (string.IsNullOrEmpty(dnsRecordDTO.Url) || dnsRecordDTO.Url == "http://localhost")
+            {
+                dnsRecordDTO.Url = applicationConfiguration!.GetValue<string>("DnsServerUrl");
+            }
 
             return dnsRecordDTO;
         }

@@ -1,4 +1,6 @@
-﻿namespace SkySoft.DnsServer.DAL
+﻿using Microsoft.Extensions.Configuration;
+
+namespace SkySoft.DnsServer.DAL
 {
     /// <summary>
     /// InitializingApplication transition request handler

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 
+using SkySoft.DnsClientServerComponents;
+
 namespace SkySoft.DnsServer.DAL
 {
     /// <summary>
@@ -26,7 +28,23 @@ namespace SkySoft.DnsServer.DAL
         /// </summary>
         protected override void HandleRequest()
         {
+            LoadDnsRecordsFromFile();
+            if (DnsRecordsLoadedFromFile)
+            {
+                CacheListOfDnsRecords();
+            }
+            else
+            {
+                CreateEmptyListOfDnsRecordsForCaching();
+                CacheListOfDnsRecords();
+                SaveListOfDnsRecordsIntoFile();
+            }
+
             GetDnsRecordFromRequest();
+            LoadDnsRecordFromApplicationConfiguration();
+            CopyUrlFromApplicationConfigurationIntoDnsRecordFromRequest();
+
+/*
             LoadDnsRecordsFromFile();
             if (DnsRecordsLoadedFromFile)
             {
@@ -40,9 +58,7 @@ namespace SkySoft.DnsServer.DAL
                 CreateEmptyListOfDnsRecords();
                 AddDnsRecordToListOfDnsRecords();
             }
-
-            CopyDnsDataIntoDnsRecordFromRequest();
-            CacheListOfDnsRecords();
+*/
         }
 
         /// <summary>
@@ -51,7 +67,7 @@ namespace SkySoft.DnsServer.DAL
         public override void ReleaseResources()
         {
             DnsRecordFromRequest = null;
-            HostDnsRecordDTO = null;
+            DnsRecordFromApplicationConfiguration = null;
             ListOfDnsRecords = null;
             base.ReleaseResources();
         }

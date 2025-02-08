@@ -14,14 +14,9 @@ namespace SkySoft.DnsClientServerComponents
         /// </summary>
         /// <param name="operatingSystem">Operating system</param>
         /// <returns>List of DNS records from cache</returns>
-        public static List<DnsRecordDTO> Execute(IOS operatingSystem)
+        public static List<DnsRecordDTO>? Execute(IOS operatingSystem)
         {
             List<DnsRecordDTO>? listOfDnsRecords = operatingSystem.GetValueFomCache<List<DnsRecordDTO>>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
-            if (listOfDnsRecords == null)
-            {
-                return new List<DnsRecordDTO>();
-            }
-
             return listOfDnsRecords;
         }
         #endregion

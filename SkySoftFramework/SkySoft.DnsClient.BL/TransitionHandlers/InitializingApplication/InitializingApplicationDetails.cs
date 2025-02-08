@@ -1,4 +1,6 @@
-﻿using SkySoft.DnsRecord.DTO;
+﻿using Microsoft.Extensions.Configuration;
+
+using SkySoft.DnsRecord.DTO;
 using SkySoft.ICommunication;
 
 namespace SkySoft.DnsClient.BL
@@ -10,12 +12,13 @@ namespace SkySoft.DnsClient.BL
     {
         #region Private Methods
         /// <summary>
-        /// Adds DNS record with host application layer full name to request
+        /// Adds DNS record with initial data to request
         /// </summary>
-        void AddDnsRecordWithHostApplicationLayerFullNameToRequest()
+        void AddDnsRecordWithInitialDataToRequest()
         {
             DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS);
             dnsRecordDTO.ApplicationLayerFullName = OperatingSystem.Logger.ApplicationLayerFullName;
+            dnsRecordDTO.Url = ApplicationConfiguration!.GetValue<string>("COMPUTERNAME");
         }
 
         /// <summary>

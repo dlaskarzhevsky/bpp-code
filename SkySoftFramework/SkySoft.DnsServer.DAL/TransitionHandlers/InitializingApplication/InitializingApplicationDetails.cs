@@ -15,20 +15,18 @@ namespace SkySoft.DnsServer.DAL
         /// </summary>
         void AddDnsRecordToFile()
         {
-            if (HostDnsRecordDTO != null)
+            if (DnsRecordFromApplicationConfiguration != null)
             {
-                SkySoft.DnsClientServerComponents.AddDnsRecordToFile.Execute(HostDnsRecordDTO, DataContainer);
+                SkySoft.DnsClientServerComponents.AddDnsRecordToFile.Execute(DnsRecordFromApplicationConfiguration, DataContainer);
             }
         }
 
         /// <summary>
-        /// Adds DNS record to list of DNS records
+        /// Adds DNS record from application configuration to list of DNS records for caching
         /// </summary>
-        void AddDnsRecordToListOfDnsRecords()
+        void AddDnsRecordFromApplicationConfigurationToListOfDnsRecordsForCaching()
         {
-            DnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>();
-            CopyDnsRecordData.Execute(HostDnsRecordDTO!, dnsRecordDTO, true);
-            ListOfDnsRecords!.Add(dnsRecordDTO);
+            ListOfDnsRecords!.Add(DnsRecordFromApplicationConfiguration!);
         }
 
         /// <summary>
@@ -40,25 +38,25 @@ namespace SkySoft.DnsServer.DAL
         }
 
         /// <summary>
-        /// Copies application layer full name into loaded host DNS record
+        /// Copies application layer full name into loaded DNS record from application configuration
         /// </summary>
-        void CopyApplicationLayerFullNameIntoLoadedHostDnsRecord()
+        void CopyApplicationLayerFullNameIntoLoadedDnsRecordFromApplicationConfiguration()
         {
-            HostDnsRecordDTO!.ApplicationLayerFullName = DnsRecordFromRequest!.ApplicationLayerFullName;
+            DnsRecordFromApplicationConfiguration!.ApplicationLayerFullName = DnsRecordFromRequest!.ApplicationLayerFullName;
         }
 
         /// <summary>
-        /// Copies DNS data into DNS record from request
+        /// Copies URL from application configuration into DNS record from request
         /// </summary>
-        void CopyDnsDataIntoDnsRecordFromRequest()
+        void CopyUrlFromApplicationConfigurationIntoDnsRecordFromRequest()
         {
-            CopyDnsRecordData.Execute(HostDnsRecordDTO!, DnsRecordFromRequest!, false);
+            CopyDnsRecordData.Execute(DnsRecordFromApplicationConfiguration!, DnsRecordFromRequest!, false);
         }
 
         /// <summary>
-        /// Creates empty list of DNS records
+        /// Creates empty list of DNS records for caching
         /// </summary>
-        void CreateEmptyListOfDnsRecords()
+        void CreateEmptyListOfDnsRecordsForCaching()
         {
             ListOfDnsRecords = new List<DnsRecordDTO>();
         }
@@ -68,7 +66,7 @@ namespace SkySoft.DnsServer.DAL
         /// </summary>
         void FindHostDnsRecordByApplicationLayerFullName()
         {
-            HostDnsRecordDTO = FindDnsRecordInListByApplicationLayerFullName.Execute(ListOfDnsRecords!, DnsRecordFromRequest!.ApplicationLayerFullName!);
+            DnsRecordFromApplicationConfiguration = FindDnsRecordInListByApplicationLayerFullName.Execute(ListOfDnsRecords!, DnsRecordFromRequest!.ApplicationLayerFullName!);
         }
 
         /// <summary>
@@ -88,11 +86,19 @@ namespace SkySoft.DnsServer.DAL
         }
 
         /// <summary>
-        /// Load host DNS record from application configuration
+        /// Load DNS record from application configuration
         /// </summary>
-        void LoadHostDnsRecordFromApplicationConfiguration()
+        void LoadDnsRecordFromApplicationConfiguration()
         {
-            HostDnsRecordDTO = ReadDnsServerDataFromApplicationConfiguration.Execute(ApplicationConfiguration);
+            DnsRecordFromApplicationConfiguration = ReadDnsServerDataFromApplicationConfiguration.Execute(ApplicationConfiguration);
+        }
+
+        /// <summary>
+        /// Saves list of DNS records into file
+        /// </summary>
+        void SaveListOfDnsRecordsIntoFile()
+        {
+            SkySoft.DnsClientServerComponents.SaveListOfDnsRecordsIntoFile.Execute(ListOfDnsRecords!, PathToDnsRecordsFile);
         }
         #endregion
 
@@ -117,9 +123,9 @@ namespace SkySoft.DnsServer.DAL
         }
 
         /// <summary>
-        /// Gets or sets host DNS Record
+        /// Gets or sets DNS record from application configuration
         /// </summary>
-        DnsRecordDTO? HostDnsRecordDTO
+        DnsRecordDTO? DnsRecordFromApplicationConfiguration
         {
             get; set;
         }

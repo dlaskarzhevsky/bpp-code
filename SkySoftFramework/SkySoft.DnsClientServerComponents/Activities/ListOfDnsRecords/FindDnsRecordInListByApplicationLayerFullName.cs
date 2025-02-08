@@ -14,15 +14,18 @@ namespace SkySoft.DnsClientServerComponents
         /// <param name="ListOfDnsRecords">List of DNS records</param>
         /// <param name="applicationLayerName">Application layer name</param>
         /// <returns>Found DNS record</returns>
-        public static DnsRecordDTO? Execute(List<DnsRecordDTO> ListOfDnsRecords, string applicationLayerName)
+        public static DnsRecordDTO? Execute(List<DnsRecordDTO>? ListOfDnsRecords, string applicationLayerName)
         {
             DnsRecordDTO? foundDnsRecordDTO = null;
-            foreach (DnsRecordDTO dnsRecordDTO in ListOfDnsRecords)
+            if (ListOfDnsRecords != null)
             {
-                if (string.Equals(dnsRecordDTO.ApplicationLayerFullName!, applicationLayerName, StringComparison.InvariantCultureIgnoreCase))
+                foreach (DnsRecordDTO dnsRecordDTO in ListOfDnsRecords)
                 {
-                    foundDnsRecordDTO = dnsRecordDTO;
-                    break;
+                    if (string.Equals(dnsRecordDTO.ApplicationLayerFullName!, applicationLayerName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        foundDnsRecordDTO = dnsRecordDTO;
+                        break;
+                    }
                 }
             }
 

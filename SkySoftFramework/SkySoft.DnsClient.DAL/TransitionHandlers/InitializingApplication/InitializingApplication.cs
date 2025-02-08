@@ -25,40 +25,12 @@
         protected override void HandleRequest()
         {
             GetServerDnsRecordFromRequest();
-            GetClientDnsRecordFromRequest();
-            if (ClientDnsRecordContainsUrl)
+            LoadServerDnsDataFromConfigurationFile();
+            ValidateServerDnsDataLoadedFromConfigurationFile();
+            if (ServerDnsDataLoadedFromConfigurationFileValid)
             {
-                GetListOfDnsRecordsFromCache();
-                FindCachedClientDnsRecordByApplicationLayerFullName();
-                if (CachedClientDnsRecordFound)
-                {
-                    UpdateCachedClientDnsRecordByDataFromRequest();
-                }
-                else
-                {
-                    CreateClientDnsRecordForCacheWithDataFromRequest();
-                }
-
-                if (CachedClientDnsRecordCreated || CachedClientDnsRecordUpdated)
-                {
-                    AddCachedClientDnsRecordToFile();
-                }
-            }
-            else
-            {
-                SetComputerNameAsClientDnsRecordUrl();
-
-                LoadListOfDnsRecordsFromFileIntoMemoryCache();
-                AddClientDnsRecordToMemoryCache();
-                AddClientDnsRecordToFile();
-
-                LoadServerDnsDataFromConfigurationFile();
-                ValidateServerDnsDataLoadedFromConfigurationFile();
-                if (ServerDnsDataLoadedFromConfigurationFileValid)
-                {
-                    AddServerDnsRecordToMemoryCache();
-                    AddServerDnsRecordToFile();
-                }
+                AddServerDnsRecordToMemoryCache();
+                AddServerDnsRecordToFile();
             }
         }
 

@@ -31,11 +31,6 @@
             {
                 await RegisterDnsClientWithDnsServer();
             }
-
-            if (DataContainer.Exception == null)
-            {
-                await UpdateDnsClientDataByRegistrationResult();
-            }
         }
         #endregion
     }

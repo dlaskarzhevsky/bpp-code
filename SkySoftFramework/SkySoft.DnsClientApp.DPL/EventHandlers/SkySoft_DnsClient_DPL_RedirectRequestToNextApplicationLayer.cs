@@ -28,18 +28,28 @@ namespace SkySoft.DnsClientApp.DPL
         /// <returns>Data container</returns>
         protected override async Task HandleEventAsync()
         {
-            string applicationLayerFullName = $"{SkySoft.Contracts.DomainNames.SKYSOFT}_{SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER}_{SkySoft.Contracts.ApplicationLayerNames.BL}";
-            DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
-            if (dnsRecordDTO == null || !string.Equals(dnsRecordDTO.ApplicationLayerFullName, applicationLayerFullName, StringComparison.InvariantCultureIgnoreCase))
-            {
-                dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
-                dnsRecordDTO.ApplicationLayerFullName = applicationLayerFullName;
-            }
+            AddServerDnsRecordToRequestIfRequestDoesNotHaveIt();
 
             DataContainer.RemoveCurrentRequestMetadta();
             DataContainer.AddRequestMetadata(null, null, SkySoft.Contracts.ApplicationLayerNames.DAL, null, null);
             DataContainer = await RedirectRequestToRequestHandler(DataContainer);
             DataContainer.RemoveCurrentRequestMetadta();
+        }
+        #endregion
+
+        #region Private Methods
+        /// <summary>
+        /// Adds server DNS record to request if request does not have it
+        /// </summary>
+        void AddServerDnsRecordToRequestIfRequestDoesNotHaveIt()
+        {
+            string dnsServerApplicationLayerFullName = $"{SkySoft.Contracts.DomainNames.SKYSOFT}_{SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER}_{SkySoft.Contracts.ApplicationLayerNames.BL}";
+            DnsRecordDTO? dnsRecordDTO = DataContainer.GetLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
+            if (dnsRecordDTO == null || !string.Equals(dnsRecordDTO.ApplicationLayerFullName, dnsServerApplicationLayerFullName, StringComparison.InvariantCultureIgnoreCase))
+            {
+                dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
+                dnsRecordDTO.ApplicationLayerFullName = dnsServerApplicationLayerFullName;
+            }
         }
         #endregion
     }

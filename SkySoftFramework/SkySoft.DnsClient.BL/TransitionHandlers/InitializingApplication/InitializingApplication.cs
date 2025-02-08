@@ -29,7 +29,7 @@
                 return;
             }
 
-            AddDnsRecordWithHostApplicationLayerFullNameToRequest();
+            AddDnsRecordWithInitialDataToRequest();
             await RedirectRequestToNextApplicationLayer();
             GetClientDnsRecord();
             ValidateClientDnsRecord();

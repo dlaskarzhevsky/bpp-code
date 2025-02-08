@@ -19,12 +19,19 @@ namespace SkySoft.DnsClientServerComponents
         public static void Execute(List<DnsRecordDTO> listOfExistingDnsRecords, DnsRecordDTO dnsRecordDTO, string serverDnsRecordUrl)
         {
             int largestUsedPortNumber = 0;
-            for (int i = 0; i < listOfExistingDnsRecords.Count; i++)
+            if (listOfExistingDnsRecords.Count == 0)
             {
-                int portNumber = GetPortNumberFromUrl(listOfExistingDnsRecords[i].Url);
-                if (largestUsedPortNumber < portNumber)
+                largestUsedPortNumber = GetPortNumberFromUrl(serverDnsRecordUrl);
+            }
+            else
+            {
+                for (int i = 0; i < listOfExistingDnsRecords.Count; i++)
                 {
-                    largestUsedPortNumber = portNumber;
+                    int portNumber = GetPortNumberFromUrl(listOfExistingDnsRecords[i].Url);
+                    if (largestUsedPortNumber < portNumber)
+                    {
+                        largestUsedPortNumber = portNumber;
+                    }
                 }
             }
 

@@ -85,7 +85,7 @@ namespace SkySoft.DnsClient.DAL
         /// <summary>
         /// Gets or sets list of cached DNS records
         /// </summary>
-        List<DnsRecordDTO> ListOfCachedDnsRecords
+        List<DnsRecordDTO>? ListOfCachedDnsRecords
         {
             get; set;
         } = default!;

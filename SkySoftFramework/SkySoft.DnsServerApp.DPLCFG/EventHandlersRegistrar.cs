@@ -14,7 +14,6 @@ namespace SkySoft.DnsServerApp.DPLCFG
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServerApp.DPL.RedirectRequestToNextApplicationLayer>();
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServerApp.DPL.RequestHandlerNotFound>();
         }
         #endregion

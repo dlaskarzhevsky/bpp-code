@@ -16,6 +16,7 @@ namespace SkySoft.BPPApplication.CFG
         {
             webApplicationBuilder.Services.AddSingleton<IApplicationCache, SkySoft.BPPApplication.ApplicationCache>();
             webApplicationBuilder.Services.AddTransient<IOS, SkySoft.BPPApplication.OS>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.BPPApplication.RedirectRequestToNextApplicationLayerEventHandler>();
         }
         #endregion
     }

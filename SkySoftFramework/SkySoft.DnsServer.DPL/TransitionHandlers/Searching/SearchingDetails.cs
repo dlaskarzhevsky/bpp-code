@@ -1,7 +1,4 @@
-﻿using SkySoft.DnsRecord.DTO;
-using SkySoft.DnsClientServerComponents;
-
-namespace SkySoft.DnsServer.DPL
+﻿namespace SkySoft.DnsServer.DPL
 {
     /// <summary>
     /// Searching transition request handler
@@ -10,61 +7,11 @@ namespace SkySoft.DnsServer.DPL
     {
         #region Private Methods
         /// <summary>
-        /// Copies DNS data from cached record into record from request
+        /// Redirects request to the next application layer
         /// </summary>
-        void CopyDnsDataFromCachedRecordIntoRecordFromRequest()
+        async Task RedirectRequestToNextApplicationLayer()
         {
-            CopyDnsRecordData.Execute(FoundCachedDnsRecordDTO!, DnsRecordFromRequest!, false);
-        }
-
-        /// <summary>
-        /// Finds data of DNS record from request by application layer name
-        /// </summary>
-        void FindDataOfDnsRecordFromRequestByApplicationLayerName()
-        {
-            FoundCachedDnsRecordDTO = FindDnsRecordInListByApplicationLayerFullName.Execute(ListOfDnsRecords!, DnsRecordFromRequest!.ApplicationLayerFullName!);
-        }
-
-        /// <summary>
-        /// Gets DNS record from request
-        /// </summary>
-        void GetDnsRecordFromRequest()
-        {
-            DnsRecordFromRequest = GetLastDnsRecordFromDataContainer.Execute(DataContainer);
-        }
-
-        /// <summary>
-        /// Gets list of DNS records from cache
-        /// </summary>
-        void GetListOfDnsRecordsFromCache()
-        {
-            ListOfDnsRecords = SkySoft.DnsClientServerComponents.GetListOfDnsRecordsFromCache.Execute(OperatingSystem);
-        }
-        #endregion
-
-        #region Private Properties
-        /// <summary>
-        /// Gets or sets DNS record from request
-        /// </summary>
-        DnsRecordDTO? DnsRecordFromRequest
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets found cached DNS Record
-        /// </summary>
-        DnsRecordDTO? FoundCachedDnsRecordDTO
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets list of DNS records
-        /// </summary>
-        List<DnsRecordDTO>? ListOfDnsRecords
-        {
-            get; set;
+            await RaiseEvent(SkySoft.Contracts.EventTypes.REDIRECT_REQUEST_TO_NEXT_APPLICATION_LAYER_EVENT, false);
         }
         #endregion
     }

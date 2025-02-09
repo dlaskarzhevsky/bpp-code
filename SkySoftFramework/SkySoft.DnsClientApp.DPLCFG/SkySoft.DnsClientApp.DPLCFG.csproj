@@ -12,7 +12,6 @@
   <ItemGroup>
     <ProjectReference Include="..\SkySoft.DnsClient.CON\SkySoft.DnsClient.CON.csproj" />
     <ProjectReference Include="..\SkySoft.DnsClientApp.DPL\SkySoft.DnsClientApp.DPL.csproj" />
-    <ProjectReference Include="..\SkySoft.DnsServer.CON\SkySoft.DnsServer.CON.csproj" />
     <ProjectReference Include="..\SkySoft.IBPPApplication\SkySoft.IBPPApplication.csproj" />
   </ItemGroup>
 

@@ -1,9 +1,9 @@
-﻿namespace SkySoft.DnsServer.DPL
+﻿namespace SkySoft.DnsServer.BL
 {
     /// <summary>
-    /// InitializingApplication transition request handler
+    /// Searching transition request handler
     /// </summary>
-    public partial class InitializingApplication
+    public partial class Searching
     {
         #region Private Methods
         /// <summary>

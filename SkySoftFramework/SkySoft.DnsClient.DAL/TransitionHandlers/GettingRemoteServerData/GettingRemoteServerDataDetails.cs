@@ -1,4 +1,5 @@
-﻿using SkySoft.DnsClientServerComponents;
+﻿using SkySoft.BPPApplication;
+using SkySoft.DnsClientServerComponents;
 using SkySoft.DnsRecord.DTO;
 
 namespace SkySoft.DnsClient.DAL
@@ -10,13 +11,24 @@ namespace SkySoft.DnsClient.DAL
     {
         #region Private Methods
         /// <summary>
+        /// Finds cached DNS record by application layer full name
+        /// </summary>
+        void FindCachedDnsRecordByApplicationLayerFullName()
+        {
+            if (DnsRecordDTOFromRequest != null)
+            {
+                CachedDnsRecordDTO = FindDnsRecordInListByApplicationLayerFullName.Execute(ListOfCachedDnsRecords, DnsRecordDTOFromRequest.ApplicationLayerFullName!);
+            }
+        }
+
+        /// <summary>
         /// Finds cached DNS record by application layer name
         /// </summary>
         void FindCachedDnsRecordByApplicationLayerName()
         {
             if (DnsRecordDTOFromRequest != null)
             {
-                string applicationLayerName = DnsRecordDTOFromRequest.ApplicationLayerFullName!.ToLowerInvariant();
+                string applicationLayerName = GetApplicationLayerNameFromFullName.Execute(DnsRecordDTOFromRequest.ApplicationLayerFullName!);
                 CachedDnsRecordDTO = FindDnsRecordInListByApplicationLayerFullName.Execute(ListOfCachedDnsRecords, applicationLayerName);
             }
         }

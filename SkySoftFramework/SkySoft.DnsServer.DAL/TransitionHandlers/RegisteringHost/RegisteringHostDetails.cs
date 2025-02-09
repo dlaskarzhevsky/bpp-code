@@ -21,6 +21,14 @@ namespace SkySoft.DnsServer.DAL
         }
 
         /// <summary>
+        /// Adds created DNS record to list of cached DNS records
+        /// </summary>
+        void AddCreatedDnsRecordToListOfCachedDnsRecords()
+        {
+            ListOfCachedDnsRecords!.Add(CachedClientDnsRecordDTO!);
+        }
+
+        /// <summary>
         /// Generates URL for client DNS record
         /// </summary>
         void GenerateUrlForClientDnsRecord()
@@ -35,8 +43,6 @@ namespace SkySoft.DnsServer.DAL
         {
             CachedClientDnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>();
             CopyDnsRecordData.Execute(ClientDnsRecordDTOFromRequest!, CachedClientDnsRecordDTO!, true);
-            ListOfCachedDnsRecords!.Add(CachedClientDnsRecordDTO);
-
             CachedClientDnsRecordCreated = true;
         }
 
@@ -47,8 +53,7 @@ namespace SkySoft.DnsServer.DAL
         {
             if (ClientDnsRecordDTOFromRequest != null)
             {
-                string applicationLayerFullName = ClientDnsRecordDTOFromRequest.ApplicationLayerFullName!.ToLowerInvariant();
-                CachedClientDnsRecordDTO = FindDnsRecordInListByApplicationLayerFullName.Execute(ListOfCachedDnsRecords, applicationLayerFullName);
+                CachedClientDnsRecordDTO = FindDnsRecordInListByApplicationLayerFullName.Execute(ListOfCachedDnsRecords, ClientDnsRecordDTOFromRequest.ApplicationLayerFullName!);
             }
         }
 

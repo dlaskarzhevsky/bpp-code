@@ -7,7 +7,7 @@
     {
         #region Private Methods
         /// <summary>
-        /// Load DNS records from storage
+        /// Redirects request to the next application layer
         /// </summary>
         async Task RedirectRequestToNextApplicationLayer()
         {

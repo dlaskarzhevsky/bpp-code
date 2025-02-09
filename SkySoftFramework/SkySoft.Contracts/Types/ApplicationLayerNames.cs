@@ -16,6 +16,11 @@
         public const string DAL = "DAL";
 
         /// <summary>
+        /// DNS server
+        /// </summary>
+        public const string DNS_SERVER = "DnsServer";
+
+        /// <summary>
         /// Data processing logic layer
         /// </summary>
         public const string DPL = "DPL";

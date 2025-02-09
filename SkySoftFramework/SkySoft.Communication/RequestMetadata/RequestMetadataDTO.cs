@@ -106,7 +106,15 @@ namespace SkySoft.Communication
                 applicationLayerName = ApplicationLayerName;
             }
 
-            applicationLayerFullName = $"{domainName}_{useCaseName}_{applicationLayerName}";
+            if (string.IsNullOrEmpty(applicationLayerName))
+            {
+                applicationLayerFullName = $"{domainName}_{useCaseName}";
+            }
+            else
+            {
+                applicationLayerFullName = $"{domainName}_{useCaseName}_{applicationLayerName}";
+            }
+
             return applicationLayerFullName;
         }
         #endregion

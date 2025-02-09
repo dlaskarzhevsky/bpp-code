@@ -44,7 +44,7 @@ namespace SkySoft.DnsClient.DAL
         /// </summary>
         void AddServerDnsRecordToFile()
         {
-            AddDnsRecordToFile.Execute(ServerDnsRecordFromRequest, DataContainer);
+            AddDnsRecordToFile.Execute(ConfigurationDnsRecord, DataContainer);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace SkySoft.DnsClient.DAL
         void AddServerDnsRecordToMemoryCache()
         {
             DnsRecordDTO newDnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>();
-            AddDnsRecordToCache.Execute(ServerDnsRecordFromRequest, newDnsRecordDTO, OperatingSystem);
+            AddDnsRecordToCache.Execute(ConfigurationDnsRecord, newDnsRecordDTO, OperatingSystem);
         }
 
         /// <summary>
@@ -110,9 +110,8 @@ namespace SkySoft.DnsClient.DAL
         void LoadServerDnsDataFromConfigurationFile()
         {
             ConfigurationDnsRecord = DataContainer.GetNewDTO<DnsRecordDTO>();
-            ConfigurationDnsRecord.ApplicationLayerFullName = ServerDnsRecordFromRequest!.ApplicationLayerFullName;
-            ConfigurationDnsRecord.Url = ApplicationConfiguration!.GetValue<string>("DnsServerUrl");
-            ServerDnsRecordFromRequest.Url = ConfigurationDnsRecord.Url;
+            ConfigurationDnsRecord.ApplicationLayerFullName = SkySoft.Contracts.ApplicationLayerNames.DNS_SERVER;
+            ConfigurationDnsRecord.Url = ApplicationConfiguration!.GetValue<string>(SkySoft.Contracts.Constants.DNS_SERVER_URL);
         }
 
         /// <summary>

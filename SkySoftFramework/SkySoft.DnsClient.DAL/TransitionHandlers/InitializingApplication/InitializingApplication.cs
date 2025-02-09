@@ -24,7 +24,6 @@
         /// </summary>
         protected override void HandleRequest()
         {
-            GetServerDnsRecordFromRequest();
             LoadServerDnsDataFromConfigurationFile();
             ValidateServerDnsDataLoadedFromConfigurationFile();
             if (ServerDnsDataLoadedFromConfigurationFileValid)

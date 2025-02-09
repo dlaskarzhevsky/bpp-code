@@ -50,6 +50,7 @@ namespace SkySoft.DnsClientApp.INI
         protected override void PreconfigureOperatingSystem()
         {
             OperatingSystem.Logger.ApplicationLayerFullName = SkySoft.BPPApplication.GetHostApplicationLayerFullName.Execute();
+            OperatingSystem.Logger.ApplicationLayerFullName = SkySoft.BPPApplication.NormilizeApplicationLayerFullName.Execute(OperatingSystem.Logger.ApplicationLayerFullName);
         }
         #endregion
 

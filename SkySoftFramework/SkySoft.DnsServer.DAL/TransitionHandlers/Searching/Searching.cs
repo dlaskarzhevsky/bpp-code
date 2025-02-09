@@ -1,4 +1,4 @@
-﻿namespace SkySoft.DnsServer.DPL
+﻿namespace SkySoft.DnsServer.DAL
 {
     /// <summary>
     /// Searching transition request handler
@@ -21,11 +21,25 @@
 
         #region Overridden Methods
         /// <summary>
-        /// Handles request aynchronously
+        /// Handles request
         /// </summary>
-        protected override async Task HandleRequestAsync()
+        protected override void HandleRequest()
         {
-            await RedirectRequestToNextApplicationLayer();
+            GetListOfDnsRecordsFromCache();
+            GetDnsRecordFromRequest();
+            FindDataOfDnsRecordFromRequestByApplicationLayerName();
+            CopyDnsDataFromCachedRecordIntoRecordFromRequest();
+        }
+
+        /// <summary>
+        /// Releases resources
+        /// </summary>
+        public override void ReleaseResources()
+        {
+            DnsRecordFromRequest = null;
+            FoundCachedDnsRecordDTO = null;
+            ListOfDnsRecords = null;
+            base.ReleaseResources();
         }
         #endregion
     }

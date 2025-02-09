@@ -125,7 +125,7 @@ namespace SkySoft.Communication
 
             RequestMetadataDTO previousRequestMetadataDTO = requestMetadataDataCollection[requestMetadataDataCollection.Count - 1];
             RequestMetadataDTO requestMetadataDTO = new RequestMetadataDTO();
-            if (string.IsNullOrEmpty(applicationLayerName))
+            if (applicationLayerName == null)
             {
                 requestMetadataDTO.ApplicationLayerName = previousRequestMetadataDTO.ApplicationLayerName;
             }
@@ -134,7 +134,7 @@ namespace SkySoft.Communication
                 requestMetadataDTO.ApplicationLayerName = applicationLayerName;
             }
 
-            if (string.IsNullOrEmpty(domainName))
+            if (domainName == null)
             {
                 requestMetadataDTO.DomainName = previousRequestMetadataDTO.DomainName;
             }
@@ -143,7 +143,7 @@ namespace SkySoft.Communication
                 requestMetadataDTO.DomainName = domainName;
             }
 
-            if (string.IsNullOrEmpty(useCaseName))
+            if (useCaseName == null)
             {
                 requestMetadataDTO.UseCaseName = previousRequestMetadataDTO.UseCaseName;
             }
@@ -161,7 +161,7 @@ namespace SkySoft.Communication
                 requestMetadataDTO.StateName = stateName;
             }
 
-            if (string.IsNullOrEmpty(transitionName))
+            if (transitionName == null)
             {
                 requestMetadataDTO.TransitionName = previousRequestMetadataDTO.TransitionName;
             }

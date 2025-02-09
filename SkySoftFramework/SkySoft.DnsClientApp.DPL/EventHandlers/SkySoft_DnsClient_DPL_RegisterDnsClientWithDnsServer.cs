@@ -28,9 +28,9 @@
         {
             DataContainer.AddRequestMetadata(
                 SkySoft.Contracts.DomainNames.SKYSOFT,
-                SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER,
-                SkySoft.Contracts.ApplicationLayerNames.BL,
-                SkySoft.DnsClient.CON.StateTypes.INITIAL,
+                "",
+                SkySoft.Contracts.ApplicationLayerNames.DNS_SERVER,
+                "",
                 SkySoft.DnsClient.CON.TransitionTypes.REGISTERING_HOST);
             DataContainer = await RedirectRequestToRequestHandler(DataContainer);
             DataContainer.RemoveCurrentRequestMetadta();

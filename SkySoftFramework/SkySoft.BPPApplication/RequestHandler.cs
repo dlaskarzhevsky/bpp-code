@@ -212,7 +212,15 @@ namespace SkySoft.BPPApplication
                 stateName = "";
             }
 
-            DataContainer!.AddRequestMetadata(DomainName, UseCaseName, ApplicationLayerName, stateName, eventName);
+            if (string.Equals(eventName, SkySoft.Contracts.EventTypes.REDIRECT_REQUEST_TO_NEXT_APPLICATION_LAYER_EVENT, StringComparison.InvariantCultureIgnoreCase))
+            {
+                DataContainer!.AddRequestMetadata("", "", "", "", eventName);
+            }
+            else
+            {
+                DataContainer!.AddRequestMetadata(DomainName, UseCaseName, ApplicationLayerName, stateName, eventName);
+            }
+
             DataContainer = await OperatingSystem.RedirectRequestToEventHandler(DataContainer);
             DataContainer.RemoveCurrentRequestMetadta();
         }

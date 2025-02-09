@@ -26,7 +26,12 @@
         {
             GetDnsRecordFromRequest();
             GetListOfDnsRecordsFromCache();
-            FindCachedDnsRecordByApplicationLayerName();
+            FindCachedDnsRecordByApplicationLayerFullName();
+            if (!CachedDnsRecordFound)
+            {
+                FindCachedDnsRecordByApplicationLayerName();
+            }
+
             if (CachedDnsRecordFound)
             {
                 UpdateDnsRecordFromRequestByDataFromCachedDnsRecord();

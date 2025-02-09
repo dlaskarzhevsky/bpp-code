@@ -22,7 +22,7 @@ namespace BPP.Person.Tests
             IDataContainer requestDataContainer = InitializeRequestDataContainer();
             AddPersonSearchCriteriaToRequestDataContainer(requestDataContainer);
             Transceiver transceiver = new Transceiver();
-            IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, "http://localhost:5078", "/processrequest", 10000);
+            IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, "http://localhost:5002", "/processrequest", 10000);
             AssertResponse(responseDataContainer);
         }
         #endregion
@@ -75,7 +75,7 @@ namespace BPP.Person.Tests
                             Assert.Fail("One of the persons contain unexpected data");
                         }
 
-                        string personExpectedLocation = $"{SkySoft.Contracts.DomainNames.BPP}_{SkySoft.Contracts.ApplicationLayerNames.DAL}_{UseCaseContract.PERSON}";
+                        string personExpectedLocation = $"{SkySoft.Contracts.DomainNames.BPP}_{UseCaseContract.PERSON}_{SkySoft.Contracts.ApplicationLayerNames.DAL}";
                         if (person1.Location != personExpectedLocation || person2.Location != personExpectedLocation)
                         {
                             Assert.Fail("One of the persons location is not correct");

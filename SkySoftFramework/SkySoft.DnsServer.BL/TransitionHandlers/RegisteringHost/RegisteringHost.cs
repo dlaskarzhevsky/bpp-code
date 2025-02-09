@@ -1,4 +1,6 @@
-﻿namespace SkySoft.DnsServer.BL
+﻿using SkySoft.Communication;
+
+namespace SkySoft.DnsServer.BL
 {
     /// <summary>
     /// RegisteringHost transition request handler
@@ -12,9 +14,7 @@
         public RegisteringHost()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.BL;
-            StateName = SkySoft.DnsServer.CON.StateTypes.INITIAL;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DNS_SERVER;
             TransitionName = SkySoft.DnsServer.CON.TransitionTypes.REGISTERING_HOST;
         }
         #endregion
@@ -25,7 +25,29 @@
         /// </summary>
         protected override async Task HandleRequestAsync()
         {
+            ChangeApplicationLayerName();
+            AddMissingRequestMetadata();
+
             await RedirectRequestToNextApplicationLayer();
+        }
+        #endregion
+
+        #region Private Methods
+        /// <summary>
+        /// Adds missing request metadata
+        /// </summary>
+        void AddMissingRequestMetadata()
+        {
+            DataContainer.UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
+            DataContainer.StateName = SkySoft.DnsServer.CON.StateTypes.INITIAL;
+        }
+
+        /// <summary>
+        /// Changes application layer name
+        /// </summary>
+        void ChangeApplicationLayerName()
+        {
+            DataContainer.ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.BL;
         }
         #endregion
     }

@@ -1,4 +1,6 @@
-﻿namespace SkySoft.DnsServer.DAL
+﻿using SkySoft.DnsClientServerComponents;
+
+namespace SkySoft.DnsServer.DAL
 {
     /// <summary>
     /// RegisteringHost transition request handler
@@ -42,6 +44,7 @@
                 }
 
                 CreateClientDnsRecordForCacheWithDataFromRequest();
+                AddCreatedDnsRecordToListOfCachedDnsRecords();
             }
 
             if (CachedClientDnsRecordCreated || CachedClientDnsRecordUpdated)

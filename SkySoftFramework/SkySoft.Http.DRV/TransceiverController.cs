@@ -206,10 +206,10 @@ namespace SkySoft.Http.DRV
             DataContainer.RemoveLastDTOFromDataCollection<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
             DataContainer.AddRequestMetadata(
                 SkySoft.Contracts.DomainNames.SKYSOFT,
-                SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER,
-                SkySoft.Contracts.ApplicationLayerNames.DPL,
-                SkySoft.DnsServer.CON.StateTypes.INITIAL,
-                SkySoft.DnsServer.CON.TransitionTypes.SEARCHING);
+                "",
+                SkySoft.Contracts.ApplicationLayerNames.DNS_SERVER,
+                "",
+                SkySoft.Contracts.TransitionTypes.SEARCHING);
 
             CalculateDnsServerUrl();
             await TransmitRequestToRemoteServer();

@@ -16,6 +16,7 @@ namespace SkySoft.DnsServer.BLCFG
         {
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServer.BL.InitializingApplication>();
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServer.BL.RegisteringHost>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsServer.BL.Searching>();
         }
         #endregion
     }

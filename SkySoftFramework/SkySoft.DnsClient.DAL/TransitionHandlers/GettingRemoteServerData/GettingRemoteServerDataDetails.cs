@@ -60,14 +60,6 @@ namespace SkySoft.DnsClient.DAL
 
         #region Private Properties
         /// <summary>
-        /// Gets or sets flag indicating whether cached DNS record created
-        /// </summary>
-        bool CachedDnsRecordCreated
-        {
-            get; set;
-        }
-
-        /// <summary>
         /// Gets or sets cached DNS record
         /// </summary>
         DnsRecordDTO? CachedDnsRecordDTO

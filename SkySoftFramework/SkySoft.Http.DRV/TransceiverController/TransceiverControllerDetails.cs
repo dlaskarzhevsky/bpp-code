@@ -181,7 +181,6 @@ namespace SkySoft.Http.DRV
         /// <returns>Task result</returns>
         async Task TransmitRequestToRemoteServer()
         {
-            //            DataContainer.RemoveCurrentRequestMetadta();
             SkySoft.Http.Transceiver transceiver = new SkySoft.Http.Transceiver();
             IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(DataContainer, RemoteServerUrl!, "/processrequest", 10000);
             ExceptionDTO? exceptionDTO = responseDataContainer!.GetLastDTOFromDataCollection<ExceptionDTO>(SkySoft.Contracts.DataCollectionTypes.EXCEPTIONS);

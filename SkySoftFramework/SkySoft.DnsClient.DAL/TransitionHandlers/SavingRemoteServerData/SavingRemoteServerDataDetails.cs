@@ -17,7 +17,7 @@ namespace SkySoft.DnsClient.DAL
         {
             CachedDnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>();
             CopyDnsRecordData.Execute(DnsRecordDTOFromRequest!, CachedDnsRecordDTO!, true);
-            ListOfCachedDnsRecords.Add(CachedDnsRecordDTO);
+            AddDnsRecordToListOfDnsRecords.Execute(CachedDnsRecordDTO, ListOfCachedDnsRecords);
 
             CachedDnsRecordCreated = true;
         }
@@ -45,8 +45,7 @@ namespace SkySoft.DnsClient.DAL
         {
             if (DnsRecordDTOFromRequest != null)
             {
-                string applicationLayerName = DnsRecordDTOFromRequest.ApplicationLayerFullName!.ToLowerInvariant();
-                CachedDnsRecordDTO = FindDnsRecordInListByApplicationLayerFullName.Execute(ListOfCachedDnsRecords, applicationLayerName);
+                CachedDnsRecordDTO = FindDnsRecordInListByApplicationLayerFullName.Execute(ListOfCachedDnsRecords, DnsRecordDTOFromRequest.ApplicationLayerFullName!);
             }
         }
 
@@ -64,14 +63,6 @@ namespace SkySoft.DnsClient.DAL
         void ReadHostDnsRecordDataFromApplicationConfiguration()
         {
             HostDnsRecordDTO = SkySoft.DnsClientServerComponents.ReadDnsServerDataFromApplicationConfiguration.Execute(((OS)OperatingSystem).ApplicationConfiguration);
-        }
-
-        /// <summary>
-        /// Saves updated data
-        /// </summary>
-        void SaveUpdatedData()
-        {
-            SaveListOfDnsRecordsIntoFile.Execute(ListOfCachedDnsRecords, PathToDnsRecordsFile);
         }
 
         /// <summary>
@@ -139,18 +130,10 @@ namespace SkySoft.DnsClient.DAL
         /// <summary>
         /// Gets or sets list of cached DNS records
         /// </summary>
-        List<DnsRecordDTO> ListOfCachedDnsRecords
+        List<DnsRecordDTO>? ListOfCachedDnsRecords
         {
             get; set;
         } = default!;
-
-        /// <summary>
-        /// Getsa or sets path to DNS records file
-        /// </summary>
-        string PathToDnsRecordsFile
-        {
-            get; set;
-        } = SkySoft.DnsClient.CON.DataCollectionTypes.DNS_RECORDS + ".json";
         #endregion
     }
 }

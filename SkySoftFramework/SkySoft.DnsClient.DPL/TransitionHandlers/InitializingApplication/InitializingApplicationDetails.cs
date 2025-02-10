@@ -13,14 +13,6 @@
         {
             await RaiseEvent(SkySoft.DnsClient.CON.EventTypes.REGISTER_DNS_CLIENT_WITH_DNS_SERVER_EVENT);
         }
-
-        /// <summary>
-        /// Updates DNS client data by registration result
-        /// </summary>
-        async Task UpdateDnsClientDataByRegistrationResult()
-        {
-            await RaiseEvent(SkySoft.Contracts.EventTypes.REDIRECT_REQUEST_TO_NEXT_APPLICATION_LAYER_EVENT, false);
-        }
         #endregion
     }
 }

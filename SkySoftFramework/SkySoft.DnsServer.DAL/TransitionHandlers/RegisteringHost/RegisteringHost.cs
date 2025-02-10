@@ -1,6 +1,4 @@
-﻿using SkySoft.DnsClientServerComponents;
-
-namespace SkySoft.DnsServer.DAL
+﻿namespace SkySoft.DnsServer.DAL
 {
     /// <summary>
     /// RegisteringHost transition request handler

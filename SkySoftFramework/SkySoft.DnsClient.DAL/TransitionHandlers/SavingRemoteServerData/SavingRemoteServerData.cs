@@ -41,7 +41,6 @@
 
             if (CachedDnsRecordCreated || CachedDnsRecordUpdated)
             {
-                SaveUpdatedData();
                 LogRegistrationResult();
             }
         }
@@ -53,8 +52,8 @@
         {
             CachedDnsRecordDTO = null;
             DnsRecordDTOFromRequest = null;
-            ListOfCachedDnsRecords = default!;
             HostDnsRecordDTO = null;
+            ListOfCachedDnsRecords = default!;
             base.ReleaseResources();
         }
         #endregion

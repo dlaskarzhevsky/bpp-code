@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-
-using SkySoft.DnsClientServerComponents;
-
-namespace SkySoft.DnsServer.DAL
+﻿namespace SkySoft.DnsServer.DAL
 {
     /// <summary>
     /// InitializingApplication transition request handler
@@ -43,22 +39,6 @@ namespace SkySoft.DnsServer.DAL
             GetDnsRecordFromRequest();
             LoadDnsRecordFromApplicationConfiguration();
             CopyUrlFromApplicationConfigurationIntoDnsRecordFromRequest();
-
-/*
-            LoadDnsRecordsFromFile();
-            if (DnsRecordsLoadedFromFile)
-            {
-                FindHostDnsRecordByApplicationLayerFullName();
-            }
-            else
-            {
-                LoadHostDnsRecordFromApplicationConfiguration();
-                CopyApplicationLayerFullNameIntoLoadedHostDnsRecord();
-                AddDnsRecordToFile();
-                CreateEmptyListOfDnsRecords();
-                AddDnsRecordToListOfDnsRecords();
-            }
-*/
         }
 
         /// <summary>

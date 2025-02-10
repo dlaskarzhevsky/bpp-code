@@ -37,6 +37,17 @@
                 UpdateDnsRecordFromRequestByDataFromCachedDnsRecord();
             }
         }
+
+        /// <summary>
+        /// Releases resources
+        /// </summary>
+        public override void ReleaseResources()
+        {
+            CachedDnsRecordDTO = null;
+            DnsRecordDTOFromRequest = null;
+            ListOfCachedDnsRecords = null;
+            base.ReleaseResources();
+        }
         #endregion
     }
 }

@@ -3,7 +3,7 @@
     /// <summary>
     /// RegisteringHost transition request handler
     /// </summary>
-    public partial class RegisteringHost : SkySoft.BPPApplication.RequestHandler
+    public partial class RegisteringHost : SkySoft.BPPApplication.DataProcessingLogicRequestHandler
     {
         #region Constructors
         /// <summary>
@@ -16,16 +16,6 @@
             ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
             StateName = SkySoft.DnsServer.CON.StateTypes.INITIAL;
             TransitionName = SkySoft.DnsServer.CON.TransitionTypes.REGISTERING_HOST;
-        }
-        #endregion
-
-        #region Public Methods
-        /// <summary>
-        /// Handles request aynchronously
-        /// </summary>
-        protected override async Task HandleRequestAsync()
-        {
-            await RedirectRequestToNextApplicationLayer();
         }
         #endregion
     }

@@ -24,17 +24,11 @@
         /// </summary>
         protected override void HandleRequest()
         {
-            LoadListOfDnsRecordsFromFileIntoMemoryCache();
             LoadServerDnsDataFromConfigurationFile();
             ValidateServerDnsDataLoadedFromConfigurationFile();
             if (ServerDnsDataLoadedFromConfigurationFileValid)
             {
-                FindCachedServerDnsRecordByApplicationLayerFullName();
-                if (!CachedServerDnsRecordFound)
-                {
-                    AddServerDnsRecordToMemoryCache();
-                    AddServerDnsRecordToFile();
-                }
+                AddServerDnsRecordToMemoryCache();
             }
         }
 
@@ -44,9 +38,6 @@
         public override void ReleaseResources()
         {
             ConfigurationDnsRecord = null;
-            ClientDnsRecordFromRequest = null;
-            ServerDnsRecordFromRequest = null;
-            ListOfDnsRecords = null;
             base.ReleaseResources();
         }
         #endregion

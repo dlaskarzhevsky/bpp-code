@@ -15,7 +15,7 @@ namespace BPP.Person.DPLCFG
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
             // Data access logic
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, BPP.Person.DPL.SearchingRequestHandler>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, BPP.Person.DPL.Searching>();
         }
         #endregion
     }

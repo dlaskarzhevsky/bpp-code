@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
+using SkySoft.BPPApplication;
 using SkySoft.DnsClientServerComponents;
 using SkySoft.DnsRecord.DTO;
 
@@ -110,7 +111,7 @@ namespace SkySoft.DnsClient.DAL
         void LoadServerDnsDataFromConfigurationFile()
         {
             ConfigurationDnsRecord = DataContainer.GetNewDTO<DnsRecordDTO>();
-            ConfigurationDnsRecord.ApplicationLayerFullName = SkySoft.Contracts.ApplicationLayerNames.DNS_SERVER;
+            ConfigurationDnsRecord.ApplicationLayerFullName = GetApplicationLayerFullName.Execute(SkySoft.Contracts.DomainNames.SKYSOFT, null, SkySoft.Contracts.ApplicationLayerNames.DNS_SERVER);
             ConfigurationDnsRecord.Url = ApplicationConfiguration!.GetValue<string>(SkySoft.Contracts.Constants.DNS_SERVER_URL);
         }
 

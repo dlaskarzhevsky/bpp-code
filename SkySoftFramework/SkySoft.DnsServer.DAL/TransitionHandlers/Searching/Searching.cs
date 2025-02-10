@@ -13,7 +13,7 @@
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
             StateName = SkySoft.DnsServer.CON.StateTypes.INITIAL;
             TransitionName = SkySoft.DnsServer.CON.TransitionTypes.SEARCHING;
         }

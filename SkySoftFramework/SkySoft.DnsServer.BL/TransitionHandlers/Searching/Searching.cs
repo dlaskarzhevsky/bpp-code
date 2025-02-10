@@ -12,10 +12,8 @@
         public Searching()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
-            UseCaseName = SkySoft.DnsServer.CON.UseCaseContract.DNS_SERVER;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.BL;
-            StateName = SkySoft.DnsServer.CON.StateTypes.INITIAL;
-            TransitionName = SkySoft.DnsServer.CON.TransitionTypes.REGISTERING_HOST;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DNS_SERVER;
+            TransitionName = SkySoft.DnsServer.CON.TransitionTypes.SEARCHING;
         }
         #endregion
 
@@ -25,6 +23,9 @@
         /// </summary>
         protected override async Task HandleRequestAsync()
         {
+            ChangeApplicationLayerName();
+            AddMissingRequestMetadata();
+
             await RedirectRequestToNextApplicationLayer();
         }
         #endregion

@@ -35,7 +35,7 @@
             }
 
             DataContainer = await RedirectRequestToRequestHandler(DataContainer);
-            DataContainer.RemoveCurrentRequestMetadta();
+//            DataContainer.RemoveCurrentRequestMetadta();
         }
         #endregion
     }

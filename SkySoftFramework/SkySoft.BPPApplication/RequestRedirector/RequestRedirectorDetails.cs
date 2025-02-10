@@ -141,6 +141,7 @@ namespace SkySoft.BPPApplication
                     transceiverDriver.StateName,
                     transceiverDriver.TransitionName);
                 DataContainer = await OperatingSystem.RedirectRequestToRequestHandler(DataContainer);
+                DataContainer.RemoveCurrentRequestMetadta();
             }
         }
 

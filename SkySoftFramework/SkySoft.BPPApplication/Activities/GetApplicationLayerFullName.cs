@@ -13,7 +13,7 @@
         /// <param name="useCaseName">Use case name</param>
         /// <param name="applicationLayerName">Application layer name</param>
         /// <returns>Application layer full name</returns>
-        public static string Execute(string domainName, string useCaseName, string applicationLayerName)
+        public static string Execute(string? domainName, string? useCaseName, string? applicationLayerName)
         {
             string applicationLayerFullNameTemplate = $"{domainName}_{useCaseName}_{applicationLayerName}";
 

@@ -1,4 +1,5 @@
-﻿using SkySoft.Communication;
+﻿using SkySoft.BPPApplication;
+using SkySoft.Communication;
 using SkySoft.Contracts;
 using SkySoft.DnsClientServerComponents;
 using SkySoft.DnsRecord.DTI;
@@ -77,7 +78,7 @@ namespace SkySoft.Http.DRV
         void AddDnsRecordWithApplicationLayerFullNameOfDnsServerToDataContainer()
         {
             IDnsRecordDTO dnsRecordDTO = DataContainer.GetNewDTO<DnsRecordDTO>(SkySoft.Contracts.DataCollectionTypes.DNS_RECORDS);
-            dnsRecordDTO.ApplicationLayerFullName = OperatingSystem.Logger.ApplicationLayerFullName;
+            dnsRecordDTO.ApplicationLayerFullName = GetApplicationLayerFullName.Execute(SkySoft.Contracts.DomainNames.SKYSOFT, null, SkySoft.Contracts.ApplicationLayerNames.DNS_SERVER);
         }
 
         /// <summary>
@@ -190,11 +191,11 @@ namespace SkySoft.Http.DRV
             // TODO
 //            RemoveLastDnsRecordFromDataContainer();
             CalculateRemoteServerUrl();
-//            CacheLastRequestMetadataByRemovingItFromDataContainer();
+            CacheLastRequestMetadataByRemovingItFromDataContainer();
 
             await TransmitRequestToRemoteServer();
 
-//            RestoreLastRequestMetadataFromCache();
+            RestoreLastRequestMetadataFromCache();
         }
 
         /// <summary>

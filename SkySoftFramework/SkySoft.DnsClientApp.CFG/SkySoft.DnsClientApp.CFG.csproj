@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>true</IsPackable>
     <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+    <IsPackable>true</IsPackable>
     <Nullable>enable</Nullable>
     <OutputType>Library</OutputType>
     <StaticWebAssetsEnabled>false</StaticWebAssetsEnabled>

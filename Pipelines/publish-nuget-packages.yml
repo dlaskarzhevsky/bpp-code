@@ -1,0 +1,70 @@
+trigger: none
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+- ${{ if eq(variables['Build.SourceBranchName'], 'Development') }}:
+  - group: sky-soft-application-server-dev
+- ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+  - group: sky-soft-application-server-prod
+
+steps:
+- script: |
+    echo build_config:                      $(build_config)
+    echo nuget_feed_name:                   $(nuget_feed_name)
+    echo nuget_package_version:             $(nuget_package_version)
+    echo solution_path:                     $(solution_path)
+  displayName: display pipeline variables
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
+  inputs:
+    command: 'restore'
+    projects: $(solution_path)
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build $(Build.SourceBranchName) using $(build_config)'
+  inputs:
+    command: 'build'
+    projects: $(solution_path)
+    arguments: '--configuration $(build_config) --no-restore'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet pack'
+  inputs:
+    command: 'pack'
+    packagesToPack: $(solution_path)
+    versioningScheme: byEnvVar
+    versionEnvVar: NUGET_PACKAGE_VERSION
+    outputDir: '$(Pipeline.Workspace)\n'
+
+- script: |
+    cd $(Pipeline.Workspace)\n   
+    dir
+  displayName: "show packages folder"
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet push'
+  inputs:
+    command: 'push'
+    searchPatternPush: '$(Pipeline.Workspace)\n\*.nupkg'
+    feedPublish: $(nuget_feed_name)
+
+- powershell: ./pipelines/scripts/Increase_Version_Number.ps1
+  displayName: 'increase package version'
+
+- script: |
+    echo nuget_package_version: $(nuget_package_version)
+  displayName: 'display package version'
+
+- task: MorenoBruschi.manage-variable-group-task.custom-build-release-task.ManageVariableGroupTask@0
+  displayName: 'update package version'
+  inputs:
+    pat: $(mvgt_pat)
+    project: $(mvgt_bpp_project_id)
+    vgname: $(mvgt_variable_group)
+    orgname: $(mvgt_organization)
+    op: Update
+    varops: |
+      = nuget_package_version => $(nuget_package_version)

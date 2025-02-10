@@ -22,7 +22,7 @@ namespace BPP.Person.Tests
             IDataContainer requestDataContainer = InitializeRequestDataContainer();
             AddPersonSearchCriteriaToRequestDataContainer(requestDataContainer);
             Transceiver transceiver = new Transceiver();
-            IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, "http://20.75.223.171:5076", "processrequest", 10000);
+            IDataContainer? responseDataContainer = await transceiver.TransceiveDataContainer(requestDataContainer, "http://localhost:5004", "processrequest", 10000);
             AssertResponse(responseDataContainer);
         }
         #endregion

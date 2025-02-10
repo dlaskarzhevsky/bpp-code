@@ -226,6 +226,14 @@ namespace SkySoft.BPPApplication
         }
 
         /// <summary>
+        /// Redirects request to next application layer
+        /// </summary>
+        protected async Task RedirectRequestToNextApplicationLayer()
+        {
+            await RaiseEvent(SkySoft.Contracts.EventTypes.REDIRECT_REQUEST_TO_NEXT_APPLICATION_LAYER_EVENT, false);
+        }
+
+        /// <summary>
         /// Redirects request to request handler
         /// </summary>
         /// <param name="dataContainer">Data container</param>

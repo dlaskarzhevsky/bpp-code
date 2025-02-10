@@ -82,6 +82,17 @@ namespace SkySoft.DnsClient.DAL
         }
 
         /// <summary>
+        /// Finds cached client DNS record by application full layer name
+        /// </summary>
+        void FindCachedServerDnsRecordByApplicationLayerFullName()
+        {
+            if (ConfigurationDnsRecord != null)
+            {
+                CachedServerDnsRecord = FindDnsRecordInListByApplicationLayerFullName.Execute(ListOfDnsRecords, ConfigurationDnsRecord!.ApplicationLayerFullName!);
+            }
+        }
+
+        /// <summary>
         /// Gets client DNS record from request
         /// </summary>
         void GetClientDnsRecordFromRequest()
@@ -207,6 +218,25 @@ namespace SkySoft.DnsClient.DAL
             get
             {
                 return CachedClientDnsRecord != null;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets cached server DNS record
+        /// </summary>
+        DnsRecordDTO? CachedServerDnsRecord
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets flag indicating whether cached server DNS record found
+        /// </summary>
+        bool CachedServerDnsRecordFound
+        {
+            get
+            {
+                return CachedServerDnsRecord != null;
             }
         }
 

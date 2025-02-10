@@ -41,14 +41,6 @@ namespace SkySoft.DnsClient.BL
         }
 
         /// <summary>
-        /// Redirects request to the next application layer
-        /// </summary>
-        async Task RedirectRequestToNextApplicationLayer()
-        {
-            await RaiseEvent(SkySoft.DnsClient.CON.EventTypes.REDIRECT_REQUEST_TO_NEXT_APPLICATION_LAYER_EVENT);
-        }
-
-        /// <summary>
         /// Switches application into initial state
         /// </summary>
         void SwitchApplicationIntoInitialState()

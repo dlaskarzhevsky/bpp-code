@@ -3,7 +3,7 @@
     /// <summary>
     /// Provides searching request handler functionality
     /// </summary>
-    public class SearchingRequestHandler : SkySoft.BPPApplication.RequestHandler
+    public partial class SearchingRequestHandler : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
@@ -27,17 +27,7 @@
         /// <returns>Data container</returns>
         protected override async Task HandleRequestAsync()
         {
-            await DataRequestEvent();
-        }
-        #endregion
-
-        #region Private Methods
-        /// <summary>
-        /// Raises DataRequest event
-        /// </summary>
-        async Task DataRequestEvent()
-        {
-            await RaiseEvent(SkySoft.Contracts.EventTypes.REDIRECT_REQUEST_TO_NEXT_APPLICATION_LAYER_EVENT, false);
+            await RedirectRequestToNextApplicationLayer();
         }
         #endregion
     }

@@ -13,4 +13,8 @@
     <ProjectReference Include="..\BPP.Person.CON\BPP.Person.CON.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="EventHandlers\" />
+  </ItemGroup>
+
 </Project>

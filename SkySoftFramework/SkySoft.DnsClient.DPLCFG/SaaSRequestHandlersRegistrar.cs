@@ -15,7 +15,7 @@ namespace SkySoft.DnsClient.DPLCFG
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DPL.SaaSGettingRemoteServerData>();
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DPL.SavingRemoteServerData>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DPL.SaaSSavingRemoteServerData>();
         }
         #endregion
     }

@@ -14,7 +14,6 @@ namespace BPP.PersonApp.BLCFG
         /// <param name="webApplicationBuilder">Web application builder</param>
         public static void Register(WebApplicationBuilder webApplicationBuilder)
         {
-            webApplicationBuilder.Services.AddTransient<IRequestHandler, BPP.PersonApp.BL.RedirectRequestToNextApplicationLayer>();
         }
         #endregion
     }

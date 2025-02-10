@@ -24,12 +24,17 @@
         /// </summary>
         protected override void HandleRequest()
         {
+            LoadListOfDnsRecordsFromFileIntoMemoryCache();
             LoadServerDnsDataFromConfigurationFile();
             ValidateServerDnsDataLoadedFromConfigurationFile();
             if (ServerDnsDataLoadedFromConfigurationFileValid)
             {
-                AddServerDnsRecordToMemoryCache();
-                AddServerDnsRecordToFile();
+                FindCachedServerDnsRecordByApplicationLayerFullName();
+                if (!CachedServerDnsRecordFound)
+                {
+                    AddServerDnsRecordToMemoryCache();
+                    AddServerDnsRecordToFile();
+                }
             }
         }
 

@@ -1,5 +1,4 @@
-﻿
-namespace SkySoft.DnsClient.DPL
+﻿namespace SkySoft.DnsClient.DPL
 {
     /// <summary>
     /// GettingRemoteServerData transition request handler

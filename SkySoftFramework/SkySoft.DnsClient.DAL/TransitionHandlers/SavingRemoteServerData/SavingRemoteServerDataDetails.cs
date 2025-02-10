@@ -2,7 +2,7 @@
 using SkySoft.DnsClientServerComponents;
 using SkySoft.DnsRecord.DTO;
 
-namespace SkySoft.DnsClient.DPL
+namespace SkySoft.DnsClient.DAL
 {
     /// <summary>
     /// SavingRemoteServerData transition request handler

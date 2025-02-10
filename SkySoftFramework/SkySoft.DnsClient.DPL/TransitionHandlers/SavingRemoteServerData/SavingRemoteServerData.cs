@@ -1,21 +1,20 @@
-﻿
-namespace SkySoft.DnsClient.DPL
+﻿namespace SkySoft.DnsClient.DPL
 {
     /// <summary>
-    /// SaaSGettingRemoteServerData transition request handler
+    /// SavingRemoteServerData transition request handler
     /// </summary>
-    public partial class SaaSGettingRemoteServerData : SkySoft.BPPApplication.RequestHandler
+    public partial class SavingRemoteServerData : SkySoft.BPPApplication.RequestHandler
     {
         #region Constructors
         /// <summary>
         /// Default constructor
         /// </summary>
-        public SaaSGettingRemoteServerData()
+        public SavingRemoteServerData()
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             UseCaseName = SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL_SAAS;
-            TransitionName = SkySoft.Contracts.TransitionTypes.GETTING_REMOTE_SERVER_DATA;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL;
+            TransitionName = SkySoft.Contracts.TransitionTypes.SAVING_REMOTE_SERVER_DATA;
         }
         #endregion
 
@@ -25,7 +24,7 @@ namespace SkySoft.DnsClient.DPL
         /// </summary>
         protected override async Task HandleRequestAsync()
         {
-            await RedirectRequestToDataProcessingLogic();
+            await RedirectRequestToNextApplicationLayer();
         }
         #endregion
     }

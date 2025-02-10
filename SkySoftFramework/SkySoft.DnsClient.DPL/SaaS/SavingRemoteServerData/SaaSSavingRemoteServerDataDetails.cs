@@ -1,9 +1,9 @@
 ﻿namespace SkySoft.DnsClient.DPL
 {
     /// <summary>
-    /// SaaSGettingRemoteServerData transition request handler
+    /// SaaSSavingRemoteServerData transition request handler
     /// </summary>
-    public partial class SaaSGettingRemoteServerData
+    public partial class SaaSSavingRemoteServerData
     {
         #region Private Methods
         /// <summary>

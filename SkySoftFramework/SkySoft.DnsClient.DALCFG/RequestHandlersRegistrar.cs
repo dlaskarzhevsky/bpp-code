@@ -16,6 +16,7 @@ namespace SkySoft.DnsClient.DALCFG
         {
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DAL.GettingRemoteServerData>();
             webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DAL.InitializingApplication>();
+            webApplicationBuilder.Services.AddTransient<IRequestHandler, SkySoft.DnsClient.DAL.SavingRemoteServerData>();
         }
         #endregion
     }

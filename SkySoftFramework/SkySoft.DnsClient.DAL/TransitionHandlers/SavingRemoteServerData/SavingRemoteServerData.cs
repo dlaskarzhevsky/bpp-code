@@ -1,4 +1,4 @@
-﻿namespace SkySoft.DnsClient.DPL
+﻿namespace SkySoft.DnsClient.DAL
 {
     /// <summary>
     /// SavingRemoteServerData transition request handler
@@ -13,7 +13,7 @@
         {
             DomainName = SkySoft.Contracts.DomainNames.SKYSOFT;
             UseCaseName = SkySoft.DnsClient.CON.UseCaseContract.DNS_CLIENT;
-            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DPL_SAAS;
+            ApplicationLayerName = SkySoft.Contracts.ApplicationLayerNames.DAL;
             TransitionName = SkySoft.Contracts.TransitionTypes.SAVING_REMOTE_SERVER_DATA;
         }
         #endregion

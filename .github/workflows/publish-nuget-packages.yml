@@ -2,7 +2,7 @@ name: publish-nuget-packages
 
 on:
   push:
-    branches: [ publish-nuget-packages-github ]
+    branches: [ publish-nuget-packages-github, nuget-dev, nuget-prod ]
 
 jobs:
   publish-nuget-packages:

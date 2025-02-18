@@ -13,6 +13,6 @@ jobs:
     - name: display pipeline variables
       run: |
         echo build_config:                      ${{ vars.build_config }}
-        echo nuget_feed_name:                   $(nuget_feed_name)
-        echo nuget_package_version:             $(nuget_package_version)
-        echo solution_path:                     $(solution_path)
+        echo nuget_feed_name:                   ${{ vars.nuget_feed_name }}
+        echo nuget_package_version:             ${{ vars.nuget_package_version }}
+        echo solution_path:                     ${{ vars.solution_path }}

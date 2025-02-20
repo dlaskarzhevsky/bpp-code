@@ -3,12 +3,12 @@ name: publish-nuget-packages
 on:
   workflow_dispatch:
   push:
-    branches: [ nuget-dev, nuget-prod ]
+    branches: [ github-nuget-dev, github-nuget-prod ]
 
 jobs:
   publish-nuget-packages:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref == 'refs/heads/nuget-dev' && 'dev' || github.ref == 'refs/heads/nuget-prod' && 'prod' }}
+    environment: ${{ github.ref == 'refs/heads/github-nuget-dev' && 'dev' || github.ref == 'refs/heads/github-nuget-prod' && 'prod' }}
 
     steps:
     - name: display pipeline variables
@@ -39,22 +39,13 @@ jobs:
           --configuration ${{ vars.build_config }} \
           --output ${{ github.workspace }}/n \
           -p:PackageVersion=${{ vars.nuget_package_version }} \
-          # --no-build \
-          # --no-restore
+          --no-build \
+          --no-restore
         
     - name: show packages folder
       run: |
         cd ${{ github.workspace }}/n
         ls
-
-    # - task: DotNetCoreCLI@2
-    #   displayName: 'dotnet pack'
-    #   inputs:
-    #     command: 'pack'
-    #     packagesToPack: $(solution_path)
-    #     versioningScheme: byEnvVar
-    #     versionEnvVar: NUGET_PACKAGE_VERSION
-    #     outputDir: '$(Pipeline.Workspace)\n'
 
     # - name: update pipeline variable
     #   run: |

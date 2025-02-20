@@ -34,12 +34,18 @@ jobs:
       run: dotnet build --configuration ${{ vars.build_config }} --no-restore ${{ vars.solution_path }}
 
     - name: dotnet pack
-      run: dotnet pack --no-build --no-restore --output /home/runner/work/n -p:PackageVersion=${{ vars.nuget_package_version }} ${{ vars.solution_path }}
+      run: dotnet pack
+        --no-build \
+        --no-restore \
+        --output /home/runner/work/n \
+        -p:PackageVersion=${{ vars.nuget_package_version }} \        
+        ${{ vars.solution_path }} \
 
     - name: show packages folder
       run: |
         cd /home/runner/work/n
         ls
+
     # - task: DotNetCoreCLI@2
     #   displayName: 'dotnet pack'
     #   inputs:

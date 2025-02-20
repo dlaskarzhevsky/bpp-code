@@ -50,8 +50,8 @@ jobs:
 
     - name: publish to github packages
       run: |
-        echo {{ github.event.repository.name }}
-        echo {{ github.repository }}
+        echo ${{ github.event.repository.name }}
+        echo ${{ github.repository }}
         echo $(basename ${{ github.repository }})
 
 # dotnet nuget push "./n/*.nupkg" \

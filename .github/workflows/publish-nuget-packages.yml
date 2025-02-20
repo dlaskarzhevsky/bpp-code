@@ -27,7 +27,6 @@ jobs:
         pwsh -v
         pwd
         ls
-        tree ${{ vars.solution_path }}
         dotnet restore ${{ vars.solution_path }}
     # - name: update pipeline variable
     #   run: |

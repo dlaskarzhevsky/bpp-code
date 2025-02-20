@@ -51,10 +51,11 @@ jobs:
     - name: publish to github packages
       run: |
         dotnet nuget push "./n/*.nupkg" \
-          --source "https://github.com/${{ github.repository }}/packages" \
+          --source "https://nuget.pkg.github.com/${{ github.repository }}/index.json" \
           --api-key "${{ secrets.GITHUB_TOKEN }}"
 
-  # --api-key "${{ secrets.bpp_code_publish_nuget_pat }}"
+# https://nuget.pkg.github.com/dlaskarzhevsky/index.json
+# --api-key "${{ secrets.bpp_code_publish_nuget_pat }}"
 
     # - name: update pipeline variable
     #   run: |

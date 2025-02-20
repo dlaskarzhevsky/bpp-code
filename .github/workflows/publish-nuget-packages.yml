@@ -52,7 +52,9 @@ jobs:
       run: |
         dotnet nuget push "./n/*.nupkg" \
           --source "https://github.com/${{ github.repository }}/packages" \
-          --api-key "${{ secrets.bpp_code_publish_nuget_pat }}"
+          --api-key "${{ secrets.GITHUB_TOKEN }}"
+
+  # --api-key "${{ secrets.bpp_code_publish_nuget_pat }}"
 
     # - name: update pipeline variable
     #   run: |

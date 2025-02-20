@@ -22,13 +22,16 @@ jobs:
     - name: checkout repo
       uses: actions/checkout@v4
 
+    - name: setup .net sdk
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '9.0.x'
+
     - name: dotnet restore
-      run: |
-        pwsh -v
-        pwd
-        ls
-        dotnet restore ${{ vars.solution_path }}
-    # asd
+      run: dotnet restore ${{ vars.solution_path }}
+
+    - name: dotnet build
+      run: dotnet build --configuration ${{ build_config }} --no-restore ${{ vars.solution_path }}
     # - name: update pipeline variable
     #   run: |
     #     curl -L "https://api.github.com/repos/dlaskarzhevsky/bpp-code/environments/prod/variables/nuget_package_version" `

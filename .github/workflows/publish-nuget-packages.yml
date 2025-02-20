@@ -34,8 +34,13 @@ jobs:
       run: dotnet build ${{ vars.solution_path }} --configuration ${{ vars.build_config }} --no-restore 
 
     - name: dotnet pack
-      run: |
-        dotnet pack ${{ vars.solution_path }} -p:PackageVersion=${{ vars.nuget_package_version }} --configuration ${{ vars.build_config }} --output ${{ github.workspace }}/n --no-build --no-restore
+      run: >
+        dotnet pack ${{ vars.solution_path }}
+          -p:PackageVersion=${{ vars.nuget_package_version }}
+          --configuration ${{ vars.build_config }}
+          --output ${{ github.workspace }}/n
+          --no-build
+          --no-restore
         
     - name: show packages folder
       run: |

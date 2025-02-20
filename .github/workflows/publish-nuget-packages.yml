@@ -28,6 +28,7 @@ jobs:
         pwd
         ls
         dotnet restore ${{ vars.solution_path }}
+    # asd
     # - name: update pipeline variable
     #   run: |
     #     curl -L "https://api.github.com/repos/dlaskarzhevsky/bpp-code/environments/prod/variables/nuget_package_version" `

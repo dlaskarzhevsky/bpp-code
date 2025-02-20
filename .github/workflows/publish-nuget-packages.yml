@@ -11,7 +11,7 @@ jobs:
     environment: ${{ github.ref == 'refs/heads/github-nuget-dev' && 'dev' || github.ref == 'refs/heads/github-nuget-prod' && 'prod' }}
 
     steps:
-    - name: display pipeline variables
+    - name: show pipeline variables
       run: |
         echo bpp_code_pat:          ${{ secrets.bpp_code_pat }}
         echo build_config:          ${{ vars.build_config }}
@@ -47,12 +47,11 @@ jobs:
         cd ${{ github.workspace }}/n
         ls
 
-# - task: DotNetCoreCLI@2
-#   displayName: 'dotnet push'
-#   inputs:
-#     command: 'push'
-#     searchPatternPush: '$(Pipeline.Workspace)\n\*.nupkg'
-#     feedPublish: $(nuget_feed_name)
+    - name: publish to github packages
+      run: |
+        dotnet nuget push "./n/*.nupkg" \
+          --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+          --api-key "${{ secrets.GITHUB_TOKEN }}"
 
     # - name: update pipeline variable
     #   run: |

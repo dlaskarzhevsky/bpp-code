@@ -15,7 +15,7 @@ steps:
     echo nuget_feed_name:                   $(nuget_feed_name)
     echo nuget_package_version:             $(nuget_package_version)
     echo solution_path:                     $(solution_path)
-  displayName: display pipeline variables
+  displayName: show pipeline variables
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore'

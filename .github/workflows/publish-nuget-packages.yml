@@ -34,13 +34,15 @@ jobs:
       run: dotnet build --configuration ${{ vars.build_config }} --no-restore ${{ vars.solution_path }}
 
     - name: dotnet pack
-      run: dotnet pack
+      run: dotnet pack ${{ vars.solution_path }} \
         --configuration ${{ vars.build_config }} \
         --output /home/runner/work/n \
         -p:PackageVersion=${{ vars.nuget_package_version }} \        
         --no-build \
-        --no-restore \      
-        ${{ vars.solution_path }}
+        --no-restore       
+
+# "C:\Program Files\dotnet\dotnet.exe" pack D:\a\1\s\SkySoftFrameworkSolutions\SkySoftApplicationServerSolution.sln --output D:\a\1\n /p:PackageVersion=1.0.0 --verbosity Normal
+
 
     - name: show packages folder
       run: |

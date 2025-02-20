@@ -19,7 +19,7 @@ jobs:
         echo nuget_package_version: ${{ vars.nuget_package_version }}
         echo solution_path:         ${{ vars.solution_path }}
 
-    - name: checkout repo
+    - name: checkout branch ${{ github.ref_name }}
       uses: actions/checkout@v4
 
     - name: setup .net sdk
@@ -30,7 +30,7 @@ jobs:
     - name: dotnet restore
       run: dotnet restore ${{ vars.solution_path }}
 
-    - name: dotnet build
+    - name: dotnet build ${{ vars.build_config }}
       run: dotnet build ${{ vars.solution_path }} --configuration ${{ vars.build_config }} --no-restore 
 
     - name: dotnet pack
@@ -46,6 +46,13 @@ jobs:
       run: |
         cd ${{ github.workspace }}/n
         ls
+
+# - task: DotNetCoreCLI@2
+#   displayName: 'dotnet push'
+#   inputs:
+#     command: 'push'
+#     searchPatternPush: '$(Pipeline.Workspace)\n\*.nupkg'
+#     feedPublish: $(nuget_feed_name)
 
     # - name: update pipeline variable
     #   run: |

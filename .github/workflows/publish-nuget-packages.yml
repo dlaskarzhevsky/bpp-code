@@ -35,12 +35,12 @@ jobs:
 
     - name: dotnet pack
       run: dotnet pack
-        --no-build \
-        --no-restore \
         --configuration ${{ vars.build_config }} \
         --output /home/runner/work/n \
         -p:PackageVersion=${{ vars.nuget_package_version }} \        
-        ${{ vars.solution_path }} \
+        --no-build \
+        --no-restore \      
+        ${{ vars.solution_path }}
 
     - name: show packages folder
       run: |

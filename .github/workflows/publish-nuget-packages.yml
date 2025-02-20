@@ -31,7 +31,7 @@ jobs:
       run: dotnet restore ${{ vars.solution_path }}
 
     - name: dotnet build
-      run: dotnet build --configuration ${{ build_config }} --no-restore ${{ vars.solution_path }}
+      run: dotnet build --configuration ${{ vars.build_config }} --no-restore ${{ vars.solution_path }}
     # - name: update pipeline variable
     #   run: |
     #     curl -L "https://api.github.com/repos/dlaskarzhevsky/bpp-code/environments/prod/variables/nuget_package_version" `

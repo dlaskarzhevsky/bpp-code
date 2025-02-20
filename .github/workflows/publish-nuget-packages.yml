@@ -1,6 +1,7 @@
 name: publish-nuget-packages
 
 on:
+  workflow_dispatch:
   push:
     branches: [ nuget-dev, nuget-prod ]
 
@@ -28,7 +29,6 @@ jobs:
         ls
         tree ${{ vars.solution_path }}
         dotnet restore ${{ vars.solution_path }}
-        
     # - name: update pipeline variable
     #   run: |
     #     curl -L "https://api.github.com/repos/dlaskarzhevsky/bpp-code/environments/prod/variables/nuget_package_version" `

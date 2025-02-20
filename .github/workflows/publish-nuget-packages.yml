@@ -22,6 +22,11 @@ jobs:
     - name: checkout repo
       uses: actions/checkout@v4
 
+    - name: setup .net sdk
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '9.0.x'
+
     - name: dotnet restore
       run: |
         pwsh -v

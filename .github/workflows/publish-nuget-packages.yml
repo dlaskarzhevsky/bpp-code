@@ -37,10 +37,10 @@ jobs:
       run: |
         dotnet pack ${{ vars.solution_path }} \
           --configuration ${{ vars.build_config }} \          
-          --output ${{ github.workspace }}/n \
+          # --output ${{ github.workspace }}/n \
           -p:PackageVersion=${{ vars.nuget_package_version }} \
-          --no-build \
-          --no-restore
+          # --no-build \
+          # --no-restore
 
     - name: show packages folder
       run: |

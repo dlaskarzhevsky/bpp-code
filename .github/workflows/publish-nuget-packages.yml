@@ -56,6 +56,7 @@ jobs:
           --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
           --api-key "${{ secrets.GITHUB_TOKEN }}"
 
+# added comment
 #--api-key "${{ secrets.bpp_code_publish_nuget_pat }}"
 
 # asd

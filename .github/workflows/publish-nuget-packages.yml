@@ -9,6 +9,8 @@ jobs:
   publish-nuget-packages:
     runs-on: ubuntu-latest
     environment: ${{ github.ref == 'refs/heads/github-nuget-dev' && 'dev' || github.ref == 'refs/heads/github-nuget-prod' && 'prod' }}
+    permissions:
+      packages: write
 
     steps:
     - name: show pipeline variables
@@ -53,7 +55,7 @@ jobs:
         dotnet nuget push "./n/*.nupkg" \
           --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
           --api-key "${{ secrets.GITHUB_TOKEN }}"
-          
+
 #--api-key "${{ secrets.bpp_code_publish_nuget_pat }}"
 
 # asd

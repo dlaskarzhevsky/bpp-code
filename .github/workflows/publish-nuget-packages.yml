@@ -47,11 +47,11 @@ jobs:
         cd ${{ github.workspace }}/n
         ls
 
-    - name: publish to github packages
-      run: |
-        dotnet nuget push "./n/*.nupkg" \
-          --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
-          --api-key "${{ secrets.bpp_code_publish_nuget_pat }}"
+    # - name: publish to github packages
+    #   run: |
+    #     dotnet nuget push "./n/*.nupkg" \
+    #       --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+    #       --api-key "${{ secrets.bpp_code_publish_nuget_pat }}"
 
     - name: increase package version
       shell: pwsh

@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param
 (
-    [Parameter(Mandatory=$true)][string] $nugetPackageVersionConst="NUGET_PACKAGE_VERSION",
+    [string] $nugetPackageVersionConst="NUGET_PACKAGE_VERSION",
     [Parameter(Mandatory=$true)][ValidateNotNullOrEmpty()] [string] $nugetPackageVersion
 )
 

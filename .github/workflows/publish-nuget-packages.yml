@@ -54,7 +54,7 @@ jobs:
       run: |
         dotnet nuget push "./n/*.nupkg" \
           --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
-          --api-key "${{ secrets.GITHUB_TOKEN }}"
+          --api-key "${{ secrets.BPP_CODE_PUBLISH_NUGET_PAT_2 }}"
 
 # added comment
 #--api-key "${{ secrets.bpp_code_publish_nuget_pat }}"

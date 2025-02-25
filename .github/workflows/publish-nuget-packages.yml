@@ -69,7 +69,7 @@ jobs:
 
     - name: update workflow variable
       run: |
-        curl -L "https://api.github.com/repos/${{ github.repository_owner }}/environments/dev/variables/nuget_package_version" \
+        curl -L "https://api.github.com/repos/${{ github.repository }}/environments/dev/variables/nuget_package_version" \
           -X PATCH \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.bpp_code_pat }}" \

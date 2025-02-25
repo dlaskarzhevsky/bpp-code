@@ -64,7 +64,7 @@ jobs:
       run: |
         echo "The environment is $GITHUB_ENVIRONMENT"
         echo "The environment is ${{ env.GITHUB_ENVIRONMENT }}"
-        echo "The environment is ${{ var.GITHUB_ENVIRONMENT }}"
+        echo "The environment is ${{ vars.GITHUB_ENVIRONMENT }}"
 
     - name: update workflow variable
       run: |

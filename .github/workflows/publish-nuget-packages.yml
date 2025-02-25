@@ -1,7 +1,6 @@
 name: publish-nuget-packages
 
 on:
-  workflow_dispatch:
   push:
     branches: [ github-nuget-dev, github-nuget-prod ]
 
@@ -9,8 +8,6 @@ jobs:
   publish-nuget-packages:
     runs-on: ubuntu-latest
     environment: ${{ github.ref == 'refs/heads/github-nuget-dev' && 'dev' || github.ref == 'refs/heads/github-nuget-prod' && 'prod' }}
-    permissions:
-      packages: write
 
     steps:
     - name: show workflow variables
@@ -50,11 +47,27 @@ jobs:
         cd ${{ github.workspace }}/n
         ls
 
-    # - name: publish to github packages
-    #   run: |
-    #     dotnet nuget push "./n/*.nupkg" \
-    #       --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
-    #       --api-key "${{ secrets.bpp_code_publish_nuget_pat }}"
+    - name: publish to github packages
+      run: |
+        dotnet nuget push "./n/*.nupkg" \
+          --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+          --api-key "${{ secrets.bpp_code_publish_nuget_pat }}"
+
+    - name: increase package version
+      shell: pwsh
+      run: ./Pipelines/scripts/Increase_Version_Number_GitHub.ps1 -nugetPackageVersion ${{ vars.nuget_package_version }}
+
+    - name: show package version
+      run: echo "nuget_package_version ${{ env.nuget_package_version }}"
+        
+    - name: update workflow variable
+      run: |
+        curl -L "https://api.github.com/repos/${{ github.repository_owner }}/environments/$GITHUB_ENVIRONMENT/variables/nuget_package_version" `
+          -X PATCH `
+          -H "Accept: application/vnd.github+json" `
+          -H "Authorization: Bearer ${{ secrets.bpp_code_pat }}" `
+          -d '{"name":"nuget_package_version","value":"${{ env.nuget_package_version }}"}'
+
 
     # - name: show current folder
     #   shell: pwsh
@@ -64,18 +77,3 @@ jobs:
     #   run: |
     #     cd ${{ github.workspace }}/Pipelines/scripts
     #     ls
-
-    - name: increase package version
-      shell: pwsh
-      run: ./Pipelines/scripts/Increase_Version_Number_GitHub.ps1 -nugetPackageVersion ${{ vars.nuget_package_version }}
-
-    - name: show package version
-      run: echo "nuget_package_version ${{ env.NUGET_PACKAGE_VERSION }}"
-        
-    # - name: update pipeline variable
-    #   run: |
-    #     curl -L "https://api.github.com/repos/dlaskarzhevsky/bpp-code/environments/prod/variables/nuget_package_version" `
-    #       -X PATCH `
-    #       -H "Accept: application/vnd.github+json" `
-    #       -H "Authorization: Bearer ${{ secrets.BPP_CODE_PAT }}" `
-    #       -d '{"name":"nuget_package_version","value":"1.0.2"}'

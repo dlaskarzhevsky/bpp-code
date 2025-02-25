@@ -66,6 +66,7 @@ jobs:
         echo "The environment is ${{ env.GITHUB_ENVIRONMENT }}"
         echo "The environment is ${{ vars.GITHUB_ENVIRONMENT }}"
         echo "The environment is ${{ github.environment }}"
+        echo "The environment is ${{ jobs.publish-nuget-packages.environment }}"        
 
     - name: update workflow variable
       run: |

@@ -1,8 +1,11 @@
 [CmdletBinding()]
 param
 (
+    [Parameter(Mandatory=$true)][ValidateNotNullOrEmpty()] [string] $nugetPackageVersionConst="NUGET_PACKAGE_VERSION"
     [Parameter(Mandatory=$true)][ValidateNotNullOrEmpty()] [string] $nugetPackageVersion
 )
+
+$_NUGET_PACKAGE_VERSION_CONST = $nugetPackageVersionConst
 
 $_current_version = $nugetPackageVersion.Trim()
 
@@ -17,7 +20,8 @@ $new_version = $constant_part + '.' + $variable_part_increased
 
 Write-Host "Increased version: $new_version"
 
-# Set the pipeline for future tasks
+# Set Azure DevOps pipeline variable for future tasks
 Write-Host "##vso[task.setvariable variable=$_NUGET_PACKAGE_VERSION_CONST;]$new_version"
 
+# Set GitHub workflow variable for future steps
 "$_NUGET_PACKAGE_VERSION_CONST=$new_version" | Out-File -FilePath $env:GITHUB_ENV -Append

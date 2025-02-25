@@ -56,11 +56,13 @@ jobs:
     #       --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
     #       --api-key "${{ secrets.bpp_code_publish_nuget_pat }}"
 
+    - name: show current folder
+      shell: pwsh
+      run: Get-Location
+
     - name: increase package version
       shell: pwsh
-      run: |
-        Get-Location
-        ./pipelines/scripts/Increase_Version_Number_GitHub.ps1
+      run: ./pipelines/scripts/Increase_Version_Number_GitHub.ps1        
 
     - name: show package version
       run: echo "nuget_package_version ${{ env.NUGET_PACKAGE_VERSION }}"

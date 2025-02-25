@@ -60,7 +60,7 @@ jobs:
       shell: pwsh
       run: |
         Get-Location
-        ./pipelines/scripts/Increase_Version_Number_GitHub.ps1
+# ./pipelines/scripts/Increase_Version_Number_GitHub.ps1
 
     - name: show package version
       run: echo "nuget_package_version ${{ env.NUGET_PACKAGE_VERSION }}"

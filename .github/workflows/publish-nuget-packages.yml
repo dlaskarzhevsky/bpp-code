@@ -56,14 +56,14 @@ jobs:
     #       --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
     #       --api-key "${{ secrets.bpp_code_publish_nuget_pat }}"
 
-    - name: show current folder
-      shell: pwsh
-      run: Get-Location
+    # - name: show current folder
+    #   shell: pwsh
+    #   run: Get-Location
 
-    - name: show script folder
-      run: |
-        cd ${{ github.workspace }}/Pipelines/scripts
-        ls
+    # - name: show script folder
+    #   run: |
+    #     cd ${{ github.workspace }}/Pipelines/scripts
+    #     ls
 
     - name: increase package version
       shell: pwsh

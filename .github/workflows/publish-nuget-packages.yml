@@ -13,7 +13,7 @@ jobs:
       packages: write
 
     steps:
-    - name: show pipeline variables
+    - name: show workflow variables
       run: |
         echo bpp_code_pat:                ${{ secrets.bpp_code_pat }}
         echo bpp_code_publish_nuget_pat:  ${{ secrets.bpp_code_publish_nuget_pat }}
@@ -56,6 +56,13 @@ jobs:
           --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
           --api-key "${{ secrets.bpp_code_publish_nuget_pat }}"
 
+    - name: increase package version
+      shell: pwsh
+      run: ./pipelines/scripts/Increase_Version_Number_GitHub.ps1
+
+    - name: show package version
+      run: echo "nuget_package_version ${{ env.NUGET_PACKAGE_VERSION }}"
+        
     # - name: update pipeline variable
     #   run: |
     #     curl -L "https://api.github.com/repos/dlaskarzhevsky/bpp-code/environments/prod/variables/nuget_package_version" `

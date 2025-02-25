@@ -1,6 +1,8 @@
 
 $_NUGET_PACKAGE_VERSION_CONST = "NUGET_PACKAGE_VERSION";
 
+Write-Host "Environment Variable: $env:NUGET_PACKAGE_VERSION"
+
 $_current_version = [Environment]::GetEnvironmentVariable($_NUGET_PACKAGE_VERSION_CONST).Trim()
 
 Write-Host "Current version: $_current_version"

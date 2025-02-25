@@ -61,7 +61,10 @@ jobs:
       run: echo "nuget_package_version ${{ env.nuget_package_version }}"
 
     - name: show environment name
-      run: echo "The environment is $GITHUB_ENVIRONMENT"
+      run: |
+        echo "The environment is $GITHUB_ENVIRONMENT"
+        echo "The environment is ${{ env.GITHUB_ENVIRONMENT }}"
+        echo "The environment is ${{ var.GITHUB_ENVIRONMENT }}"
 
     - name: update workflow variable
       run: |

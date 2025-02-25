@@ -67,7 +67,7 @@ jobs:
 
     - name: increase package version
       shell: pwsh
-      run: ./Pipelines/scripts/Increase_Version_Number_GitHub.ps1
+      run: ./Pipelines/scripts/Increase_Version_Number_GitHub.ps1 -nugetPackageVersion ${{ vars.nuget_package_version }}
 
     - name: show package version
       run: echo "nuget_package_version ${{ env.NUGET_PACKAGE_VERSION }}"

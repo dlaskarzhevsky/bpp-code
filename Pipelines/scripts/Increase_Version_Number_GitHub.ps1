@@ -1,9 +1,10 @@
+[CmdletBinding()]
+param
+(
+    [Parameter(Mandatory=$true)][ValidateNotNullOrEmpty()] [string] $nugetPackageVersion
+)
 
-$_NUGET_PACKAGE_VERSION_CONST = "NUGET_PACKAGE_VERSION";
-
-Write-Host "Environment Variable: $env:NUGET_PACKAGE_VERSION"
-
-$_current_version = [Environment]::GetEnvironmentVariable($_NUGET_PACKAGE_VERSION_CONST).Trim()
+$_current_version = $nugetPackageVersion.Trim()
 
 Write-Host "Current version: $_current_version"
 

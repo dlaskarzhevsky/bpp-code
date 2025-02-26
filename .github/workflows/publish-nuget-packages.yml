@@ -58,7 +58,7 @@ jobs:
       run: ./Pipelines/scripts/Increase_Version_Number_GitHub.ps1 -nugetPackageVersion ${{ vars.nuget_package_version }}
 
     - name: show package version
-      run: echo "nuget_package_version ${{ env.NUGET_PACKAGE_VERSION }}"
+      run: echo "nuget_package_version ${{ env.nuget_package_version }}"
 
     - name: show environment name
       run: |
@@ -72,7 +72,7 @@ jobs:
           -X PATCH \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.bpp_code_pat }}" \
-          -d '{"name":"nuget_package_version","value":"${{ env.NUGET_PACKAGE_VERSION }}"}'
+          -d '{"name":"nuget_package_version","value":"${{ env.nuget_package_version }}"}'
 
 
     # - name: show current folder

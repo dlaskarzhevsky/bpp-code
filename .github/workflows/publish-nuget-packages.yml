@@ -73,7 +73,7 @@ jobs:
           -X PATCH \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.bpp_code_pat }}" \
-          -d '{"name":"nuget_package_version","value":"${{ env.nuget_package_version }}"}'
+          -d '{"name":"nuget_package_version","value":"${{ env.NUGET_PACKAGE_VERSION }}"}'
 
 
     # - name: show current folder
